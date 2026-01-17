@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storytime - Stories that remember. Adventures that continue.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=Synonym:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --midnight: #0f1419;
+            --twilight: #1a1f3a;
+            --deep-purple: #2d1b4e;
+            --purple: #6366f1;
+            --amber: #f59e0b;
+            --gold: #fbbf24;
+            --cream: #fef3c7;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --glow: rgba(251, 191, 36, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Synonym', -apple-system, sans-serif;
+            background: linear-gradient(180deg, var(--midnight) 0%, var(--twilight) 40%, var(--deep-purple) 100%);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Starfield background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Drifting stars with trails */
+        .star.drifting {
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow:
+                -4px 0 8px rgba(255, 255, 255, 0.3),
+                -8px 0 12px rgba(255, 255, 255, 0.15),
+                -12px 0 16px rgba(255, 255, 255, 0.05);
+            animation: drift 20s linear infinite, twinkle 2s ease-in-out infinite;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(-100px, 60px);
+            }
+        }
+
+        /* Shooting stars */
+        .star.shooting {
+            width: 1px;
+            height: 1px;
+            background: white;
+            box-shadow:
+                0 0 2px white,
+                -20px 0 4px rgba(255, 255, 255, 0.4),
+                -40px 0 6px rgba(255, 255, 255, 0.2),
+                -60px 0 8px rgba(255, 255, 255, 0.1);
+            animation: shoot 3s ease-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes shoot {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-200px, 150px);
+            }
+        }
+
+        /* Golden dust particles in hero */
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 8s ease-in-out infinite;
+            box-shadow: 0 0 8px var(--glow);
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 0;
+                transform: translateY(0) translateX(0) scale(0.5);
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.3;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) translateX(20px) scale(1);
+            }
+        }
+
+        /* Content wrapper */
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            position: relative;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+            pointer-events: none;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 50%, var(--amber) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px var(--glow);
+        }
+
+        .hero .subhead {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: var(--text-secondary);
+            margin-bottom: 48px;
+            font-weight: 400;
+            line-height: 1.6;
+            min-height: 4.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rotating-text {
+            display: inline-block;
+            position: relative;
+        }
+
+        .rotating-text .text-option {
+            position: absolute;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .rotating-text .text-option.active {
+            position: relative;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Email Form */
+        .email-form {
+            display: flex;
+            gap: 12px;
+            max-width: 500px;
+            margin: 0 auto 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .email-input {
+            flex: 1;
+            min-width: 280px;
+            padding: 16px 24px;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Synonym', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), 0 0 20px var(--glow);
+        }
+
+        .email-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .cta-button {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--amber) 0%, var(--gold) 100%);
+            color: var(--midnight);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Synonym', sans-serif;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .trust-badge {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .trust-badge::before {
+            content: '✨';
+        }
+
+        /* Section styles */
+        section {
+            padding: 120px 24px;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--cream);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        /* How It Works */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .step {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 40px 32px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .step:nth-child(1) { animation-delay: 0.1s; }
+        .step:nth-child(2) { animation-delay: 0.2s; }
+        .step:nth-child(3) { animation-delay: 0.3s; }
+        .step:nth-child(4) { animation-delay: 0.4s; }
+
+        .step:hover {
+            transform: translateY(-8px);
+            border-color: var(--purple);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--amber) 0%, var(--gold) 100%);
+            color: var(--midnight);
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        .step h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--cream);
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .coming-soon {
+            display: inline-block;
+            font-size: 0.85rem;
+            color: var(--amber);
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        /* Story Progression */
+        .stories {
+            display: grid;
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .story-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 24px;
+            padding: 48px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--amber) 0%, var(--gold) 100%);
+        }
+
+        .story-number {
+            font-family: 'Fraunces', serif;
+            font-size: 0.9rem;
+            color: var(--amber);
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .story-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.8rem;
+            color: var(--cream);
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .story-text {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 24px;
+            padding: 48px 40px;
+            transition: all 0.4s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--purple);
+            box-shadow: 0 24px 48px rgba(99, 102, 241, 0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--amber);
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .pricing-tier {
+            font-size: 0.9rem;
+            color: var(--amber);
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .pricing-amount {
+            font-family: 'Fraunces', serif;
+            font-size: 3rem;
+            color: var(--cream);
+            margin-bottom: 8px;
+        }
+
+        .pricing-amount small {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 32px 0;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--amber);
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .guarantee {
+            margin-top: 40px;
+            padding: 24px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 16px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            text-align: center;
+        }
+
+        .guarantee strong {
+            color: var(--cream);
+        }
+
+        /* FAQ */
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 24px 28px;
+            background: transparent;
+            border: none;
+            color: var(--cream);
+            font-family: 'Synonym', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--amber);
+        }
+
+        .faq-icon {
+            font-size: 1.5rem;
+            color: var(--amber);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 28px 24px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 120px 24px;
+            background: rgba(99, 102, 241, 0.05);
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .cta-section h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 16px;
+            color: var(--cream);
+        }
+
+        .cta-section .subtext {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .timeline {
+            max-width: 600px;
+            margin: 48px auto 0;
+            text-align: left;
+        }
+
+        .timeline-item {
+            padding: 12px 0;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 16px;
+        }
+
+        .timeline-item strong {
+            color: var(--amber);
+            min-width: 60px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 24px 40px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .footer-tagline {
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 32px;
+        }
+
+        .footer-made {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin: 32px 0;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 24px 0;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--amber);
+        }
+
+        .footer-copyright {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 80px 24px 60px;
+            }
+
+            section {
+                padding: 80px 24px;
+            }
+
+            .email-form {
+                flex-direction: column;
+            }
+
+            .email-input {
+                min-width: 100%;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-glow"></div>
+            <div class="hero-particles" id="heroParticles"></div>
+            <div class="hero-content">
+                <h1>Stories that remember.<br>Adventures that continue.</h1>
+                <p class="subhead">
+                    <span class="rotating-text" id="rotatingText">
+                        <span class="text-option active">Create a persistent story world where your child is the hero—with recurring characters, callbacks, and plot lines that evolve night after night.</span>
+                        <span class="text-option">Bedtime stories that remember yesterday and build tomorrow—where every night continues the adventure.</span>
+                        <span class="text-option">Your child's imagination deserves a universe that grows with them, not stories that reset every night.</span>
+                        <span class="text-option">Meet Whisper the Owl and friends in a magical world that remembers your child's name, their jokes, and their greatest adventures.</span>
+                    </span>
+                </p>
+
+                <form class="email-form" id="heroForm">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="cta-button">Start your story universe</button>
+                </form>
+
+                <p class="trust-badge">First 10 stories free • No credit card required</p>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section id="how-it-works">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">How It Works</h2>
+                </div>
+
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Tell us about your child</h3>
+                        <p>Share their name, age, interests, and what makes them special. We'll craft their character in a world made just for them.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Receive your first story in 30 seconds</h3>
+                        <p>Your child becomes the hero in a magical adventure—meeting friends like Whisper the Owl, our house character who'll guide them through their universe.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Watch their universe grow</h3>
+                        <p>Each night's story builds on the last. Characters return, plot lines evolve, inside jokes develop. Your child's bedtime stories become an ongoing saga they can't wait to continue.</p>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Bring the magic into the real world</h3>
+                        <p>Transform favourite characters into custom plushies, continue adventures in companion games, and watch as their story world becomes part of everyday play.</p>
+                        <span class="coming-soon">Coming soon</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sample Story Progression -->
+        <section id="stories">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">See how Maya's universe grows</h2>
+                    <p class="section-subtitle">Three bedtimes, one continuous adventure</p>
+                </div>
+
+                <div class="stories">
+                    <div class="story-card">
+                        <div class="story-number">Story 1</div>
+                        <h3 class="story-title">Maya and the Whispering Garden</h3>
+                        <p class="story-text">Maya pushed open the garden gate and gasped. The flowers glowed softly in the twilight, and a gentle "whoo" came from the old oak tree. A beautiful silver owl swooped down, landing on a low branch.</p>
+                        <p class="story-text">"Hello Maya," said the owl in a voice like wind chimes. "I'm Whisper, guardian of the Whispering Garden. We've been waiting for someone brave enough to hear the flowers' secrets. Would you like to learn their language?"</p>
+                        <p class="story-text">Maya nodded eagerly. Whisper touched her wing to Maya's forehead, and suddenly Maya could hear the roses giggling and the daisies singing soft songs. "You're a natural," Whisper smiled. "Tomorrow, I'll introduce you to the garden sprites. They've heard all about you."</p>
+                    </div>
+
+                    <div class="story-card">
+                        <div class="story-number">Story 3</div>
+                        <h3 class="story-title">Maya and the Garden Sprites' Treasure</h3>
+                        <p class="story-text">"Whisper! You're here!" Maya ran to the oak tree where her friend was waiting. The silver owl chuckled.</p>
+                        <p class="story-text">"Of course, little gardener. The sprites have a mystery for us today." Three tiny creatures with petal wings appeared from behind a sunflower. "Our treasure is missing!" they squeaked.</p>
+                        <p class="story-text">Maya remembered the flower language Whisper had taught her. She knelt down and asked the roses, "Did you see who took it?" The roses whispered about a curious rabbit who'd hopped past at dawn. Maya, Whisper, and the sprites followed the trail of tiny pawprints, working together to solve the mystery—just like a real team of friends.</p>
+                    </div>
+
+                    <div class="story-card">
+                        <div class="story-number">Story 7</div>
+                        <h3 class="story-title">Maya Teaches Luna the Secret Language</h3>
+                        <p class="story-text">Whisper was sitting in her usual spot when Maya arrived, but tonight there was someone new—a nervous little girl with starlight in her hair. "Maya, this is Luna. She's just discovered the garden, and she's scared of the talking flowers."</p>
+                        <p class="story-text">Maya remembered feeling nervous on her first night too. She took Luna's hand. "It's okay! The flowers are friendly once you learn their language. Here, I'll teach you." She showed Luna the gentle way to listen, just as Whisper had taught her weeks ago.</p>
+                        <p class="story-text">By the end of the evening, Luna was laughing at the daisies' jokes. Whisper winked at Maya. "You've become quite the teacher, Maya. The garden is lucky to have you both." Maya beamed, proud to share her magical world with a new friend.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Simple Pricing</h2>
+                </div>
+
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-tier">Free Tier</div>
+                        <div class="pricing-amount">Free</div>
+                        <ul class="pricing-features">
+                            <li>First 10 stories completely free</li>
+                            <li>Experience the universe-building magic</li>
+                            <li>No credit card required</li>
+                        </ul>
+                    </div>
+
+                    <div class="pricing-card featured">
+                        <div class="pricing-tier">Story Universe Membership</div>
+                        <div class="pricing-amount">$9.99<small>/month</small></div>
+                        <ul class="pricing-features">
+                            <li>Unlimited personalized stories</li>
+                            <li>Persistent universe with continuity</li>
+                            <li>Meet our house characters</li>
+                            <li>Request specific themes or lessons</li>
+                            <li>Early access to physical merchandise</li>
+                            <li>Companion digital games <em>(coming soon)</em></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="guarantee">
+                    <p><strong>Money-back guarantee:</strong> If your child doesn't love their story universe, we'll refund your first month, no questions asked.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Frequently Asked Questions</h2>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>How is this different from other AI story generators?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Most AI story tools create one-off stories that forget everything by tomorrow. Storytime builds a <em>persistent universe</em>—characters remember your child, running jokes develop, plot lines evolve. It's like having a TV series where your child is the star, not just random episodes.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Is it safe for my child?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Absolutely. All stories are age-appropriate and reviewed by our safety systems. We never include scary content, and you can set guidelines for themes you'd prefer to avoid. Plus, we're privacy-focused—your child's data stays with us and is never sold or shared.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>What ages is this suitable for?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Storytime is designed for children aged 2-8 years old. Stories are tailored to your child's age, reading level, and interests, growing more complex as they do.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>What are "house characters"?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                These are proprietary recurring characters we've created—like Whisper the Owl—who appear naturally in stories as guides, friends, or mentors. They provide continuity across different story worlds and become beloved companions your child looks forward to seeing.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Will you really make custom plushies?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Yes! Once we validate demand, we'll offer custom plushies of your child's favourite characters from their universe—including house characters and original characters from their stories. It's part of our vision to bring the story world into real life.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Can I have stories for multiple children?</span>
+                            <span class="faq-icon">+</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Yes! Each child gets their own persistent universe. Siblings can even visit each other's story worlds for special crossover adventures.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to start your child's story universe?</h2>
+                <p class="subtext">Join the waitlist now and get your first 10 stories free when we launch.</p>
+
+                <form class="email-form" id="ctaForm">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="cta-button">Join the waitlist</button>
+                </form>
+
+                <div class="timeline">
+                    <h3 style="color: var(--cream); margin-bottom: 24px;">What happens next:</h3>
+                    <div class="timeline-item">
+                        <strong>Day 1:</strong>
+                        <span>Welcome email + quick survey about your child's interests</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Day 3:</strong>
+                        <span>Sample story showing what we're building</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Day 7:</strong>
+                        <span>Help us prioritize features you'd love to see</span>
+                    </div>
+                    <div class="timeline-item">
+                        <strong>Launch:</strong>
+                        <span>Be first to create your child's universe</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-brand">Storytime</div>
+                <p class="footer-tagline">Where every bedtime becomes an adventure</p>
+
+                <form class="email-form" id="footerForm" style="margin-bottom: 32px;">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="cta-button">Get Started</button>
+                </form>
+
+                <p class="footer-made">Made with love by parents, for parents 🇦🇺</p>
+
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms</a>
+                    <a href="#contact">Contact</a>
+                </div>
+
+                <p class="footer-copyright">© 2026 Storytime. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Generate stars with trails
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 80; // Regular twinkling stars
+            const driftingCount = 15; // Drifting stars with trails
+            const shootingCount = 5; // Shooting stars
+
+            // Create regular twinkling stars
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                starsContainer.appendChild(star);
+            }
+
+            // Create drifting stars with trails
+            for (let i = 0; i < driftingCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star drifting';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 20 + 's';
+                star.style.animationDuration = (15 + Math.random() * 10) + 's';
+                starsContainer.appendChild(star);
+            }
+
+            // Create shooting stars
+            for (let i = 0; i < shootingCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star shooting';
+                star.style.left = (20 + Math.random() * 80) + '%';
+                star.style.top = (10 + Math.random() * 40) + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.animationDuration = (2 + Math.random() * 2) + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Generate golden particles in hero section
+        function createHeroParticles() {
+            const particlesContainer = document.getElementById('heroParticles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '0';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (6 + Math.random() * 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+
+                // Close all FAQs
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+
+                // Open clicked FAQ if it wasn't active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
+
+        // Form submissions
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            alert(`Thanks for your interest! We'll send updates to ${email}`);
+            e.target.reset();
+        }
+
+        document.getElementById('heroForm').addEventListener('submit', handleFormSubmit);
+        document.getElementById('ctaForm').addEventListener('submit', handleFormSubmit);
+        document.getElementById('footerForm').addEventListener('submit', handleFormSubmit);
+
+        // Rotating taglines
+        function rotateTaglines() {
+            const rotatingText = document.getElementById('rotatingText');
+            const options = rotatingText.querySelectorAll('.text-option');
+            let currentIndex = 0;
+
+            setInterval(() => {
+                options[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % options.length;
+                options[currentIndex].classList.add('active');
+            }, 5000); // Rotate every 5 seconds
+        }
+
+        // Initialize
+        createStars();
+        createHeroParticles();
+        rotateTaglines();
+    </script>
+</body>
+</html>
