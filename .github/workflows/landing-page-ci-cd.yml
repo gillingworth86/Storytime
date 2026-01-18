@@ -6,10 +6,12 @@ on:
     paths:
       - 'experimental/landing-pages/**'
       - '.github/workflows/landing-page-ci-cd.yml'
+      - '.htmlvalidate.json'
   pull_request:
     branches: [master]
     paths:
       - 'experimental/landing-pages/**'
+      - '.htmlvalidate.json'
 
 env:
   NODE_VERSION: '20'
