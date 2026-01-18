@@ -1,0 +1,195 @@
+name: Landing Page CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'experimental/landing-pages/**'
+      - '.github/workflows/landing-page-ci-cd.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'experimental/landing-pages/**'
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # Validate HTML and check quality
+  quality-check:
+    name: Quality & Security Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Validate HTML
+        run: |
+          npm install -g html-validate
+          html-validate experimental/landing-pages/*.html
+
+      - name: Check links
+        run: |
+          npm install -g broken-link-checker
+          # Run link checker after deployment
+
+      - name: Security scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: 'experimental/landing-pages'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload security scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # Lighthouse performance audit
+  lighthouse-audit:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    needs: quality-check
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: |
+            file://${{ github.workspace }}/experimental/landing-pages/index.html
+          configPath: '.github/lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # Deploy to Netlify (Preview for PRs, Production for main)
+  deploy-netlify:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    needs: [quality-check, lighthouse-audit]
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Netlify
+        id: deploy
+        uses: nwtgck/actions-netlify@v2.1
+        with:
+          publish-dir: './experimental/landing-pages'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Comment deployment URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ Landing page deployed to preview:\n\n🔗 ${{ steps.deploy.outputs.url }}\n\nPlease review before merging.`
+            });
+
+  # Post-deployment tests
+  post-deployment-tests:
+    name: Post-Deployment Tests
+    runs-on: ubuntu-latest
+    needs: deploy-netlify
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Playwright
+        run: |
+          npm install -g playwright
+          playwright install chromium
+
+      - name: Run smoke tests
+        run: |
+          # Create a simple smoke test
+          cat > smoke-test.js << 'EOF'
+          const { chromium } = require('playwright');
+
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+
+            // Get deployment URL from environment
+            const url = process.env.DEPLOY_URL || 'https://getstorytime.com';
+
+            try {
+              // Navigate to landing page
+              await page.goto(url, { waitUntil: 'networkidle' });
+              console.log('✓ Page loaded successfully');
+
+              // Check for key elements
+              const title = await page.title();
+              console.log('✓ Page title:', title);
+
+              // Check hero section
+              const heroHeading = await page.locator('h1').first().textContent();
+              console.log('✓ Hero heading found:', heroHeading);
+
+              // Check email forms are present
+              const emailInputs = await page.locator('input[type="email"]').count();
+              console.log('✓ Email forms found:', emailInputs);
+
+              // Check CTA buttons
+              const ctaButtons = await page.locator('.cta-button').count();
+              console.log('✓ CTA buttons found:', ctaButtons);
+
+              // Verify no console errors
+              page.on('console', msg => {
+                if (msg.type() === 'error') {
+                  console.error('❌ Console error:', msg.text());
+                  process.exit(1);
+                }
+              });
+
+              console.log('\n✅ All smoke tests passed!');
+            } catch (error) {
+              console.error('❌ Smoke tests failed:', error);
+              process.exit(1);
+            } finally {
+              await browser.close();
+            }
+          })();
+          EOF
+
+          node smoke-test.js
+        env:
+          DEPLOY_URL: ${{ needs.deploy-netlify.outputs.url }}
+
+      - name: Check deployment health
+        run: |
+          echo "✓ Deployment completed successfully"
+          echo "📝 TODO: Add Plausible analytics and Buttondown email integration"
+

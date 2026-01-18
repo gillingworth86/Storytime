@@ -1,0 +1,193 @@
+name: App CI/CD (Phase 2)
+
+# This workflow is for the full Storytime application (Phase 2)
+# Currently disabled - will be activated when app development begins
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'app/**'
+      - '.github/workflows/app-ci-cd.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'app/**'
+
+# Uncomment when ready to use
+# env:
+#   NODE_VERSION: '20'
+#   PYTHON_VERSION: '3.11'
+
+jobs:
+  # Placeholder job - remove when implementing
+  placeholder:
+    name: App CI/CD Placeholder
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notice
+        run: |
+          echo "⚠️  App CI/CD workflow is not yet configured"
+          echo "📝 This will be activated in Phase 2 when app development begins"
+          echo ""
+          echo "Planned jobs for Phase 2:"
+          echo "  - Lint and type checking"
+          echo "  - Unit tests"
+          echo "  - Integration tests"
+          echo "  - Build application"
+          echo "  - Deploy to staging"
+          echo "  - E2E tests"
+          echo "  - Deploy to production"
+
+  # TEMPLATE: Uncomment and customize for your stack when ready
+  #
+  # lint-and-test:
+  #   name: Lint & Test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: 'npm'
+  #         cache-dependency-path: app/package-lock.json
+  #
+  #     - name: Install dependencies
+  #       working-directory: app
+  #       run: npm ci
+  #
+  #     - name: Run linter
+  #       working-directory: app
+  #       run: npm run lint
+  #
+  #     - name: Type check
+  #       working-directory: app
+  #       run: npm run typecheck
+  #
+  #     - name: Run unit tests
+  #       working-directory: app
+  #       run: npm run test:unit -- --coverage
+  #
+  #     - name: Upload coverage
+  #       uses: codecov/codecov-action@v3
+  #       with:
+  #         directory: ./app/coverage
+  #
+  # build:
+  #   name: Build Application
+  #   needs: lint-and-test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: 'npm'
+  #
+  #     - name: Install dependencies
+  #       working-directory: app
+  #       run: npm ci
+  #
+  #     - name: Build
+  #       working-directory: app
+  #       run: npm run build
+  #       env:
+  #         NODE_ENV: production
+  #
+  #     - name: Upload build artifacts
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: app-build
+  #         path: app/dist
+  #         retention-days: 7
+  #
+  # deploy-staging:
+  #   name: Deploy to Staging
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+  #   environment:
+  #     name: staging
+  #     url: https://staging.getstorytime.com
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Download build artifacts
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: app-build
+  #         path: app/dist
+  #
+  #     - name: Deploy to Netlify Staging
+  #       uses: nwtgck/actions-netlify@v2.1
+  #       with:
+  #         publish-dir: './app/dist'
+  #         production-branch: main
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         deploy-message: "Staging deploy - ${{ github.event.head_commit.message }}"
+  #       env:
+  #         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  #         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_STAGING_SITE_ID }}
+  #
+  # e2e-tests:
+  #   name: E2E Tests
+  #   needs: deploy-staging
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #
+  #     - name: Install Playwright
+  #       working-directory: app
+  #       run: |
+  #         npm ci
+  #         npx playwright install --with-deps
+  #
+  #     - name: Run E2E tests
+  #       working-directory: app
+  #       run: npm run test:e2e
+  #       env:
+  #         BASE_URL: https://staging.getstorytime.com
+  #
+  #     - name: Upload test results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: playwright-results
+  #         path: app/test-results
+  #
+  # deploy-production:
+  #   name: Deploy to Production
+  #   needs: [build, e2e-tests]
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   environment:
+  #     name: production
+  #     url: https://app.getstorytime.com
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #
+  #     - name: Download build artifacts
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: app-build
+  #         path: app/dist
+  #
+  #     - name: Deploy to Netlify Production
+  #       uses: nwtgck/actions-netlify@v2.1
+  #       with:
+  #         publish-dir: './app/dist'
+  #         production-deploy: true
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #         deploy-message: "Production deploy - ${{ github.event.head_commit.message }}"
+  #       env:
+  #         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+  #         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_APP_PROD_SITE_ID }}
