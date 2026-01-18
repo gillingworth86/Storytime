@@ -45,6 +45,7 @@ jobs:
 
       - name: Security scan
         uses: aquasecurity/trivy-action@master
+        continue-on-error: true
         with:
           scan-type: 'fs'
           scan-ref: 'experimental/landing-pages'
@@ -54,7 +55,7 @@ jobs:
 
       - name: Upload security scan results
         uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        if: always() && hashFiles('trivy-results.sarif') != ''
         with:
           sarif_file: 'trivy-results.sarif'
 

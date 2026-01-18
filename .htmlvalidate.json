@@ -16,9 +16,9 @@
     "wcag/h67": "error",
     "wcag/h71": "error",
     "no-trailing-whitespace": "off",
-    "void-style": ["error", "selfclose"],
-    "attribute-boolean-style": ["error", "omit"],
-    "attr-quotes": ["error", "double"]
+    "void-style": ["error", {"style": "selfclose"}],
+    "attribute-boolean-style": ["error", {"style": "omit"}],
+    "attr-quotes": ["error", {"style": "double"}]
   },
   "elements": [
     "html5"
