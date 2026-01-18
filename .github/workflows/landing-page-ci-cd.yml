@@ -81,8 +81,8 @@ jobs:
           urls: |
             https://getstorytime.netlify.app
           configPath: '.github/lighthouserc.json'
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+          uploadArtifacts: false
+          temporaryPublicStorage: false
 
   # Deploy to Netlify (Preview for PRs, Production for main)
   deploy-netlify:
