@@ -1,0 +1,27 @@
+{
+  "name": "storytime",
+  "version": "1.0.0",
+  "description": "Storytime - Personalized bedtime stories with persistent universe",
+  "private": true,
+  "scripts": {
+    "validate:html": "html-validate experimental/landing-pages/*.html",
+    "serve:landing": "cd experimental/landing-pages && python -m http.server 8000",
+    "lighthouse": "lighthouse https://getstorytime.com --view",
+    "lighthouse:local": "lighthouse http://localhost:8000 --view",
+    "format:check": "prettier --check experimental/landing-pages/*.html",
+    "format:fix": "prettier --write experimental/landing-pages/*.html"
+  },
+  "devDependencies": {
+    "html-validate": "^8.9.0",
+    "lighthouse": "^11.4.0",
+    "prettier": "^3.1.1"
+  },
+  "keywords": [
+    "storytime",
+    "bedtime-stories",
+    "ai-stories",
+    "personalized-stories"
+  ],
+  "author": "gillingworth86",
+  "license": "UNLICENSED"
+}

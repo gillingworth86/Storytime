@@ -7,7 +7,7 @@
   # No build command needed for static HTML
   command = "echo 'Static site - no build required'"
 
-# Production context (main branch)
+# Production context (master branch)
 [context.production]
   publish = "experimental/landing-pages"
 

@@ -1,0 +1,26 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "close-attr": "error",
+    "close-order": "error",
+    "doctype-html": "error",
+    "no-dup-attr": "error",
+    "no-dup-id": "error",
+    "no-missing-references": "error",
+    "require-sri": "off",
+    "valid-id": "error",
+    "wcag/h30": "error",
+    "wcag/h32": "error",
+    "wcag/h36": "error",
+    "wcag/h37": "error",
+    "wcag/h67": "error",
+    "wcag/h71": "error",
+    "no-trailing-whitespace": "off",
+    "void-style": ["error", "selfclose"],
+    "attribute-boolean-style": ["error", "omit"],
+    "attr-quotes": ["error", "double"]
+  },
+  "elements": [
+    "html5"
+  ]
+}

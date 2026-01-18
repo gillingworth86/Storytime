@@ -11,7 +11,7 @@ Your CI/CD pipeline will automatically:
 - ✅ Run Lighthouse performance audits
 - ✅ Scan for security vulnerabilities
 - ✅ Deploy preview builds for pull requests
-- ✅ Deploy to production on merge to main
+- ✅ Deploy to production on merge to master
 - ✅ Run post-deployment smoke tests
 
 ---
@@ -58,11 +58,11 @@ Your CI/CD pipeline will automatically:
 6. **COPY THE TOKEN IMMEDIATELY** - you won't see it again!
    - Format: `nfp_abc123def456ghi789jkl012mno345pqr678stu901vwx234yz`
 
-### Step 3: Configure Custom Domain (Optional but Recommended)
+### Step 3: Configure Custom Domaster (Optional but Recommended)
 
-1. In your Netlify site settings, go to **Domain management**
-2. Click **Add custom domain**
-3. Enter: `getstorytime.com` (or your chosen domain)
+1. In your Netlify site settings, go to **Domaster management**
+2. Click **Add custom domaster**
+3. Enter: `getstorytime.com` (or your chosen domaster)
 4. Follow the DNS configuration instructions
 5. Enable **HTTPS** (Netlify will automatically provision SSL)
 
@@ -111,7 +111,7 @@ If they're not committed yet:
 cd c:\Dev\Storytime
 git add .github/ netlify.toml
 git commit -m "ci: add CI/CD automation for landing page"
-git push origin main
+git push origin master
 ```
 
 ### Step 2: Watch the Workflow Run
@@ -154,7 +154,7 @@ git push origin test-ci-cd
 
 ### Step 4: Create Pull Request
 
-1. Go to GitHub and create a Pull Request from `test-ci-cd` to `main`
+1. Go to GitHub and create a Pull Request from `test-ci-cd` to `master`
 2. The CI/CD workflow will automatically:
    - Run quality checks
    - Deploy a preview version
@@ -208,11 +208,11 @@ After each deployment, Lighthouse generates a performance report:
 ### Add Plausible Analytics (when ready)
 
 1. Sign up at https://plausible.io/
-2. Add your domain
+2. Add your domaster
 3. Copy the tracking script
 4. Add to `index.html` before `</head>`:
    ```html
-   <script defer data-domain="getstorytime.com" src="https://plausible.io/js/script.js"></script>
+   <script defer data-domaster="getstorytime.com" src="https://plausible.io/js/script.js"></script>
    ```
 5. Update `netlify.toml` CSP headers (follow the comments in the file)
 

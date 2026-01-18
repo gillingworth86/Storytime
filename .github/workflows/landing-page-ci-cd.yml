@@ -2,12 +2,12 @@ name: Landing Page CI/CD
 
 on:
   push:
-    branches: [main, develop]
+    branches: [master, develop]
     paths:
       - 'experimental/landing-pages/**'
       - '.github/workflows/landing-page-ci-cd.yml'
   pull_request:
-    branches: [main]
+    branches: [master]
     paths:
       - 'experimental/landing-pages/**'
 
@@ -79,7 +79,7 @@ jobs:
     needs: [quality-check, lighthouse-audit]
     if: github.event_name == 'push' || github.event_name == 'pull_request'
     environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+      name: ${{ github.ref == 'refs/heads/master' && 'production' || 'preview' }}
       url: ${{ steps.deploy.outputs.url }}
     steps:
       - name: Checkout code
@@ -90,7 +90,7 @@ jobs:
         uses: nwtgck/actions-netlify@v2.1
         with:
           publish-dir: './experimental/landing-pages'
-          production-branch: main
+          production-branch: master
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
           enable-pull-request-comment: true
@@ -117,7 +117,7 @@ jobs:
     name: Post-Deployment Tests
     runs-on: ubuntu-latest
     needs: deploy-netlify
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
