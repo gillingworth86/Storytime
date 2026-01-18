@@ -14,6 +14,11 @@ on:
 env:
   NODE_VERSION: '20'
 
+permissions:
+  contents: read
+  security-events: write
+  pull-requests: write
+
 jobs:
   # Validate HTML and check quality
   quality-check:
@@ -27,7 +32,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
 
       - name: Validate HTML
         run: |
@@ -49,7 +53,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
       - name: Upload security scan results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
           sarif_file: 'trivy-results.sarif'
