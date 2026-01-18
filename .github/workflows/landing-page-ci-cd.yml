@@ -79,7 +79,7 @@ jobs:
         continue-on-error: true
         with:
           urls: |
-            https://getstorytime.com
+            https://getstorytime.netlify.app
           configPath: '.github/lighthouserc.json'
           uploadArtifacts: true
           temporaryPublicStorage: true
@@ -141,8 +141,8 @@ jobs:
 
       - name: Install Playwright
         run: |
-          npm install -g playwright
-          playwright install chromium
+          npm install playwright
+          npx playwright install chromium --with-deps
 
       - name: Run smoke tests
         run: |
@@ -155,7 +155,7 @@ jobs:
             const page = await browser.newPage();
 
             // Get deployment URL from environment
-            const url = process.env.DEPLOY_URL || 'https://getstorytime.com';
+            const url = process.env.DEPLOY_URL || 'https://getstorytime.netlify.app';
 
             try {
               // Navigate to landing page
