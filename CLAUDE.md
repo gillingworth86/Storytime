@@ -8,7 +8,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 **Current Phase:** Phase 1 - Landing page validation
 **Goal:** Collect 100 email signups in 3 weeks
-**Tech Stack:** Static HTML landing page, deployed to Netlify
+**Tech Stack:** Static HTML landing page, deployed to Vercel (migrated from Netlify 2026-01-24)
 
 ## Repository Structure
 
@@ -29,14 +29,26 @@ Storytime/
 - **Remote:** origin (GitHub: gillingworth86/Storytime)
 
 ### Deployment
-- **Platform:** Netlify
-- **Production URL:** https://getstorytime.netlify.app
-- **Netlify secrets configured:** Yes (NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID)
+- **Platform:** Vercel (native Git integration)
+- **Production URL:** [Will be assigned by Vercel - update after first deployment]
+- **Deployment:** Automatic on push to `master` branch
+- **Preview URLs:** Automatic for all PRs and branches
+- **Configuration:** `vercel.json` (headers, redirects, security settings)
+
+**Legacy Netlify Setup (Preserved):**
+- Backup files: `netlify.toml.backup`, `.github/workflows/landing-page-ci-cd.yml.backup`
+- Git tag: `netlify-backup` (restore point if needed)
+- Old URL: https://getstorytime.netlify.app (will be deprecated)
 
 ### CI/CD Pipeline
-- **Workflow:** `.github/workflows/landing-page-ci-cd.yml`
-- **Triggers:** Changes to `experimental/landing-pages/**`, `.htmlvalidate.json`, or workflow file
-- **Jobs:** quality-check → deploy-netlify → lighthouse-audit → post-deployment-tests
+- **Workflow:** `.github/workflows/quality-checks.yml`
+- **Purpose:** Quality checks only (Vercel handles deployment automatically)
+- **Triggers:** Push to `master` or PRs affecting `experimental/landing-pages/**`
+- **Jobs:**
+  - HTML validation (`html-validate`)
+  - Security scanning (`trivy`)
+  - Lighthouse performance audit (on master push only, after Vercel deploys)
+- **Build minutes usage:** ~50 minutes/month (well under GitHub's free tier)
 
 ## CI/CD Implementation Guidelines
 
@@ -52,9 +64,9 @@ Storytime/
 **Common gotchas for this project:**
 - Branch is `master`, not `main`
 - No `package-lock.json` exists (don't add npm cache)
-- URL is `https://getstorytime.netlify.app` (not custom domain)
+- Deployment is handled by Vercel (not GitHub Actions)
 - HTML validation rules are intentionally lenient
-- Lighthouse runs after deployment, not before
+- Lighthouse audit URL needs updating after first Vercel deployment
 
 ## Development Commands
 
@@ -65,8 +77,12 @@ npx html-validate experimental/landing-pages/*.html
 # Start local server
 cd experimental/landing-pages && python -m http.server 8000
 
-# Trigger CI/CD
-git commit --allow-empty -m "trigger: test pipeline"
+# Deploy to Vercel
+git push origin master
+# Vercel automatically deploys on push (no manual trigger needed)
+
+# Trigger quality checks workflow manually
+git commit --allow-empty -m "trigger: test quality checks"
 git push origin master
 ```
 
@@ -84,33 +100,58 @@ git push origin master
 
 ## External Services
 
-### Netlify
-- Account: gillingworth86 GitHub account
-- Site ID: Stored in GitHub secrets
-- Auth token: Stored in GitHub secrets
+### Vercel (Current Deployment)
+- Account: Connect via GitHub (gillingworth86)
+- Configuration: `vercel.json`
+- Deployment: Native Git integration (automatic)
+- Build minutes: 6,000/month free tier
+- Dashboard: https://vercel.com/dashboard
+
+### Netlify (Deprecated - Legacy)
+- Status: Migrated to Vercel 2026-01-24
+- Reason: Build minute limits (300/month) exhausted
+- Backup: Config preserved in `netlify.toml.backup`
+- Restore: Use git tag `netlify-backup` if rollback needed
 
 ### Analytics (Future)
 - Plausible: Not yet configured
-- Instructions in `netlify.toml` comments
+- Instructions in `vercel.json` CSP headers
 
 ### Email (Future)
 - Buttondown: Not yet configured
-- Instructions in `netlify.toml` comments
+- Will need CSP updates in `vercel.json`
 
 ## Troubleshooting
 
-### Workflow fails on push
-- Check `.github/workflows/landing-page-ci-cd.yml` paths filter
-- Verify secrets are configured in GitHub
+### Quality checks workflow fails
+- Check `.github/workflows/quality-checks.yml` paths filter
+- Verify HTML validation rules in `.htmlvalidate.json`
+- Security scan failures are set to `continue-on-error: true`
 
 ### HTML validation errors
 - Rules are in `.htmlvalidate.json`
 - Rules are intentionally lenient for existing HTML
 - Don't make stricter without fixing HTML first
 
-### Deployment fails
-- Check Netlify secrets: NETLIFY_AUTH_TOKEN, NETLIFY_SITE_ID
-- Verify publish directory: `experimental/landing-pages`
+### Vercel deployment fails
+- Check Vercel dashboard: https://vercel.com/dashboard
+- Verify `vercel.json` configuration is valid
+- Ensure output directory is `experimental/landing-pages`
+- Check Vercel project settings for correct branch
+
+### Lighthouse audit fails
+- Update the production URL in `.github/workflows/quality-checks.yml`
+- Ensure Vercel deployment completed before Lighthouse runs
+- Wait time is set to 60 seconds (may need adjustment)
+
+### Need to rollback to Netlify
+```bash
+git checkout netlify-backup
+mv netlify.toml.backup netlify.toml
+mv .github/workflows/landing-page-ci-cd.yml.backup .github/workflows/landing-page-ci-cd.yml
+rm vercel.json
+git add . && git commit -m "rollback: Restore Netlify deployment"
+```
 
 ## Resources
 
@@ -119,9 +160,10 @@ git push origin master
 - **Implementation checklist:** `IMPLEMENTATION-CHECKLIST.md`
 - **CI/CD guide:** `.claude/cicd-implementation-guide.md`
 - **GitHub Actions:** https://github.com/gillingworth86/Storytime/actions
-- **Netlify Dashboard:** https://app.netlify.com/
+- **Vercel Dashboard:** https://vercel.com/dashboard
+- **Migration docs:** `VERCEL-MIGRATION.md` (rollback instructions)
 
 ---
 
-**Last Updated:** 2026-01-18
+**Last Updated:** 2026-01-24 (Vercel migration)
 **Maintained by:** gillingworth86
