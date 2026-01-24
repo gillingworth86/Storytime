@@ -738,6 +738,9 @@
             scroll-behavior: smooth;
         }
     </style>
+
+    <!-- Plausible Analytics - Privacy-friendly analytics with custom events -->
+    <script defer data-domain="getstorytime.netlify.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 </head>
 <body>
     <div class="stars" id="stars"></div>
@@ -758,7 +761,7 @@
                     </span>
                 </p>
 
-                <form class="email-form" id="heroForm">
+                <form class="email-form" id="heroForm" data-location="hero">
                     <input type="email" class="email-input" placeholder="Enter your email" required>
                     <button type="submit" class="cta-button">Start your story universe</button>
                 </form>
@@ -966,7 +969,7 @@
                 <h2>Ready to start your child's story universe?</h2>
                 <p class="subtext">Join the waitlist now and get your first 10 stories free when we launch.</p>
 
-                <form class="email-form" id="ctaForm">
+                <form class="email-form" id="ctaForm" data-location="mid-page">
                     <input type="email" class="email-input" placeholder="Enter your email" required>
                     <button type="submit" class="cta-button">Join the waitlist</button>
                 </form>
@@ -999,7 +1002,7 @@
                 <div class="footer-brand">Storytime</div>
                 <p class="footer-tagline">Where every bedtime becomes an adventure</p>
 
-                <form class="email-form" id="footerForm" style="margin-bottom: 32px;">
+                <form class="email-form" id="footerForm" data-location="footer" style="margin-bottom: 32px;">
                     <input type="email" class="email-input" placeholder="Enter your email" required>
                     <button type="submit" class="cta-button">Get Started</button>
                 </form>
@@ -1093,10 +1096,21 @@
             });
         });
 
-        // Form submissions
+        // Form submissions with Plausible event tracking
         function handleFormSubmit(e) {
             e.preventDefault();
             const email = e.target.querySelector('input[type="email"]').value;
+            const location = e.target.dataset.location || 'unknown';
+
+            // Track email signup event in Plausible
+            if (window.plausible) {
+                plausible('Email Signup', {
+                    props: {
+                        location: location
+                    }
+                });
+            }
+
             alert(`Thanks for your interest! We'll send updates to ${email}`);
             e.target.reset();
         }
@@ -1104,6 +1118,27 @@
         document.getElementById('heroForm').addEventListener('submit', handleFormSubmit);
         document.getElementById('ctaForm').addEventListener('submit', handleFormSubmit);
         document.getElementById('footerForm').addEventListener('submit', handleFormSubmit);
+
+        // Track when email forms become visible (scroll tracking)
+        const emailForms = document.querySelectorAll('.email-form');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const location = entry.target.dataset.location || 'unknown';
+                    if (window.plausible) {
+                        plausible('Form Viewed', {
+                            props: {
+                                location: location
+                            }
+                        });
+                    }
+                    // Track only once per form
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 }); // Trigger when 50% visible
+
+        emailForms.forEach(form => observer.observe(form));
 
         // Rotating taglines
         function rotateTaglines() {
