@@ -7,6 +7,10 @@
   # No build command needed for static HTML
   command = "echo 'Static site - no build required'"
 
+  # Ignore automatic Netlify builds - we deploy only via GitHub Actions
+  # This prevents Netlify from consuming build minutes on every commit
+  ignore = "exit 0"
+
 # Production context (master branch)
 [context.production]
   publish = "experimental/landing-pages"
