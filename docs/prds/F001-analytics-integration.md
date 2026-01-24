@@ -1,9 +1,9 @@
 # PRD: F001 - Analytics Integration
 
-**Status:** In Progress
+**Status:** Completed
 **Priority:** P0 (Critical Path)
 **Effort Estimate:** 1 day
-**Owner:** TBD
+**Owner:** Claude
 **Created:** 2026-01-24
 **Last Updated:** 2026-01-24
 
@@ -324,7 +324,7 @@ User's Browser
 **Components:**
 - **Frontend:** Modified `index.html` with script tag and event tracking
 - **External Service:** Plausible Analytics (cloud-hosted)
-- **Configuration:** Updated CSP headers in `netlify.toml`
+- **Configuration:** Updated CSP headers in `vercel.json`
 
 ### 5.2 Integration Implementation
 
@@ -335,37 +335,30 @@ User's Browser
 **Add to `<head>` section (before closing `</head>`):**
 ```html
 <!-- Plausible Analytics - Privacy-friendly analytics -->
-<script defer data-domain="getstorytime.netlify.app" src="https://plausible.io/js/script.js"></script>
+<script defer data-domain="getstorytime.vercel.app" src="https://plausible.io/js/script.js"></script>
 ```
 
 **Alternative (with custom events support):**
 ```html
 <!-- Plausible Analytics with custom events -->
-<script defer data-domain="getstorytime.netlify.app" src="https://plausible.io/js/script.tagged-events.js"></script>
+<script defer data-domain="getstorytime.vercel.app" src="https://plausible.io/js/script.tagged-events.js"></script>
 ```
 
 **Notes:**
 - `defer` attribute: Script loads asynchronously (no blocking)
-- `data-domain`: Matches Netlify site URL
+- `data-domain`: Matches Vercel site URL
 - `script.tagged-events.js`: Enables custom event tracking
 
 #### Step 2: Update CSP Headers
 
-**Location:** `netlify.toml`
+**Location:** `vercel.json`
 
-**Modify Content-Security-Policy (line ~39):**
-```toml
-Content-Security-Policy = """
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' https://plausible.io;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  font-src 'self' https://fonts.gstatic.com;
-  img-src 'self' data: https:;
-  connect-src 'self' https://plausible.io;
-  frame-ancestors 'none';
-  base-uri 'self';
-  form-action 'self';
-"""
+**Modify Content-Security-Policy in headers section:**
+```json
+{
+  "key": "Content-Security-Policy",
+  "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+}
 ```
 
 **Changes:**
@@ -451,7 +444,7 @@ document.addEventListener('DOMContentLoaded', function() {
 ```typescript
 interface PlausibleEvent {
   // Automatic properties (sent by Plausible script)
-  domain: string;              // "getstorytime.netlify.app"
+  domain: string;              // "getstorytime.vercel.app"
   url: string;                 // Full page URL
   referrer: string | null;     // Referrer URL
   screen_width: number;        // Device screen width
@@ -468,7 +461,7 @@ interface PlausibleEvent {
 ```json
 {
   "name": "Email Signup",
-  "url": "https://getstorytime.netlify.app/",
+  "url": "https://getstorytime.vercel.app/",
   "props": {
     "location": "hero"
   }
@@ -482,11 +475,11 @@ interface PlausibleEvent {
 - **Docs:** https://plausible.io/docs
 - **Script CDN:** https://plausible.io/js/script.js
 - **API Endpoint:** https://plausible.io/api/event
-- **Dashboard:** https://plausible.io/getstorytime.netlify.app
+- **Dashboard:** https://plausible.io/getstorytime.vercel.app
 
 **Authentication:**
 - Sign up at https://plausible.io/register
-- Add site domain: `getstorytime.netlify.app`
+- Add site domain: `getstorytime.vercel.app`
 - No API key required for basic tracking (script embeds domain)
 
 **Rate Limits:**
@@ -504,7 +497,7 @@ experimental/landing-pages/
 ├── index.html                 # Modified with Plausible script + event tracking
 └── (other existing files)
 
-netlify.toml                   # Modified CSP headers
+vercel.json                    # Modified CSP headers
 
 docs/
 └── prds/
@@ -513,7 +506,7 @@ docs/
 
 **Changes Summary:**
 - `index.html`: Add script tag, add event tracking JavaScript
-- `netlify.toml`: Update CSP to allow Plausible domains
+- `vercel.json`: Update CSP to allow Plausible domains
 
 ---
 
@@ -522,7 +515,7 @@ docs/
 ### 6.1 User Flows
 
 **Flow 1: Visitor arrives and browses**
-1. User lands on https://getstorytime.netlify.app
+1. User lands on https://getstorytime.vercel.app
 2. Plausible script loads asynchronously (deferred, no blocking)
 3. Pageview event sent to Plausible API (< 100ms)
 4. User scrolls through content
@@ -539,7 +532,7 @@ docs/
 6. Dashboard updates within 30 seconds
 
 **Flow 3: Dashboard monitoring**
-1. Product owner visits https://plausible.io/getstorytime.netlify.app
+1. Product owner visits https://plausible.io/getstorytime.vercel.app
 2. Sees real-time visitor count, pageviews, top pages
 3. Clicks "Goals" tab to see email signup conversions
 4. Analyzes conversion rate and traffic sources
@@ -623,7 +616,7 @@ docs/
 - **Trigger:** CSP headers block Plausible script or API calls
 - **User Message:** None (script doesn't load)
 - **Logging:** Browser console shows CSP violation error
-- **Recovery:** Fix CSP headers in netlify.toml, redeploy
+- **Recovery:** Fix CSP headers in vercel.json, redeploy
 
 ### 7.3 Validation Rules
 
@@ -684,7 +677,7 @@ plausible('Email Signup', { props: { email: 'user@example.com' } });
 - Avoid sending user-generated content in event props
 
 **CORS Policy:**
-- Plausible API accepts requests from configured domain only (`getstorytime.netlify.app`)
+- Plausible API accepts requests from configured domain only (`getstorytime.vercel.app`)
 
 ### 8.4 Secret Management
 
@@ -755,7 +748,7 @@ plausible('Email Signup', { props: { email: 'user@example.com' } });
 
 **Scenario 1: Happy Path - Visitor to Signup**
 1. Open incognito browser window
-2. Navigate to https://getstorytime.netlify.app
+2. Navigate to https://getstorytime.vercel.app
 3. Scroll through page content
 4. Scroll to email form (observe form in viewport)
 5. Enter test email: test@example.com
@@ -854,7 +847,7 @@ if (ENABLE_ANALYTICS && window.plausible) {
 
 **Step 2: Add Site**
 1. Click "Add a website"
-2. Enter domain: `getstorytime.netlify.app`
+2. Enter domain: `getstorytime.vercel.app`
 3. Select timezone: **Australia/Sydney** (handles AEDT/AEST automatically)
 4. Click "Add site"
 
@@ -1054,8 +1047,8 @@ if (ENABLE_ANALYTICS && window.plausible) {
 ### 12.2 Dependencies
 
 **Depends on:**
-- Netlify deployment working (already in place)
-- CSP headers configurable (already in netlify.toml)
+- Vercel deployment working (already in place)
+- CSP headers configurable (already in vercel.json)
 - Email form exists on landing page (already in place)
 
 **Blocks:**
@@ -1167,8 +1160,8 @@ if (ENABLE_ANALYTICS && window.plausible) {
 
 ### Codebase References
 - **index.html:** `/experimental/landing-pages/index.html`
-- **netlify.toml:** `/netlify.toml` (CSP headers at line ~39)
-- **Workflow:** `/.github/workflows/landing-page-ci-cd.yml`
+- **vercel.json:** `/vercel.json` (CSP headers in headers section)
+- **Workflow:** `/.github/workflows/quality-checks.yml`
 
 ---
 
