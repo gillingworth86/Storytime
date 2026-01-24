@@ -1,236 +1,299 @@
-name: Landing Page CI/CD
+# ⚠️ DEPRECATED: This workflow is disabled - Vercel now handles deployment automatically
+#
+# Migration Date: 2026-01-24
+# Reason: Migrated from Netlify to Vercel for deployment
+# Vercel provides native Git integration with automatic deployments on push to master
+#
+# Active Workflow: quality-checks.yml (runs quality checks only, no deployment)
+#
+# This file is preserved for reference. To restore Netlify deployment, rename this file
+# and restore netlify.toml from netlify.toml.backup
+#
+# DO NOT DELETE - kept for rollback capability if needed
 
+# Uncomment below to re-enable this workflow
+# name: Landing Page CI/CD (DISABLED - Vercel Active)
+
+# Triggers disabled - uncomment to restore
 on:
-  # Tagged releases trigger production deploy (15 credits)
-  # Note: paths filters don't work with tag pushes in GitHub Actions
-  push:
-    tags:
-      - 'v*'           # Matches v1.0.0, v1.2.3, etc.
-      - 'release-*'    # Matches release-2026-01-24, etc.
+  # Disabled: Vercel handles all deployments automatically via Git integration
+  #
+  # # Tagged releases trigger production deploy (15 credits)
+  # # Note: paths filters don't work with tag pushes in GitHub Actions
+  # push:
+  #   tags:
+  #     - 'v*'           # Matches v1.0.0, v1.2.3, etc.
+  #     - 'release-*'    # Matches release-2026-01-24, etc.
+  #
+  # # Pull requests get preview deploys (FREE - no credits consumed)
+  # pull_request:
+  #   branches: [master]
+  #   paths:
+  #     - 'experimental/landing-pages/**'
+  #     - '.htmlvalidate.json'
+  #
+  # # Manual trigger from GitHub Actions UI
+  # workflow_dispatch:
+  #   inputs:
+  #     deploy_type:
+  #       description: 'Deployment type'
+  #       required: true
+  #       default: 'production'
+  #       type: choice
+  #       options:
+  #         - production
+  #         - preview
 
-  # Pull requests get preview deploys (FREE - no credits consumed)
-  pull_request:
-    branches: [master]
-    paths:
-      - 'experimental/landing-pages/**'
-      - '.htmlvalidate.json'
-
-  # Manual trigger from GitHub Actions UI
+  # Dummy trigger to keep workflow valid (never triggers)
   workflow_dispatch:
     inputs:
-      deploy_type:
-        description: 'Deployment type'
-        required: true
-        default: 'production'
-        type: choice
-        options:
-          - production
-          - preview
+      disabled:
+        description: 'This workflow is disabled - use quality-checks.yml instead'
+        required: false
+        default: 'true'
 
-env:
-  NODE_VERSION: '20'
+# All jobs below are commented out - Vercel handles deployment automatically
+# See quality-checks.yml for active quality checks workflow
+#
+# env:
+#   NODE_VERSION: '20'
+#
+# permissions:
+#   contents: read
+#   security-events: write
+#   pull-requests: write
+#
+# jobs:
+#   # Validate HTML and check quality
+#   quality-check:
+#     name: Quality & Security Checks
+#     runs-on: ubuntu-latest
+#     permissions:
+#       actions: read          # Required for workflow telemetry
+#       contents: read         # Required to checkout code
+#       security-events: write # Required to upload security scan results
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: ${{ env.NODE_VERSION }}
+#
+#       - name: Validate HTML
+#         run: |
+#           npm install -g html-validate
+#           html-validate experimental/landing-pages/*.html
+#
+#       - name: Check links
+#         run: |
+#           npm install -g broken-link-checker
+#           # Run link checker after deployment
+#
+#       - name: Security scan
+#         uses: aquasecurity/trivy-action@master
+#         continue-on-error: true
+#         with:
+#           scan-type: 'fs'
+#           scan-ref: 'experimental/landing-pages'
+#           format: 'sarif'
+#           output: 'trivy-results.sarif'
+#           severity: 'CRITICAL,HIGH'
+#
+#       - name: Upload security scan results
+#         uses: github/codeql-action/upload-sarif@v4
+#         if: always() && hashFiles('trivy-results.sarif') != ''
+#         with:
+#           sarif_file: 'trivy-results.sarif'
+#
+#   # Lighthouse performance audit (runs after production deployment only)
+#   # NOTE: Lighthouse audit now runs in quality-checks.yml after Vercel deployment
+#   lighthouse-audit:
+#     name: Lighthouse Performance Audit
+#     runs-on: ubuntu-latest
+#     needs: deploy-netlify
+#     if: |
+#       startsWith(github.ref, 'refs/tags/') ||
+#       (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production')
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#
+#       - name: Wait for deployment
+#         run: sleep 30
+#
+#       - name: Run Lighthouse CI
+#         uses: treosh/lighthouse-ci-action@v10
+#         continue-on-error: true
+#         with:
+#           urls: |
+#             https://getstorytime.netlify.app  # OUTDATED: Now using getstorytime.vercel.app
+#           configPath: '.github/lighthouserc.json'
+#           uploadArtifacts: false
+#           temporaryPublicStorage: false
+#
+#   # ==========================================
+#   # NETLIFY DEPLOYMENT (DEPRECATED)
+#   # ==========================================
+#   # Vercel now handles all deployments automatically via Git integration
+#   # - Push to master → Production deploy
+#   # - PRs → Preview deploy
+#   # Configuration: vercel.json
+#   #
+#   # Deploy to Netlify
+#   # - PRs: Preview deploy (FREE)
+#   # - Tags: Production deploy (15 credits)
+#   # - Manual: Based on input (15 credits for production)
+#   deploy-netlify:
+#     name: Deploy to Netlify
+#     runs-on: ubuntu-latest
+#     needs: quality-check
+#     if: |
+#       github.event_name == 'pull_request' ||
+#       github.event_name == 'workflow_dispatch' ||
+#       startsWith(github.ref, 'refs/tags/')
+#     environment:
+#       name: ${{ (startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production')) && 'production' || 'preview' }}
+#       url: ${{ steps.deploy.outputs.url }}
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#
+#       - name: Deploy to Netlify
+#         id: deploy
+#         uses: nwtgck/actions-netlify@v2.1
+#         with:
+#           publish-dir: './experimental/landing-pages'
+#           production-branch: master
+#           production-deploy: ${{ startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production') }}
+#           github-token: ${{ secrets.GITHUB_TOKEN }}
+#           deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
+#           enable-pull-request-comment: true
+#           enable-commit-comment: true
+#           overwrites-pull-request-comment: true
+#         env:
+#           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+#           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+#
+#       - name: Comment deployment URL
+#         if: github.event_name == 'pull_request'
+#         uses: actions/github-script@v7
+#         with:
+#           script: |
+#             github.rest.issues.createComment({
+#               issue_number: context.issue.number,
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               body: `✅ Landing page deployed to preview:\n\n🔗 ${{ steps.deploy.outputs.url }}\n\nPlease review before merging.`
+#             });
+#
+#   # Post-deployment tests (runs after production deployment only)
+#   # NOTE: These tests could be adapted for Vercel in quality-checks.yml if needed
+#   post-deployment-tests:
+#     name: Post-Deployment Tests
+#     runs-on: ubuntu-latest
+#     needs: deploy-netlify
+#     if: |
+#       startsWith(github.ref, 'refs/tags/') ||
+#       (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production')
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+#
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: ${{ env.NODE_VERSION }}
+#
+#       - name: Install Playwright
+#         run: |
+#           npm install playwright
+#           npx playwright install chromium --with-deps
+#
+#       - name: Run smoke tests
+#         run: |
+#           # Create a simple smoke test
+#           cat > smoke-test.js << 'EOF'
+#           const { chromium } = require('playwright');
+#
+#           (async () => {
+#             const browser = await chromium.launch();
+#             const page = await browser.newPage();
+#
+#             // Get deployment URL from environment
+#             const url = process.env.DEPLOY_URL || 'https://getstorytime.netlify.app';  # OUTDATED: Now using getstorytime.vercel.app
+#
+#             try {
+#               // Navigate to landing page
+#               await page.goto(url, { waitUntil: 'networkidle' });
+#               console.log('✓ Page loaded successfully');
+#
+#               // Check for key elements
+#               const title = await page.title();
+#               console.log('✓ Page title:', title);
+#
+#               // Check hero section
+#               const heroHeading = await page.locator('h1').first().textContent();
+#               console.log('✓ Hero heading found:', heroHeading);
+#
+#               // Check email forms are present
+#               const emailInputs = await page.locator('input[type="email"]').count();
+#               console.log('✓ Email forms found:', emailInputs);
+#
+#               # Check CTA buttons
+#               const ctaButtons = await page.locator('.cta-button').count();
+#               console.log('✓ CTA buttons found:', ctaButtons);
+#
+#               // Verify no console errors
+#               page.on('console', msg => {
+#                 if (msg.type() === 'error') {
+#                   console.error('❌ Console error:', msg.text());
+#                   process.exit(1);
+#                 }
+#               });
+#
+#               console.log('\n✅ All smoke tests passed!');
+#             } catch (error) {
+#               console.error('❌ Smoke tests failed:', error);
+#               process.exit(1);
+#             } finally {
+#               await browser.close();
+#             }
+#           })();
+#           EOF
+#
+#           node smoke-test.js
+#         env:
+#           DEPLOY_URL: ${{ needs.deploy-netlify.outputs.url }}
+#
+#       - name: Check deployment health
+#         run: |
+#           echo "✓ Deployment completed successfully"
+#           echo "📝 TODO: Add Plausible analytics and Buttondown email integration"
+#
+# ==========================================
+# END OF DEPRECATED NETLIFY WORKFLOW
+# ==========================================
+#
+# To restore Netlify deployment:
+# 1. Uncomment this entire file
+# 2. Restore netlify.toml from netlify.toml.backup
+# 3. Disable quality-checks.yml
+# 4. Remove vercel.json
+#
+# Active workflow: .github/workflows/quality-checks.yml
 
-permissions:
-  contents: read
-  security-events: write
-  pull-requests: write
-
+# Placeholder job to keep workflow file valid (never runs)
 jobs:
-  # Validate HTML and check quality
-  quality-check:
-    name: Quality & Security Checks
+  disabled-notice:
+    name: This workflow is disabled - Vercel handles deployment
     runs-on: ubuntu-latest
-    permissions:
-      actions: read          # Required for workflow telemetry
-      contents: read         # Required to checkout code
-      security-events: write # Required to upload security scan results
+    if: false  # Never runs
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Validate HTML
+      - name: Notice
         run: |
-          npm install -g html-validate
-          html-validate experimental/landing-pages/*.html
-
-      - name: Check links
-        run: |
-          npm install -g broken-link-checker
-          # Run link checker after deployment
-
-      - name: Security scan
-        uses: aquasecurity/trivy-action@master
-        continue-on-error: true
-        with:
-          scan-type: 'fs'
-          scan-ref: 'experimental/landing-pages'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Upload security scan results
-        uses: github/codeql-action/upload-sarif@v4
-        if: always() && hashFiles('trivy-results.sarif') != ''
-        with:
-          sarif_file: 'trivy-results.sarif'
-
-  # Lighthouse performance audit (runs after production deployment only)
-  lighthouse-audit:
-    name: Lighthouse Performance Audit
-    runs-on: ubuntu-latest
-    needs: deploy-netlify
-    if: |
-      startsWith(github.ref, 'refs/tags/') ||
-      (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production')
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Wait for deployment
-        run: sleep 30
-
-      - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v10
-        continue-on-error: true
-        with:
-          urls: |
-            https://getstorytime.netlify.app
-          configPath: '.github/lighthouserc.json'
-          uploadArtifacts: false
-          temporaryPublicStorage: false
-
-  # Deploy to Netlify
-  # - PRs: Preview deploy (FREE)
-  # - Tags: Production deploy (15 credits)
-  # - Manual: Based on input (15 credits for production)
-  deploy-netlify:
-    name: Deploy to Netlify
-    runs-on: ubuntu-latest
-    needs: quality-check
-    if: |
-      github.event_name == 'pull_request' ||
-      github.event_name == 'workflow_dispatch' ||
-      startsWith(github.ref, 'refs/tags/')
-    environment:
-      name: ${{ (startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production')) && 'production' || 'preview' }}
-      url: ${{ steps.deploy.outputs.url }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to Netlify
-        id: deploy
-        uses: nwtgck/actions-netlify@v2.1
-        with:
-          publish-dir: './experimental/landing-pages'
-          production-branch: master
-          production-deploy: ${{ startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production') }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
-          enable-pull-request-comment: true
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - name: Comment deployment URL
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `✅ Landing page deployed to preview:\n\n🔗 ${{ steps.deploy.outputs.url }}\n\nPlease review before merging.`
-            });
-
-  # Post-deployment tests (runs after production deployment only)
-  post-deployment-tests:
-    name: Post-Deployment Tests
-    runs-on: ubuntu-latest
-    needs: deploy-netlify
-    if: |
-      startsWith(github.ref, 'refs/tags/') ||
-      (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production')
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      - name: Install Playwright
-        run: |
-          npm install playwright
-          npx playwright install chromium --with-deps
-
-      - name: Run smoke tests
-        run: |
-          # Create a simple smoke test
-          cat > smoke-test.js << 'EOF'
-          const { chromium } = require('playwright');
-
-          (async () => {
-            const browser = await chromium.launch();
-            const page = await browser.newPage();
-
-            // Get deployment URL from environment
-            const url = process.env.DEPLOY_URL || 'https://getstorytime.netlify.app';
-
-            try {
-              // Navigate to landing page
-              await page.goto(url, { waitUntil: 'networkidle' });
-              console.log('✓ Page loaded successfully');
-
-              // Check for key elements
-              const title = await page.title();
-              console.log('✓ Page title:', title);
-
-              // Check hero section
-              const heroHeading = await page.locator('h1').first().textContent();
-              console.log('✓ Hero heading found:', heroHeading);
-
-              // Check email forms are present
-              const emailInputs = await page.locator('input[type="email"]').count();
-              console.log('✓ Email forms found:', emailInputs);
-
-              // Check CTA buttons
-              const ctaButtons = await page.locator('.cta-button').count();
-              console.log('✓ CTA buttons found:', ctaButtons);
-
-              // Verify no console errors
-              page.on('console', msg => {
-                if (msg.type() === 'error') {
-                  console.error('❌ Console error:', msg.text());
-                  process.exit(1);
-                }
-              });
-
-              console.log('\n✅ All smoke tests passed!');
-            } catch (error) {
-              console.error('❌ Smoke tests failed:', error);
-              process.exit(1);
-            } finally {
-              await browser.close();
-            }
-          })();
-          EOF
-
-          node smoke-test.js
-        env:
-          DEPLOY_URL: ${{ needs.deploy-netlify.outputs.url }}
-
-      - name: Check deployment health
-        run: |
-          echo "✓ Deployment completed successfully"
-          echo "📝 TODO: Add Plausible analytics and Buttondown email integration"
+          echo "This workflow is disabled."
+          echo "Vercel handles all deployments automatically via Git integration."
+          echo "See .github/workflows/quality-checks.yml for active quality checks."
 
