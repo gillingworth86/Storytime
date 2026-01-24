@@ -85,7 +85,7 @@ jobs:
         continue-on-error: true
         with:
           urls: |
-            https://storytime-vercel.vercel.app
+            https://getstorytime.vercel.app
           configPath: '.github/lighthouserc.json'
           uploadArtifacts: false
           temporaryPublicStorage: false

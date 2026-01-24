@@ -30,7 +30,7 @@ Storytime/
 
 ### Deployment
 - **Platform:** Vercel (native Git integration)
-- **Production URL:** [Will be assigned by Vercel - update after first deployment]
+- **Production URL:** https://getstorytime.vercel.app
 - **Deployment:** Automatic on push to `master` branch
 - **Preview URLs:** Automatic for all PRs and branches
 - **Configuration:** `vercel.json` (headers, redirects, security settings)
