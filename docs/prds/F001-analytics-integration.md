@@ -1,6 +1,6 @@
 # PRD: F001 - Analytics Integration
 
-**Status:** Draft - Ready for Review
+**Status:** Approved - Ready for Build
 **Priority:** P0 (Critical Path)
 **Effort Estimate:** 1 day
 **Owner:** TBD
@@ -855,7 +855,7 @@ if (ENABLE_ANALYTICS && window.plausible) {
 **Step 2: Add Site**
 1. Click "Add a website"
 2. Enter domain: `getstorytime.netlify.app`
-3. Select timezone: UTC or local timezone
+3. Select timezone: **Australia/Sydney** (handles AEDT/AEST automatically)
 4. Click "Add site"
 
 **Step 3: Configure Site (Optional)**
@@ -881,11 +881,11 @@ if (ENABLE_ANALYTICS && window.plausible) {
 3. Add custom event goal: "Form Viewed"
 4. Add custom event goal: "CTA Clicked" (optional)
 
-**Step 7: Share Dashboard (Optional)**
+**Step 7: Dashboard Visibility**
 1. Go to Site Settings → Visibility
-2. Toggle "Public" to enable shared link
-3. Copy shared link for stakeholders
-4. **Note:** Anyone with link can view data (read-only)
+2. Keep dashboard **Private** (default setting)
+3. Share login credentials with authorized stakeholders if needed
+4. **Note:** Private dashboard requires Plausible account login to access
 
 **Verification Steps:**
 - Visit site and trigger events
@@ -1108,15 +1108,15 @@ if (ENABLE_ANALYTICS && window.plausible) {
   - **Answer:** Nice-to-have, implement if time allows
   - **Decision Maker:** Product Owner
 
-- [ ] **Q3:** Should we enable shared public dashboard link?
-  - **Answer:** TBD - Decide based on stakeholder needs
+- [x] **Q3:** Should we enable shared public dashboard link?
+  - **Answer:** No - Keep dashboard private (login required)
   - **Decision Maker:** Product Owner
-  - **Options:** Public (anyone with link) vs. Private (login required)
+  - **Rationale:** Maintains data privacy, controlled access
 
-- [ ] **Q4:** What timezone for Plausible dashboard?
-  - **Answer:** TBD
+- [x] **Q4:** What timezone for Plausible dashboard?
+  - **Answer:** Australia/Sydney (AEDT/AEST)
   - **Decision Maker:** Product Owner
-  - **Recommendation:** UTC (standard) or local timezone
+  - **Rationale:** Aligns with local working hours, easier daily monitoring, intuitive correlation with marketing activities
 
 ### Decisions Made
 
@@ -1137,6 +1137,12 @@ if (ENABLE_ANALYTICS && window.plausible) {
 
 **D6:** Update CSP headers to allow Plausible
 - **Rationale:** Required for analytics to function
+
+**D7:** Keep dashboard private (no public sharing link)
+- **Rationale:** Maintains data privacy and controlled access to analytics
+
+**D8:** Use Australia/Sydney timezone for dashboard
+- **Rationale:** Aligns with working hours, easier to monitor and correlate with daily activities
 
 ---
 
@@ -1228,8 +1234,6 @@ Instead of JavaScript event listeners, can use Plausible's data-attribute approa
 - [x] Success metrics defined (5 KPIs + events)
 - [x] Implementation plan realistic (4.5 hours total)
 - [x] Market analysis complete (5 options evaluated)
-- [ ] Minor open questions remaining (Q3: public dashboard, Q4: timezone)
+- [x] All open questions resolved (Q3: private dashboard, Q4: Sydney timezone)
 
-**Ready for Build:** ☑ Yes - Pending final decisions on Q3 & Q4 (non-blocking)
-
-**Note:** Q3 and Q4 are configuration decisions that can be made during/after implementation. They do not block development work.
+**Ready for Build:** ✅ Yes - All questions resolved, PRD approved and ready for implementation
