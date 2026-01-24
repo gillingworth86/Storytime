@@ -1,0 +1,95 @@
+# Netlify Configuration for Storytime Landing Page
+
+[build]
+  # Publish directory for Phase 1 (landing page)
+  publish = "experimental/landing-pages"
+
+  # No build command needed for static HTML
+  command = "echo 'Static site - no build required'"
+
+  # Ignore automatic Netlify builds - we deploy only via GitHub Actions
+  # This prevents Netlify from consuming build minutes on every commit
+  ignore = "exit 0"
+
+# Production context (master branch)
+[context.production]
+  publish = "experimental/landing-pages"
+
+# Deploy preview context (pull requests)
+[context.deploy-preview]
+  publish = "experimental/landing-pages"
+
+# Branch deploys (non-main branches)
+[context.branch-deploy]
+  publish = "experimental/landing-pages"
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+    # Content Security Policy
+    # NOTE: Plausible Analytics configured. Add Buttondown URLs after setup.
+    Content-Security-Policy = """
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://plausible.io;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data: https:;
+      connect-src 'self' https://plausible.io;
+      frame-ancestors 'none';
+      base-uri 'self';
+      form-action 'self';
+    """
+
+    # Analytics & Email Service CSP Configuration:
+    # ✅ Plausible: Added 'https://plausible.io' to script-src and connect-src
+    # ⏳ Buttondown: Add 'https://buttondown.email' to form-action when ready
+
+    # Cache control for static assets
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# HTML files should not be cached aggressively
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Redirect rules (if needed)
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/terms.html"
+  status = 200
+
+# 404 page
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 404
+
+# Environment variables (can be overridden in Netlify UI)
+[build.environment]
+  NODE_VERSION = "20"
+
+# Plugin configuration (optional - for future use)
+# [[plugins]]
+#   package = "@netlify/plugin-lighthouse"
+#
+#   [plugins.inputs.thresholds]
+#     performance = 0.9
+#     accessibility = 0.9
+#     best-practices = 0.9
+#     seo = 0.9
+
+# Note: For Phase 2 (full app), update the publish directory to "app/dist" or similar
