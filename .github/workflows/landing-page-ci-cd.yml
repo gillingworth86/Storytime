@@ -2,14 +2,11 @@ name: Landing Page CI/CD
 
 on:
   # Tagged releases trigger production deploy (15 credits)
+  # Note: paths filters don't work with tag pushes in GitHub Actions
   push:
     tags:
       - 'v*'           # Matches v1.0.0, v1.2.3, etc.
       - 'release-*'    # Matches release-2026-01-24, etc.
-    paths:
-      - 'experimental/landing-pages/**'
-      - '.github/workflows/landing-page-ci-cd.yml'
-      - '.htmlvalidate.json'
 
   # Pull requests get preview deploys (FREE - no credits consumed)
   pull_request:
