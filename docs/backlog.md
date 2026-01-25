@@ -263,3 +263,45 @@ When adding new features to backlog, use this format:
 - Effort estimates are for single developer
 - All P0 features must complete before Phase 2
 - Review backlog weekly during Phase 1
+
+---
+
+## Future Considerations (Not included in F002)
+
+Not included in F002, consider for future:
+Name field collection (Q-006 revisited)
+Personalization opportunity
+Higher friction (test impact)
+Email preferences
+Frequency selection
+Topic interests
+Child age/gender
+Welcome email series
+Email #1: Immediate confirmation
+Email #2: Story about product vision
+Email #3: Sneak peek at features
+Email #4: Reminder to whitelist
+Referral program
+Share link with friends
+Rewards for referrals
+Move up waitlist
+Waitlist position
+"You're #47 in line!"
+Gamification
+Urgency/FOMO
+A/B testing
+Different CTAs
+Different form copy
+Different value props
+Advanced analytics
+Heatmaps
+Session recordings
+Funnel analysis
+Email verification (beyond double opt-in)
+Real-time email validation API
+Catch typos (did you mean @gmail.com?)
+Block disposable emails
+Progressive profiling
+Collect additional info over time
+Not all at once (reduce friction)
+These should have their own PRDs when prioritized
