@@ -1,4 +1,4 @@
-const KIT_API_URL = 'https://api.convertkit.com/v3/forms';
+const KIT_API_URL = 'https://api.kit.com/v4/forms';
 
 function isValidEmail(email) {
   if (typeof email !== 'string') {
@@ -35,16 +35,16 @@ export default async function handler(req, res) {
   };
 
   const requestBody = {
-    api_key: apiKey,
     email: email.trim().toLowerCase(),
     tags: Array.isArray(tags) ? tags : undefined,
     fields: metadata
   };
 
   try {
-    const response = await fetch(`${KIT_API_URL}/${formId}/subscribe`, {
+    const response = await fetch(`${KIT_API_URL}/${formId}/subscribers`, {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody)
