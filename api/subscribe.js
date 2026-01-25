@@ -24,7 +24,7 @@ function normalizeFormId(formId) {
   return match ? match[1] : null;
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
@@ -56,6 +56,9 @@ export default async function handler(req, res) {
   };
 
   try {
+    // On older Node runtimes (<18) global fetch may not exist.
+    // If you see "fetch is not defined" in logs, install node-fetch and uncomment:
+    // const fetch = global.fetch || (await import('node-fetch')).default;
     const response = await fetch(`${KIT_API_URL}/${formId}/subscribers`, {
       method: 'POST',
       headers: {
@@ -76,6 +79,10 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true });
   } catch (error) {
+    // Surface error into logs so you can see details in Vercel logs
+    console.error('subscribe error:', error);
     return res.status(500).json({ error: 'Failed to reach Kit.' });
   }
 }
+
+module.exports = handler;
