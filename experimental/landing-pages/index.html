@@ -1355,14 +1355,11 @@
 
         // ========================================
         // F002: Email Collection Integration
-        // ConvertKit (Kit) API Configuration
+        // Kit Serverless Configuration
         // ========================================
 
         const EMAIL_CONFIG = {
-            // Kit configuration (use a proxy URL if you don't want to expose api keys)
-            kitFormId: 'your_form_id',
-            kitApiKey: 'your_public_api_key',
-            kitProxyUrl: '',
+            apiEndpoint: '/api/subscribe',
             timeout: 15000, // 15 second timeout
             rateLimitPerMinute: 5
         };
@@ -1378,7 +1375,7 @@
         // Custom error classes
         class ApiError extends Error {
             constructor(status, data) {
-                super(data.detail || data.message || 'API request failed');
+                super(data.detail || data.message || data.error || 'API request failed');
                 this.status = status;
                 this.data = data;
             }
@@ -1413,7 +1410,7 @@
             return true;
         }
 
-        // Submit to Kit (ConvertKit) API
+        // Submit to Kit via serverless function
         async function submitToKit(email, location) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), EMAIL_CONFIG.timeout);
@@ -1426,15 +1423,10 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        api_key: EMAIL_CONFIG.kitApiKey,
-                        email,
-                        fields: {
-                            signup_location: location,
-                            signup_date: new Date().toISOString(),
-                            signup_url: window.location.href,
-                            referrer: document.referrer || 'direct'
-                        },
-                        // Add tags if your Kit account supports them
+                        email: email,
+                        location: location,
+                        signup_url: window.location.href,
+                        referrer: document.referrer || 'direct',
                         tags: [location, 'landing-page']
                     }),
                     signal: controller.signal
