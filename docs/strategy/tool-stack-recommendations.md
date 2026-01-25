@@ -58,51 +58,47 @@
 
 ## 2. Email Capture & Marketing
 
-### Option A: Buttondown (RECOMMENDED)
-**Price:** FREE for up to 100 subscribers
+### Option A: Kit (ConvertKit) (RECOMMENDED)
+**Price:** FREE for up to 10,000 subscribers
 
 **Pros:**
-- Clean, simple interface
-- Markdown support (easy to write emails)
-- Privacy-focused (no tracking pixels unless you opt in)
-- Great deliverability
-- API access even on free tier
-- Can embed signup forms on Carrd
-- Scales to paid plan smoothly ($9/mo for up to 1000 subscribers)
+- Strong automation features (sequences, tagging, branching)
+- Visual email builder + plain-text support
 - Built-in subscriber management and tagging
+- Easy embed forms and landing pages
+- Scales well if you grow past validation
+- Solid deliverability and creator-focused tooling
 
 **Cons:**
-- Less sophisticated automation than ConvertKit
-- Basic analytics only
-- No visual email builder (markdown only)
+- Free tier branding on forms/emails
+- API access requires a server-side proxy (no client-side CORS)
+- Slightly more setup than a purely client-side embed
 
-**Best for:** Solo builders who want simple, privacy-friendly email
+**Best for:** Solo builders who want growth-ready automation and a mainstream ESP
 
 ---
 
-### Option B: ConvertKit (Free Tier)
+### Option B: MailerLite (Free Tier)
 **Price:** FREE for up to 1,000 subscribers
 
 **Pros:**
-- More automation features (sequences, tagging, branching)
-- Better for complex funnels later
-- Visual email builder
-- Landing page builder included (could replace Carrd)
-- Great for creator economy products
+- Easy drag-and-drop editor
+- Solid automations for basic sequences
+- Simple landing pages and forms
+- Competitive pricing as you grow
 
 **Cons:**
-- Overkill for 100 signup goal
-- More complex interface
-- ConvertKit branding on free tier
-- Less privacy-focused (more tracking by default)
+- Smaller ecosystem than Kit
+- Fewer creator-specific integrations
+- UI can feel busy for a quick validation sprint
 
-**Best for:** If you want room to grow into sophisticated email marketing
+**Best for:** If you want a simple editor and basic automations at low cost
 
 ---
 
-### **RECOMMENDATION: Buttondown (Free tier)**
+### **RECOMMENDATION: Kit (ConvertKit) Free tier**
 
-**Why:** Privacy-friendly aligns with your brand values, free tier covers your 100-signup goal, markdown makes email writing fast, and it's beautifully simple. You can always migrate to ConvertKit if you validate and need advanced automation.
+**Why:** Free tier easily covers your 100-signup goal, automations are built in, and Kit is the best long-term fit if you validate and scale. It supports forms, tags, and sequences without needing a tool change later.
 
 ---
 
@@ -187,14 +183,14 @@
 
 ### Recommended Stack:
 - **Carrd Pro Plus:** $19/year
-- **Buttondown:** FREE (up to 100 subscribers)
+- **Kit (ConvertKit):** FREE (up to 10,000 subscribers)
 - **Plausible:** $9/month × 1 month = $9 (cancel after test)
 - **Domain:** $12-15/year
 - **Total:** ~$40-43 (within $21-50 budget)
 
 ### Budget-Conscious Alternative:
 - **Carrd Pro Plus:** $19/year
-- **Buttondown:** FREE
+- **Kit (ConvertKit):** FREE
 - **No paid analytics:** Use Carrd's basic stats + manual tracking
 - **Domain:** $12-15
 - **Total:** ~$31-34
@@ -206,23 +202,23 @@
 ### Day 1-2:
 1. Register domain
 2. Sign up for Carrd Pro Plus
-3. Sign up for Buttondown (free)
+3. Sign up for Kit (ConvertKit) (free)
 4. Sign up for Plausible (start 30-day trial)
 
 ### Day 3-4:
 1. Build landing page in Carrd using provided copy
 2. Set up 4 headline variants for A/B testing
-3. Embed Buttondown signup form
+3. Embed Kit signup form
 4. Connect custom domain
 
 ### Day 5:
 1. Add Plausible tracking code
 2. Set up conversion goals (email signup)
 3. Test on mobile devices
-4. Test email delivery from Buttondown
+4. Test email delivery from Kit
 
 ### Day 6:
-1. Set up email welcome sequence in Buttondown
+1. Set up email welcome sequence in Kit
 2. Schedule follow-up emails
 
 ### Day 7:
@@ -234,13 +230,12 @@
 
 ## Tool Integration Setup
 
-### Carrd + Buttondown Integration:
+### Carrd + Kit Integration:
 ```html
-<!-- Embed Buttondown form in Carrd -->
+<!-- Embed Kit form in Carrd -->
 <form
-  action="https://buttondown.email/api/emails/embed-subscribe/YOUR-NEWSLETTER-NAME"
+  action="https://app.kit.com/forms/YOUR_FORM_ID/subscriptions"
   method="post"
-  target="popupwindow"
 >
   <input type="email" name="email" placeholder="Your email address" required />
   <input type="submit" value="Join waitlist" />
@@ -262,7 +257,7 @@ Set up custom goal for email signups in Plausible dashboard.
 1. **Decide on domain name** (check availability at namecheap.com)
 2. **Register domain**
 3. **Sign up for Carrd Pro Plus**
-4. **Create Buttondown account**
+4. **Create Kit account**
 5. **Start building the landing page using the copy provided**
 
 Want me to create a detailed implementation guide with screenshots and step-by-step instructions for each tool?

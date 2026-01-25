@@ -2,7 +2,7 @@
 
 **Purpose:** Request feedback, deepen relationship, identify engaged subscribers
 **Timing:** Day 10 (after confirmation)
-**Send Method:** Manual via Buttondown dashboard
+**Send Method:** Manual via Kit dashboard
 
 ---
 
@@ -26,7 +26,7 @@ Your answer will directly shape what we build...
 
 ## Email Content
 
-Copy everything below the line into Buttondown when sending:
+Copy everything below the line into Kit when sending:
 
 ---
 
@@ -83,7 +83,7 @@ P.S. - Everyone who replies gets added to our "VIP early access" list. You'll ge
 
 ## Sending Instructions
 
-1. Go to Buttondown → **Emails** → **New email**
+1. Go to Kit → **Emails** → **New email**
 2. Copy the subject line and content above
 3. Set "Send to" = Subscribers who confirmed 10 days ago
 4. Preview and send

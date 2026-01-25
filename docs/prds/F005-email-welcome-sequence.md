@@ -32,7 +32,7 @@
 ### 1.1 Problem Statement
 
 **Current State:**
-After a visitor signs up on the Storytime landing page (F002), they receive only a double opt-in confirmation email from Buttondown. There is no:
+After a visitor signs up on the Storytime landing page (F002), they receive only a double opt-in confirmation email from Kit. There is no:
 - Welcome message explaining what to expect
 - Value delivery to build excitement
 - Engagement nurturing to maintain interest
@@ -63,18 +63,18 @@ Create a **4-email welcome sequence** that engages new subscribers from signup t
 - Higher confirmation rates (more compelling than bland "please confirm")
 
 **Implementation Approach: Manual-First**
-- **Phase A (Now):** Confirmation email via Buttondown settings; follow-ups sent manually
+- **Phase A (Now):** Confirmation email via Kit settings; follow-ups sent manually
 - **Phase B (After validation):** Automate once 100 signups achieved
 
 ### 1.3 Success Criteria
 
 | Metric | Target | Measurement |
 |--------|--------|-------------|
-| Confirmation email open rate | >60% | Buttondown analytics |
-| Confirmation rate (click to confirm) | >50% | Buttondown analytics |
-| Sequence open rate (avg) | >40% | Buttondown analytics |
-| Click-through rate | >10% | Buttondown analytics |
-| Unsubscribe rate | <2% | Buttondown analytics |
+| Confirmation email open rate | >60% | Kit analytics |
+| Confirmation rate (click to confirm) | >50% | Kit analytics |
+| Sequence open rate (avg) | >40% | Kit analytics |
+| Click-through rate | >10% | Kit analytics |
+| Unsubscribe rate | <2% | Kit analytics |
 | Reply rate | >5% | Manual count |
 | Sequence completion | >70% | Confirmed subscribers receiving all 3 follow-ups |
 
@@ -85,7 +85,7 @@ Create a **4-email welcome sequence** that engages new subscribers from signup t
 - ✅ Email timing strategy
 - ✅ Subject line optimization
 - ✅ Manual sending process documentation
-- ✅ Email templates in Buttondown
+- ✅ Email templates in Kit
 - ✅ Tracking and metrics setup
 - ✅ Automation requirements (for future Phase B)
 
@@ -100,7 +100,7 @@ Create a **4-email welcome sequence** that engages new subscribers from signup t
 
 **Depends on:**
 - F002 Email Collection Integration (must be complete)
-- Buttondown account configured with double opt-in
+- Kit account configured with double opt-in
 
 **Blocks:**
 - None directly (F008 Referral could integrate with sequence)
@@ -108,13 +108,12 @@ Create a **4-email welcome sequence** that engages new subscribers from signup t
 ### 1.6 Cost Considerations
 
 **Phase A (Manual):** $0 additional cost
-- Uses existing Buttondown free/basic tier
+- Uses existing Kit free/basic tier
 - Manual sending via dashboard
 
 **Phase B (Automated):** Decision deferred (see SD-001 in backlog)
-- Buttondown Standard: $29/mo
-- Kit Free: $0 (1 automation limit, requires code changes)
-- Kit Creator: $39/mo
+- Kit Creator: ~$29/mo (automations + sequences)
+- Kit Free: $0 (limited automations)
 
 **Decision trigger:** 100 signups achieved OR manual sending unsustainable
 
@@ -134,8 +133,8 @@ Create a **4-email welcome sequence** that engages new subscribers from signup t
 │                                                              │
 │  ┌─────────────────┐                ┌─────────────────┐     │
 │  │ Email templates │                │ Platform choice │     │
-│  │ created in      │    ──────►    │ (Buttondown $29 │     │
-│  │ Buttondown      │   100 signups  │  or Kit $0-39)  │     │
+│  │ created in      │    ──────►    │ (Kit Free or   │     │
+│  │ Kit             │   100 signups  │  Kit Creator)  │     │
 │  └────────┬────────┘    achieved    └────────┬────────┘     │
 │           │                                   │              │
 │           ▼                                   ▼              │
@@ -159,7 +158,7 @@ Create a **4-email welcome sequence** that engages new subscribers from signup t
 
 **Daily workflow (5-10 minutes):**
 
-1. **Check Buttondown dashboard** for newly confirmed subscribers
+1. **Check Kit dashboard** for newly confirmed subscribers
 2. **Note confirmation date** for each new subscriber
 3. **Send appropriate email** based on days since confirmation:
    - Day 0: Send Email #1 (Welcome)
@@ -241,7 +240,7 @@ Manual sending becomes unsustainable when:
 **REQ-001: Four-Email Sequence**
 - **Description:** Create exactly 4 emails with distinct purposes
 - **Priority:** Must-have
-- **Acceptance:** All 4 emails written, reviewed, and loaded in Buttondown
+- **Acceptance:** All 4 emails written, reviewed, and loaded in Kit
 
 **REQ-002: Consistent Branding**
 - **Description:** All emails match Storytime visual identity
@@ -264,7 +263,7 @@ Manual sending becomes unsustainable when:
 - **Description:** Use subscriber's first name when available
 - **Priority:** Should-have
 - **Acceptance:**
-  - Buttondown merge tag: `{{ subscriber.metadata.first_name }}`
+  - Kit merge tag: `{{ subscriber.first_name }}`
   - Fallback: "there" or "friend" if no name
 
 ### 4.2 Timing Requirements
@@ -285,19 +284,19 @@ Manual sending becomes unsustainable when:
 - **Priority:** Should-have
 - **Acceptance:**
   - Phase A: Send all emails ~9am AEST (target market)
-  - Phase B: Use Buttondown's send-time optimization if available
+  - Phase B: Use Kit's send-time optimization if available
 
 ### 4.3 Tracking Requirements
 
 **REQ-007: Open Tracking**
 - **Description:** Track email open rates
 - **Priority:** Must-have
-- **Acceptance:** Buttondown's built-in open tracking enabled
+- **Acceptance:** Kit's built-in open tracking enabled
 
 **REQ-008: Click Tracking**
 - **Description:** Track link clicks within emails
 - **Priority:** Must-have
-- **Acceptance:** All links use Buttondown's click tracking
+- **Acceptance:** All links use Kit's click tracking
 
 **REQ-009: Manual Tracking Spreadsheet (Phase A)**
 - **Description:** Maintain spreadsheet of sequence progress
@@ -312,12 +311,12 @@ Manual sending becomes unsustainable when:
 **REQ-010: Unsubscribe Link**
 - **Description:** Every email includes one-click unsubscribe
 - **Priority:** Must-have (legal requirement)
-- **Acceptance:** Buttondown auto-includes unsubscribe link
+- **Acceptance:** Kit auto-includes unsubscribe link
 
 **REQ-011: Physical Address**
 - **Description:** Include physical mailing address (CAN-SPAM)
 - **Priority:** Must-have (legal requirement)
-- **Acceptance:** Footer includes address or Buttondown default
+- **Acceptance:** Footer includes address or Kit default
 
 **REQ-012: Reply-To Address**
 - **Description:** Replies go to monitored inbox
@@ -332,7 +331,7 @@ Manual sending becomes unsustainable when:
 
 **Purpose:** Confirm subscription + welcome + deliver immediate value
 
-**Timing:** Immediate (sent automatically by Buttondown on signup)
+**Timing:** Immediate (sent automatically by Kit on signup)
 
 **Type:** Double opt-in confirmation email (requires click to confirm)
 
@@ -404,11 +403,11 @@ FOOTER
 - Target confirmation rate: >50%
 - Target click rate: >50% (the confirm button)
 
-**Buttondown Setup:**
+**Kit Setup:**
 - Configure in Settings → Emails → Confirmation email
 - Enable "Custom confirmation email"
-- Paste content above (adjust for Buttondown's template format)
-- Ensure `{{ confirmation_url }}` merge tag is in the button
+- Paste content above (adjust for Kit's template format)
+- Ensure `{{ subscriber.confirmation_url }}` merge tag is in the button
 
 ---
 
@@ -702,7 +701,7 @@ When subscribers reply:
 **EDGE-001: Subscriber Never Confirms**
 - **Scenario:** User signs up but doesn't click confirmation
 - **Handling:** No welcome sequence sent (correct behavior)
-- **Mitigation:** Buttondown can send confirmation reminder
+- **Mitigation:** Kit can send confirmation reminder
 
 **EDGE-002: Subscriber Unsubscribes Mid-Sequence**
 - **Scenario:** User unsubscribes after Email #2
@@ -717,7 +716,7 @@ When subscribers reply:
 
 **EDGE-004: Email Bounces**
 - **Scenario:** Email address becomes invalid
-- **Handling:** Buttondown auto-handles, removes from list
+- **Handling:** Kit auto-handles, removes from list
 - **Action:** No manual intervention needed
 
 **EDGE-005: Missed Manual Send (Phase A)**
@@ -742,7 +741,7 @@ Not applicable—emails are outbound only. No user-facing error states.
 ### 8.1 Pre-Launch Testing
 
 **TEST-001: Email Rendering**
-- [ ] Test all 4 emails in Buttondown preview
+- [ ] Test all 4 emails in Kit preview
 - [ ] Send test emails to personal accounts
 - [ ] Check rendering in:
   - Gmail (web)
@@ -758,7 +757,7 @@ Not applicable—emails are outbound only. No user-facing error states.
 - [ ] Verify personalization displays correctly
 
 **TEST-003: Deliverability**
-- [ ] Check spam score (Buttondown or external tool)
+- [ ] Check spam score (Kit or external tool)
 - [ ] Verify emails don't land in spam folder
 - [ ] Test from different email providers
 
@@ -785,11 +784,11 @@ Not applicable—emails are outbound only. No user-facing error states.
 
 | Metric | Target | Good | Needs Work | Measurement |
 |--------|--------|------|------------|-------------|
-| Confirmation Email Open Rate | >60% | 50-60% | <50% | Buttondown |
-| Confirmation Rate (clicks) | >50% | 40-50% | <40% | Buttondown |
+| Confirmation Email Open Rate | >60% | 50-60% | <50% | Kit |
+| Confirmation Rate (clicks) | >50% | 40-50% | <40% | Kit |
 | Follow-up Avg Open Rate | >40% | 30-40% | <30% | Calculated |
-| Click-Through Rate | >10% | 5-10% | <5% | Buttondown |
-| Unsubscribe Rate | <2% | 2-5% | >5% | Buttondown |
+| Click-Through Rate | >10% | 5-10% | <5% | Kit |
+| Unsubscribe Rate | <2% | 2-5% | >5% | Kit |
 | Reply Rate | >5% | 2-5% | <2% | Manual count |
 | Sequence Completion | >70% | 50-70% | <50% | Tracking sheet |
 
@@ -813,15 +812,15 @@ Trigger automation implementation when:
 ### 10.1 Phase A Tasks
 
 **Confirmation Email Setup (1 hour)**
-- [ ] Configure custom confirmation email in Buttondown settings
+- [ ] Configure custom confirmation email in Kit settings
 - [ ] Add branded content with story excerpt
 - [ ] Test confirmation flow end-to-end
 - [ ] Verify confirmation link works
 
 **Follow-up Emails Preparation (2 hours)**
-- [ ] Create Email #2 (Vision) template in Buttondown
-- [ ] Create Email #3 (Sneak Peek) template in Buttondown
-- [ ] Create Email #4 (Engagement) template in Buttondown
+- [ ] Create Email #2 (Vision) template in Kit
+- [ ] Create Email #3 (Sneak Peek) template in Kit
+- [ ] Create Email #4 (Engagement) template in Kit
 - [ ] Internal review of all copy
 
 **Testing (1-2 hours)**
@@ -845,7 +844,7 @@ Trigger automation implementation when:
 
 ### 10.2 Deliverables
 
-1. **Email templates:** 4 emails created in Buttondown
+1. **Email templates:** 4 emails created in Kit
 2. **Tracking spreadsheet:** Template with columns defined
 3. **Process documentation:** Step-by-step manual process
 4. **Weekly report template:** Metrics tracking format
@@ -866,7 +865,7 @@ Implement Phase B when ANY of these occur:
 
 When ready for automation, evaluate:
 
-**Option A: Buttondown Standard ($29/mo)**
+**Option A: Kit Creator ($29/mo)**
 - Pros: No code changes, same platform as F002
 - Cons: $29/mo ongoing cost
 - Implementation: ~1 hour (configure automations in dashboard)
@@ -878,14 +877,14 @@ When ready for automation, evaluate:
 
 **Option C: Kit Creator ($39/mo)**
 - Pros: Unlimited automations, no branding
-- Cons: Higher cost than Buttondown, requires code changes
+- Cons: Higher cost than Kit, requires code changes
 - Implementation: ~4-6 hours (code + setup)
 
-**Recommendation:** Re-evaluate when threshold reached. If validation successful and expecting growth, Buttondown Standard is simplest. If budget-constrained, Kit Free is viable.
+**Recommendation:** Re-evaluate when threshold reached. If validation successful and expecting growth, Kit Creator is simplest. If budget-constrained, Kit Free is viable.
 
 ### 11.3 Automation Configuration
 
-**Buttondown automation setup:**
+**Kit automation setup:**
 1. Confirmation/Welcome email: Already automatic (via Settings → Emails)
 2. Create automation: "Follow-up Sequence"
 3. Trigger: "Subscriber confirms subscription"
@@ -923,7 +922,7 @@ When ready for automation, evaluate:
 - **Decision:** Use "Primary" options for Phase A
 
 **Q-002: Physical address requirement?**
-- **Status:** Check Buttondown default
+- **Status:** Check Kit default
 - **Action:** Verify CAN-SPAM compliance
 
 ---
@@ -947,7 +946,7 @@ Before sending each email, verify:
 
 **Next Steps:**
 1. Review and approve email copy
-2. Create templates in Buttondown
+2. Create templates in Kit
 3. Set up tracking spreadsheet
 4. Begin sending to new subscribers
 

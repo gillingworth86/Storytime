@@ -54,22 +54,22 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 
 ### 1.2 Proposed Solution
 
-**Integrate Buttondown email service** to make signup forms fully functional with:
+**Integrate Kit email service** to make signup forms fully functional with:
 
-1. **Email Capture:** Forms submit to Buttondown API, storing email addresses
+1. **Email Capture:** Forms submit to Kit API, storing email addresses
 2. **Double Opt-In:** Automatic confirmation emails sent within 2 minutes
 3. **Email Verification:** Users click link to confirm subscription (GDPR-compliant)
-4. **Data Management:** Subscriber list accessible via Buttondown dashboard
+4. **Data Management:** Subscriber list accessible via Kit dashboard
 5. **Export Capability:** Download subscriber list as CSV anytime
 6. **Analytics Integration:** Track "Email Signup" events in Plausible
 7. **Quality UX:** Loading states, success messages, error handling
 
 **Technical Approach:**
-- Client-side AJAX calls to Buttondown API (CORS-supported)
-- No backend/serverless functions needed (simpler)
+- Serverless proxy (Netlify/Vercel function) calls Kit API (no CORS support)
+- Client-side form posts to our proxy endpoint
 - Update existing `handleFormSubmit` in `index.html`
 - Add success/error UI states
-- Store API key in Vercel environment variables
+- Store API key in server-side environment variables
 
 ---
 
@@ -94,14 +94,13 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 
 ### 1.4 Key Decisions
 
-**Platform Choice: Buttondown** (vs Kit/ConvertKit)
-- **Score:** 95.5% vs 76.5%
-- **Why:** Free API access, CORS support, simpler implementation, privacy-focused
-- **Cost:** $0 for first 100 subscribers (perfect for MVP)
+**Platform Choice: Kit (ConvertKit)**
+- **Why:** Scales with automations, strong creator tooling, and a generous free tier
+- **Cost:** $0 on the free tier (good for MVP), paid plans start once automation needs grow
 
-**Implementation Approach: Client-Side API Calls** (vs Serverless Proxy)
-- **Why:** Buttondown supports CORS, designed for client-side use
-- **Benefit:** Simpler code, faster implementation (3-5 hours vs 4-6 hours)
+**Implementation Approach: Serverless Proxy** (vs direct client-side calls)
+- **Why:** Kit API does not support CORS for direct browser requests
+- **Benefit:** Keeps API credentials secure and aligns with Kit's recommended integration model
 
 **User Experience: Email Only** (vs Email + Name)
 - **Why:** Minimize friction, maximize conversion
@@ -116,11 +115,11 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 ### 1.5 Scope
 
 **In Scope (F002):**
-- ✅ Email form submission to Buttondown API
+- ✅ Email form submission to Kit via serverless proxy
 - ✅ Client-side email validation (format, length)
 - ✅ Success/error UI states with messages
 - ✅ Loading indicators (<100ms feedback)
-- ✅ Double opt-in confirmation flow (Buttondown handles)
+- ✅ Double opt-in confirmation flow (Kit handles)
 - ✅ Plausible analytics tracking ("Email Signup" event)
 - ✅ Signup location tracking (hero/mid-page/footer metadata)
 - ✅ Error handling (network, timeout, validation, API errors)
@@ -145,7 +144,7 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 **Total Duration:** 1-2 days (8-16 hours)
 
 **Phase 1: Setup** (1-2 hours)
-- Create Buttondown account
+- Create Kit account
 - Configure double opt-in
 - Generate & store API key
 - Platform decision finalized
@@ -183,7 +182,7 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 - 1 Product Lead (decisions, monitoring) - 2 hours
 
 **Tools & Services:**
-- ✅ Buttondown account (free tier)
+- ✅ Kit account (free tier)
 - ✅ Vercel hosting (existing)
 - ✅ GitHub repository (existing)
 - ✅ Plausible analytics (existing)
@@ -207,25 +206,25 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 **Risk 2: High bounce/spam rate**
 - **Likelihood:** Low
 - **Impact:** Medium (poor list quality)
-- **Mitigation:** Client-side validation, double opt-in, Buttondown's built-in filtering
+- **Mitigation:** Client-side validation, double opt-in, Kit's built-in filtering
 - **Monitoring:** Weekly bounce rate checks
 
 **Risk 3: Confirmation emails go to spam**
 - **Likelihood:** Medium
 - **Impact:** High (low confirmation rate)
-- **Mitigation:** Buttondown has good sender reputation, test with multiple providers
+- **Mitigation:** Kit has good sender reputation, test with multiple providers
 - **Target:** >50% confirmation rate (industry standard)
 
 **Risk 4: Implementation takes longer than estimated**
 - **Likelihood:** Low
 - **Impact:** Low (delay of 1-2 days acceptable)
-- **Mitigation:** Buttondown's simplicity, CORS support, good docs reduce risk
+- **Mitigation:** Kit's documentation and predictable API reduce risk; proxy template simplifies setup
 - **Fallback:** Cut scope (defer nice-to-haves)
 
 **Risk 5: API rate limiting issues**
 - **Likelihood:** Very Low
 - **Impact:** Low (temporary user friction)
-- **Mitigation:** Client-side rate limiting (5/min), Buttondown limit (60/min) adequate
+- **Mitigation:** Client-side rate limiting (5/min) plus proxy throttling; Kit limit (~120/min) adequate
 - **Monitoring:** Track API error rates
 
 ---
@@ -260,12 +259,12 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 
 **Immediate (Before Implementation):**
 1. ✅ Review and approve this PRD
-2. ✅ Finalize Buttondown as platform choice
+2. ✅ Finalize Kit as platform choice
 3. ✅ Allocate dev time (1-2 days)
 4. ✅ Assign monitoring responsibility
 
 **Implementation (Week 1):**
-1. Create Buttondown account + configure
+1. Create Kit account + configure
 2. Implement code changes (Sections 5 + 12)
 3. Test thoroughly (Section 9)
 4. Deploy to production
@@ -361,53 +360,40 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 
 ### 2.2 Platform Comparison Matrix
 
-#### 2.2.1 Buttondown
+#### 2.2.1 Kit (ConvertKit)
 
 **Overview:**
-- Founded: 2016
-- Focus: Newsletter-first, developer-friendly
-- Philosophy: Simple, privacy-focused, minimal
-- Website: https://buttondown.email
+- Founded: 2013
+- Focus: Creator-focused email marketing + automations
+- Website: https://kit.com
 
-**Pricing:**
-| Subscribers | Monthly Cost | Annual Cost | Notes |
-|-------------|--------------|-------------|-------|
-| 0-100 | Free | Free | Perfect for MVP |
-| 101-1,000 | $9/mo | $90/yr (save $18) | Our expected range |
-| 1,001-5,000 | $29/mo | $290/yr | Future growth |
-| 5,001-10,000 | $49/mo | $490/yr | Mature product |
-
-**Pricing notes:**
-- Only charged for confirmed subscribers (not unconfirmed)
-- Unlimited emails
-- All features included (no feature gating)
-- API access included at all tiers
-- 50% discount for non-profits
+**Pricing (high level):**
+- Free tier: up to 10,000 subscribers (limited automations)
+- Paid plans: start around $29/mo for expanded automation and reporting
+- See https://kit.com/pricing for current tiers
 
 **API Assessment:**
-- **CORS Support:** ✅ YES (designed for client-side use)
-- **Authentication:** Token-based (simple header)
-- **Rate Limiting:** 60 requests/minute
-- **Documentation:** Excellent (clear, with examples)
-- **Endpoints Needed:** `POST /v1/subscribers` only
-- **Response Format:** Clean JSON
+- **CORS Support:** ❌ No (server-side proxy required)
+- **Authentication:** API key/secret server-side
+- **Rate Limiting:** ~120 requests/minute
+- **Documentation:** Strong, with examples
+- **Endpoints Needed:** `POST /v4/forms/{FORM_ID}/subscribers`
 - **Webhook Support:** ✅ YES
-- **Complexity:** LOW (can use directly from client-side)
+- **Complexity:** MEDIUM (requires serverless proxy)
 
-**Example API Call:**
+**Example API Call (via proxy):**
 ```javascript
-fetch('https://api.buttondown.email/v1/subscribers', {
-    method: 'POST',
-    headers: {
-        'Authorization': 'Token sk_xxxxx',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        email: 'user@example.com',
-        metadata: { location: 'hero' },
-        tags: ['landing-page']
-    })
+// Client -> proxy
+await fetch('/api/subscribe', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email: 'user@example.com', location: 'hero' })
 });
+
+// Proxy -> Kit:
+// POST https://api.kit.com/v4/forms/{FORM_ID}/subscribers
+// Headers: Authorization: Bearer <API_KEY>
+// Body: { email: 'user@example.com', fields: { location: 'hero' }, tags: ['landing-page'] }
 ```
 
 **Double Opt-In:**
@@ -415,358 +401,104 @@ fetch('https://api.buttondown.email/v1/subscribers', {
 - ✅ Customizable confirmation email template
 - ✅ GDPR-compliant by default
 - ✅ Tracks confirmed vs unconfirmed status
-- ✅ Optional reminder emails
 
 **Features:**
-- ✅ Markdown-based email composer
-- ✅ Custom domains
-- ✅ Subscriber tagging & metadata
-- ✅ Segmentation
+- ✅ Visual automations and sequences
+- ✅ Subscriber tagging & custom fields
 - ✅ Analytics (open/click rates)
 - ✅ Export subscribers (CSV)
 - ✅ API & webhooks
-- ✅ Automation sequences
-- ✅ Multiple newsletters per account (paid tiers)
-- ✅ Privacy-focused (GDPR-compliant)
-- ✅ No tracking pixels (optional)
+- ✅ Built-in forms
 
 **Pros:**
-- ✅ Free tier perfect for MVP (0-100 subscribers)
-- ✅ Extremely developer-friendly (CORS, clean API)
-- ✅ No serverless proxy needed (simpler implementation)
-- ✅ Excellent documentation
-- ✅ Privacy-first philosophy (aligns with our values)
-- ✅ Unlimited emails (no send limits)
-- ✅ Fast setup (< 30 minutes)
-- ✅ Generous free tier (100 subscribers)
+- ✅ Free tier covers MVP
+- ✅ Strong automation for future growth
+- ✅ Large ecosystem of integrations
+- ✅ Good documentation
 
 **Cons:**
-- ⚠️ Smaller brand (less well-known than ConvertKit)
-- ⚠️ Fewer integrations (but has API/webhooks)
-- ⚠️ Minimal marketing automation (vs Kit)
-- ⚠️ No built-in landing pages (not needed - we have own)
-
-**Documentation Quality:** ⭐⭐⭐⭐⭐ (5/5)
-- Clear, concise, with code examples
-- Interactive API explorer
-- Good search
-- Well-maintained
-
-**Support:**
-- Email support (responsive, founder-involved)
-- Community Discord
-- Status page
-- 99.9% uptime
+- ⚠️ Serverless proxy required for API usage
+- ⚠️ Free tier branding on forms/emails
 
 **Sources:**
-- [Buttondown Pricing](https://buttondown.com/pricing)
-- [Buttondown API Docs](https://docs.buttondown.com/api-introduction)
-- [Buttondown Features](https://buttondown.com/features)
+- [Kit Pricing](https://kit.com/pricing)
+- [Kit API Docs](https://developers.kit.com)
+- [Kit Help](https://help.kit.com)
 
 ---
 
-#### 2.2.2 Kit (formerly ConvertKit)
+#### 2.2.2 Alternative ESPs (MailerLite / Mailchimp)
 
-**Overview:**
-- Founded: 2013
-- Focus: Creator-focused, email marketing
-- Philosophy: Built for creators, podcasters, bloggers
-- Website: https://kit.com
-
-**Pricing:**
-| Subscribers | Free Tier | Creator Plan | Creator Pro |
-|-------------|-----------|--------------|-------------|
-| 0-1,000 | ✅ Free (limited) | $9/mo | $25/mo |
-| 1,001-3,000 | N/A | $25/mo | $50/mo |
-| 3,001-5,000 | N/A | $41/mo | $66/mo |
-
-**Pricing notes:**
-- Free tier: 10,000 subscriber limit BUT single automation only
-- API access: Requires paid plan ($9/mo minimum)
-- Charged for ALL subscribers (not just confirmed)
-- Annual billing: 2 months free (~16% discount)
-- **Critical for us:** Need Creator plan ($9/mo) for API access
-
-**API Assessment:**
-- **CORS Support:** ❌ NO (server-side only)
-- **Authentication:** API secret in request body (not ideal for client-side)
-- **Rate Limiting:** 120 requests/minute
-- **Documentation:** Good (but less dev-focused)
-- **Endpoints Needed:** `POST /v3/forms/{id}/subscribe`
-- **Response Format:** Nested JSON (more complex)
-- **Webhook Support:** ✅ YES (paid plans)
-- **Complexity:** MEDIUM-HIGH (requires serverless proxy)
-
-**Example API Call:**
-```javascript
-// MUST use serverless proxy (no direct client-side calls)
-fetch('/api/subscribe', { // Our proxy endpoint
-    method: 'POST',
-    body: JSON.stringify({
-        email: 'user@example.com',
-        location: 'hero'
-    })
-});
-
-// Proxy forwards to:
-// POST https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe
-// Body: { api_key: 'SECRET', email: '...', fields: {...} }
-```
-
-**Double Opt-In:**
-- ✅ Built-in, configurable
-- ✅ Customizable confirmation email
-- ✅ GDPR-compliant
-- ✅ Tracks subscriber state (inactive until confirmed)
-- ❌ Less granular control vs Buttondown
-
-**Features:**
-- ✅ Visual automation builder
-- ✅ Landing pages (built-in, not needed)
-- ✅ Email sequences
-- ✅ Tagging & segmentation
-- ✅ Analytics dashboard
-- ✅ A/B testing (Pro plan)
-- ✅ Advanced reporting (Pro plan)
-- ✅ Multiple users (Pro plan)
-- ✅ 70+ integrations
-- ✅ Migration service (they'll migrate your list)
-- ❌ Less privacy-focused (more marketing-oriented)
-
-**Pros:**
-- ✅ Well-established brand (trusted by creators)
-- ✅ Generous free tier (10,000 subscribers)
-- ✅ Visual automation builder (easier for non-devs)
-- ✅ Extensive integrations (Shopify, WordPress, etc.)
-- ✅ Free migration service
-- ✅ Great for long-term email marketing
-
-**Cons:**
-- ❌ API requires paid plan ($9/mo minimum)
-- ❌ No CORS support (must use serverless proxy)
-- ❌ More complex implementation
-- ❌ API secret in request body (awkward authentication)
-- ❌ Charges for unconfirmed subscribers
-- ❌ More marketing-focused (less developer-friendly)
-- ❌ Overkill features for simple waitlist
-
-**Documentation Quality:** ⭐⭐⭐⭐☆ (4/5)
-- Comprehensive but less focused
-- Good examples
-- More marketing-oriented docs
-- API docs buried deeper
-
-**Support:**
-- Email support
-- Live chat (paid plans)
-- Knowledge base
+Use these if you already have an account or need a simpler drag-and-drop editor. They generally:
+- Require the same serverless proxy pattern for API usage
+- Offer fewer creator-focused automations than Kit
+- Have pricing tiers that scale quickly after the free tier
 - Active community
 - 99.9% uptime
 
 **Sources:**
-- [Kit Pricing](https://kit.com/pricing)
-- [Kit Pricing Review 2026](https://www.emailtooltester.com/en/reviews/convertkit/pricing/)
-- [Kit API Docs](https://developers.convertkit.com/)
+- https://www.mailerlite.com/pricing
+- https://mailchimp.com/pricing/
 
 ---
 
-### 2.3 Detailed Scoring
+### 2.3 Scoring Summary
 
-**Cost (25% weight):**
+Kit wins on overall fit for a creator-focused waitlist with future automation needs. Alternative ESPs are acceptable but add trade-offs in automations and integrations without improving implementation simplicity (both still require a proxy).
 
-| Platform | 0-100 subs | 101-1,000 subs | Score | Weighted |
-|----------|------------|----------------|-------|----------|
-| Buttondown | $0 | $9/mo | 10/10 | 2.5 |
-| Kit | $0* | $9/mo** | 7/10 | 1.75 |
+### 2.4 Recommendation
 
-*Free tier has limitations (API not included)
-**Requires paid plan for API from day 1
-
-**Winner: Buttondown** (truly free for MVP, API included)
-
----
-
-**API Ease of Use (20% weight):**
-
-| Platform | CORS | Auth Method | Proxy Needed | Complexity | Score | Weighted |
-|----------|------|-------------|--------------|------------|-------|----------|
-| Buttondown | ✅ YES | Header token | ❌ No | Low | 10/10 | 2.0 |
-| Kit | ❌ NO | Body param | ✅ Required | High | 5/10 | 1.0 |
-
-**Winner: Buttondown** (can call directly from client-side, simpler)
-
----
-
-**Double Opt-In (15% weight):**
-
-| Platform | Built-in | Customizable | Tracking | Score | Weighted |
-|----------|----------|--------------|----------|-------|----------|
-| Buttondown | ✅ | ✅ | Excellent | 10/10 | 1.5 |
-| Kit | ✅ | ✅ | Good | 9/10 | 1.35 |
-
-**Winner: Buttondown** (slightly better granularity)
-
----
-
-**Feature Completeness (15% weight):**
-
-| Feature | Buttondown | Kit | Weight |
-|---------|------------|-----|--------|
-| Email collection | ✅ | ✅ | Required |
-| Metadata/tags | ✅ | ✅ | Required |
-| Export | ✅ | ✅ | Required |
-| Automations | ✅ Basic | ✅ Advanced | Nice-to-have |
-| Segmentation | ✅ | ✅ | Nice-to-have |
-| Analytics | ✅ | ✅ | Nice-to-have |
-
-**Score:**
-- Buttondown: 9/10 (all requirements, simpler automations)
-- Kit: 10/10 (all requirements, advanced automations)
-
-**Weighted:**
-- Buttondown: 1.35
-- Kit: 1.5
-
-**Winner: Kit** (more features, but we don't need them yet)
-
----
-
-**Documentation Quality (10% weight):**
-
-| Platform | Clarity | Examples | Searchability | Dev-Focus | Score | Weighted |
-|----------|---------|----------|---------------|-----------|-------|----------|
-| Buttondown | Excellent | Many | Good | High | 10/10 | 1.0 |
-| Kit | Good | Some | Fair | Medium | 7/10 | 0.7 |
-
-**Winner: Buttondown** (clearer, more dev-focused)
-
----
-
-**Long-term Scalability (10% weight):**
-
-| Platform | 10K subs | 50K subs | 100K subs | Migration | Score | Weighted |
-|----------|----------|----------|-----------|-----------|-------|----------|
-| Buttondown | $79/mo | $139/mo | Enterprise | Manual | 8/10 | 0.8 |
-| Kit | $119/mo | $279/mo | $399/mo | Assisted | 9/10 | 0.9 |
-
-**Winner: Kit** (better pricing at very high scale, migration help)
-
----
-
-**Support & Reliability (5% weight):**
-
-| Platform | Support Channels | Uptime | Community | Score | Weighted |
-|----------|------------------|--------|-----------|-------|----------|
-| Buttondown | Email, Discord | 99.9% | Small | 8/10 | 0.4 |
-| Kit | Email, Chat, KB | 99.9% | Large | 9/10 | 0.45 |
-
-**Winner: Kit** (more support options, larger community)
-
----
-
-### 2.4 Final Scores
-
-| Platform | Total Score | Percentage |
-|----------|-------------|------------|
-| **Buttondown** | **9.55 / 10** | **95.5%** |
-| Kit | 7.65 / 10 | 76.5% |
-
-**Clear Winner: Buttondown**
-
----
-
-### 2.5 Recommendation
-
-**RECOMMENDED PLATFORM: Buttondown**
+**RECOMMENDED PLATFORM: Kit (ConvertKit)**
 
 **Rationale:**
-
-**Primary reasons:**
-1. **Truly free for MVP** - API access included in free tier (Kit charges $9/mo for API)
-2. **Simpler implementation** - CORS support means no serverless proxy needed (saves 2-3 hours dev time)
-3. **Developer experience** - Cleaner API, better docs, designed for devs
-4. **Privacy alignment** - Privacy-first philosophy matches our brand values
-5. **Lower barrier to entry** - Can implement and test without any cost
-
-**Secondary reasons:**
-6. Better API documentation
-7. Faster implementation (no proxy needed)
-8. Charges only confirmed subscribers (Kit charges all)
-9. More predictable scaling costs
+- Free tier covers the MVP audience size
+- Automations and sequences scale with future needs
+- Strong creator ecosystem and integrations
+- Clear API documentation and support
 
 **Trade-offs accepted:**
-- Less advanced marketing automation (don't need yet)
-- Smaller brand/community (acceptable for technical team)
-- Fewer pre-built integrations (have API/webhooks)
-
-**When Kit would be better:**
-- If needing advanced visual automation builder (non-technical team)
-- If already using Kit for other newsletters (consolidation)
-- If needing extensive 3rd-party integrations
-- If at very high scale (50K+ subscribers)
-
-**For this use case (MVP email waitlist):**
-Buttondown is objectively better - simpler, faster, cheaper, and more aligned with our technical implementation approach.
+- Serverless proxy required for API usage (no CORS)
+- Free tier branding on forms/emails
 
 ---
 
-### 2.6 Implementation Implications
+### 2.5 Implementation Implications
 
-**Choosing Buttondown means:**
+**Choosing Kit means:**
 
-✅ **Simpler code:**
-- Direct API calls from client-side JavaScript
-- No serverless function proxy needed
-- Fewer moving parts = fewer failure points
+✅ **Secure integration:**
+- Use a serverless function to call Kit’s API
+- API credentials stay server-side
+- Controlled rate limiting and logging in the proxy
 
-✅ **Faster implementation:**
-- Estimated 3-5 hours (vs 4-6 hours with Kit proxy)
-- Less testing surface area
-- Easier debugging
+✅ **Predictable cost:**
+- $0 on free tier
+- Paid plans only if automation/reporting needs grow
 
-✅ **Lower cost:**
-- $0 for first 100 subscribers
-- $9/mo for 101-1,000 subscribers
-- No surprise charges
-
-✅ **Better privacy:**
-- Aligns with Plausible analytics choice
-- GDPR-compliant by default
-- Minimal data collection
-
-✅ **CSP compatibility:**
-- Add `https://api.buttondown.email` to `connect-src`
-- Simple one-line change in `vercel.json`
+✅ **CSP updates:**
+- Add `https://api.kit.com` to `connect-src`
 
 **See Section 5 for complete implementation details**
 
 ---
 
-### 2.7 Decision Record
+### 2.6 Decision Record
 
-**Decision:** Use Buttondown for F002 Email Collection Integration
+**Decision:** Use Kit for F002 Email Collection Integration
 
 **Date:** [To be filled when decision finalized]
 
 **Decided by:** [Product/Technical Lead]
 
 **Alternatives considered:**
-1. Kit (ConvertKit) - scored 76.5% vs Buttondown's 95.5%
-2. Other platforms (Mailchimp, SendGrid, etc.) - not evaluated (Buttondown/Kit were top choices)
+1. MailerLite/Mailchimp (basic ESPs)
+2. Other platforms (SendGrid, etc.)
 
 **Key factors:**
-- Free tier with full API access
-- CORS support (no proxy needed)
-- Developer-friendly
-- Privacy-focused
-
-**Review date:** After 100 subscribers (reassess if needs change)
-
----
-
-[Due to length limits, continuing in next part...]
-
-**Note: The complete PRD continues with Sections 3-13. This file contains the foundational sections. Continuing to save the full document...**
+- Free tier covers MVP
+- Automation-ready for growth
+- Clear docs and ecosystem
+- Serverless proxy aligns with security best practices
 
 ## 3. User Stories
 
@@ -881,7 +613,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
   - Request includes email, metadata (location, timestamp, referrer)
   - Successful API response (200/201) triggers success message
   - Failed API response triggers error message
-- **Dependencies:** [TOOL] API credentials, CORS configuration
+- **Dependencies:** [TOOL] API credentials, proxy configuration
 
 **REQ-004: Form Location Tracking**
 - **Description:** Track which form location user submitted from (hero, mid-page, footer)
@@ -1047,7 +779,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
   - Same IP cannot submit more than 10 emails per hour
   - Excessive submissions show: "Too many requests. Please try again later."
   - Rate limiting doesn't affect legitimate users
-- **Dependencies:** [TOOL] rate limiting or client-side implementation
+- **Dependencies:** Proxy rate limiting + [TOOL] safeguards
 
 **REQ-020: Offline/Network Error Handling**
 - **Description:** Handle scenarios where [TOOL] API is unreachable
@@ -1136,7 +868,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
 
 ### 5.1 System Architecture Overview
 
-**Architecture Pattern:** Client-side AJAX submission to third-party email service API
+**Architecture Pattern:** Client-side submission to serverless proxy → Kit API
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -1150,6 +882,13 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
 └─────────────────────────────────┼───────────┘
                                  │ HTTPS
                                  ▼
+                    ┌────────────────────────┐
+                    │ Serverless Proxy       │
+                    │  - Auth + validation   │
+                    │  - Rate limiting       │
+                    └──────────┬─────────────┘
+                               │ HTTPS
+                               ▼
                     ┌────────────────────────┐
                     │   [TOOL] REST API      │
                     │  - Create subscriber   │
@@ -1167,7 +906,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
 ```
 
 **Key Characteristics:**
-- **Serverless:** No backend required (static HTML + client-side JavaScript)
+- **Serverless:** Lightweight proxy required (no full backend app)
 - **Third-party managed:** Email service handles storage, delivery, compliance
 - **Vercel deployed:** Static site with CDN distribution
 - **CSP compliant:** Secure form submission within Content Security Policy
@@ -1217,7 +956,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
 ```javascript
 // Configuration object (to be added at top of script)
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.[tool].com/v1/subscribers', // Platform-specific
+    apiEndpoint: '/api/subscribe', // Serverless proxy endpoint
     apiKey: 'YOUR_API_KEY_HERE', // Stored as environment variable or config
     timeout: 5000, // 5 second timeout
     retryAttempts: 2 // Retry failed requests twice
@@ -1423,20 +1162,20 @@ class TimeoutError extends Error {
 
 ### 5.3 Platform-Specific API Integration
 
-#### 5.3.1 Buttondown API Specification
+#### 5.3.1 Kit API Specification
 
-**Endpoint:** `https://api.buttondown.email/v1/subscribers`
+**Endpoint:** `https://api.kit.com/v4/forms/{FORM_ID}/subscribers`
 
-**Authentication:** Header-based token
+**Authentication:** Bearer token in header (server-side only)
 ```
-Authorization: Token YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 **Request format:**
 ```json
 {
   "email": "user@example.com",
-  "metadata": {
+  "fields": {
     "signup_location": "hero",
     "signup_date": "2026-01-24T10:30:00Z",
     "signup_url": "https://getstorytime.vercel.app",
@@ -1446,103 +1185,31 @@ Authorization: Token YOUR_API_KEY
 }
 ```
 
-**Success response (201 Created):**
-```json
-{
-  "id": "abc123",
-  "email": "user@example.com",
-  "creation_date": "2026-01-24T10:30:00Z",
-  "metadata": {...},
-  "tags": ["hero", "landing-page"],
-  "subscriber_type": "unconfirmed"
-}
-```
-
-**Duplicate response (409 Conflict or 200 OK):**
-```json
-{
-  "email": "user@example.com",
-  "message": "Email already subscribed"
-}
-```
-
-**Error response (400 Bad Request):**
-```json
-{
-  "error": "Invalid email format"
-}
-```
-
-**Rate limits:** 60 requests/minute per API key
-
-**CORS:** Buttondown supports CORS for client-side requests
-
-**Documentation:** https://docs.buttondown.com/api-subscribers-create
-
----
-
-#### 5.3.2 Kit (ConvertKit) API Specification
-
-**Endpoint:** `https://api.convertkit.com/v3/forms/{form_id}/subscribe`
-
-**Authentication:** API key in request body (not header)
-
-**Request format:**
-```json
-{
-  "api_key": "YOUR_API_KEY",
-  "email": "user@example.com",
-  "fields": {
-    "signup_location": "hero",
-    "signup_date": "2026-01-24T10:30:00Z",
-    "signup_url": "https://getstorytime.vercel.app"
-  },
-  "tags": ["hero", "landing-page"]
-}
-```
-
 **Success response (200 OK):**
 ```json
 {
-  "subscription": {
-    "id": 123456,
-    "state": "inactive",
-    "created_at": "2026-01-24T10:30:00Z",
-    "source": "API",
-    "referrer": null,
-    "subscribable_id": 789,
-    "subscribable_type": "form",
-    "subscriber": {
-      "id": 987654,
-      "first_name": null,
-      "email_address": "user@example.com",
-      "state": "inactive",
-      "created_at": "2026-01-24T10:30:00Z",
-      "fields": {
-        "signup_location": "hero",
-        "signup_date": "2026-01-24T10:30:00Z"
-      }
-    }
-  }
+  "id": 123456,
+  "email": "user@example.com",
+  "state": "inactive",
+  "created_at": "2026-01-24T10:30:00Z"
 }
 ```
 
-**Duplicate response (200 OK - same as success):**
-Kit returns 200 OK even for duplicate emails, treating it as successful re-subscription.
+**Duplicate response (200 OK):**
+Kit returns 200 OK for duplicate emails, treating it as successful re-subscription.
 
 **Error response (401 Unauthorized):**
 ```json
 {
-  "error": "Invalid API key",
-  "message": "The API key you provided is invalid"
+  "error": "Invalid API key"
 }
 ```
 
-**Rate limits:** 120 requests/minute per API key
+**Rate limits:** ~120 requests/minute per API key
 
 **CORS:** Kit API does NOT support CORS for direct client-side calls (requires serverless function proxy)
 
-**Documentation:** https://developers.convertkit.com/#subscribe-to-a-form
+**Documentation:** https://developers.kit.com
 
 ---
 
@@ -1554,8 +1221,7 @@ Kit returns 200 OK even for duplicate emails, treating it as successful re-subsc
 ```javascript
 // Add to top of <script> block in index.html
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
-    apiKey: 'sk_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
+    apiEndpoint: '/api/subscribe',
     timeout: 5000
 };
 ```
@@ -1638,7 +1304,6 @@ function isValidEmail(email) {
 Then update frontend to call `/api/subscribe` instead of external API.
 
 **Recommendation:**
-- Use **Option 1** for Buttondown (supports CORS, simpler)
 - Use **Option 3** for Kit (CORS restriction requires proxy)
 
 ---
@@ -2005,12 +1670,12 @@ END STATE: 😊 Subscribed, awaiting launch updates
 ### Threat Mitigation
 
 **API Key Security:**
-- Buttondown: Visible in source (acceptable - designed for client-side)
-- Rate-limited: 60 req/min prevents abuse
+- Stored server-side in proxy (never exposed client-side)
+- Rate-limited: ~120 req/min prevents abuse
 - Can rotate if compromised
 
 **Data Privacy:**
-- Email sent ONLY to Buttondown (HTTPS)
+- Email sent ONLY to Kit (HTTPS)
 - NO email in localStorage/cookies
 - NO email in analytics (Plausible)
 
@@ -2022,7 +1687,7 @@ END STATE: 😊 Subscribed, awaiting launch updates
 
 **Security Headers:**
 ```
-Content-Security-Policy: connect-src 'self' https://plausible.io https://api.buttondown.email;
+Content-Security-Policy: connect-src 'self' https://plausible.io https://api.kit.com;
 Strict-Transport-Security: max-age=31536000
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
@@ -2038,7 +1703,7 @@ X-Frame-Options: DENY
 - [ ] Submit valid email → Success message
 - [ ] Submit duplicate → "Already subscribed" message
 - [ ] Submit invalid → Validation error
-- [ ] Email appears in Buttondown dashboard
+- [ ] Email appears in Kit dashboard
 - [ ] Confirmation email arrives within 2 min
 - [ ] All 3 forms work (hero, mid-page, footer)
 
@@ -2062,8 +1727,8 @@ X-Frame-Options: DENY
 
 ### Setup Steps
 
-**1. Create Buttondown Account**
-- Sign up at buttondown.email
+**1. Create Kit Account**
+- Sign up at kit.com
 - Enable 2FA
 - Configure double opt-in
 - Generate API key
@@ -2071,7 +1736,7 @@ X-Frame-Options: DENY
 **2. Add to Vercel Environment Variables**
 ```
 EMAIL_SERVICE_API_KEY=sk_xxxxx
-EMAIL_SERVICE_ENDPOINT=https://api.buttondown.email/v1/subscribers
+EMAIL_SERVICE_ENDPOINT=https://api.kit.com/v4/forms/FORM_ID/subscribers
 ```
 
 **3. Update Code**
@@ -2092,7 +1757,7 @@ git push origin feature/f002-email-collection
 
 **5. Verify Production**
 - Submit test email
-- Check Buttondown dashboard
+- Check Kit dashboard
 - Receive confirmation email
 - Confirm subscription
 
@@ -2104,7 +1769,7 @@ git push origin feature/f002-email-collection
 
 **METRIC-001: Total Signups**
 - Target: 100 in 21 days (~5/day)
-- Measurement: Buttondown dashboard
+- Measurement: Kit dashboard
 - Tracking: Daily
 
 **METRIC-002: Confirmation Rate**
@@ -2115,7 +1780,7 @@ git push origin feature/f002-email-collection
 **METRIC-003: Conversion Rate**
 - Target: >10%
 - Formula: Signups / Unique Visitors × 100
-- Tracking: Weekly (Plausible + Buttondown)
+- Tracking: Weekly (Plausible + Kit)
 
 **METRIC-004: Success Rate**
 - Target: >95%
@@ -2124,7 +1789,7 @@ git push origin feature/f002-email-collection
 
 **METRIC-005: Bounce Rate**
 - Target: <5%
-- Measurement: Buttondown deliverability metrics
+- Measurement: Kit deliverability metrics
 
 ### Weekly Reporting
 
@@ -2146,7 +1811,7 @@ git push origin feature/f002-email-collection
 ### Phase Timeline (1-2 days total)
 
 **Phase 1: Setup (1-2 hours)**
-- Task 1.1: Create Buttondown account
+- Task 1.1: Create Kit account
 - Task 1.2: Configure double opt-in
 - Task 1.3: Generate API key
 - Task 1.4: Add to Vercel env vars
@@ -2192,8 +1857,8 @@ Choose platform → Create account → Get API key → Code → Test → Deploy
 
 | Question | Decision | Rationale |
 |----------|----------|-----------|
-| Platform choice | Buttondown | Free API, CORS support, simpler (95.5% score) |
-| Implementation | Client-side API | Buttondown supports CORS (no proxy needed) |
+| Platform choice | Kit | Free tier for MVP + automation-ready |
+| Implementation | Serverless proxy | Kit API requires server-side calls (no CORS) |
 | Collect name? | No (email only) | Minimize friction, maximize conversion |
 | Timeout duration | 5 seconds | Balance slow connections vs user patience |
 | Rate limit | 5/minute | Prevent abuse, allow legitimate retries |
@@ -2224,14 +1889,10 @@ Choose platform → Create account → Get API key → Code → Test → Deploy
 
 ## Appendix: References
 
-**Buttondown Resources:**
-- Pricing: https://buttondown.com/pricing
-- API Docs: https://docs.buttondown.com/api-introduction
-- Features: https://buttondown.com/features
-
 **Kit Resources:**
 - Pricing: https://kit.com/pricing
-- API Docs: https://developers.convertkit.com/
+- API Docs: https://developers.kit.com
+- Features: https://kit.com/features
 
 **Implementation Guides:**
 - PRD Framework: `/docs/PRD-GUIDE.md`
@@ -2254,7 +1915,7 @@ Choose platform → Create account → Get API key → Code → Test → Deploy
 
 **Status:** ✅ Ready for Implementation
 
-**Next Step:** Create Buttondown account and begin Phase 1 setup.
+**Next Step:** Create Kit account and begin Phase 1 setup.
 
 ---
 
