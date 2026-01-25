@@ -11,13 +11,13 @@ This directory contains email templates for the Storytime welcome sequence.
 
 ### Step 1: Configure Confirmation/Welcome Email (Automatic)
 
-This email is sent automatically by Buttondown when someone signs up.
+This email is sent automatically by Kit when someone signs up.
 
-1. Log into [Buttondown](https://buttondown.email/)
+1. Log into [Kit](https://app.kit.com/)
 2. Go to **Settings** → **Emails** → **Confirmation email**
 3. Enable **"Custom confirmation email"**
 4. Copy content from `01-confirmation-welcome.md`
-5. **CRITICAL:** Ensure `{{ confirmation_url }}` is in the confirm button
+5. **CRITICAL:** Ensure `{{ subscriber.confirmation_url }}` is in the confirm button
 6. Save and send a test email
 
 ### Step 2: Create Follow-up Email Templates (Manual Sending)
@@ -30,7 +30,7 @@ These emails are sent manually based on days since confirmation.
 | Sneak Peek | `03-sneak-peek.md` | Day 5 after confirmation |
 | Engagement | `04-engagement.md` | Day 10 after confirmation |
 
-To save as drafts in Buttondown:
+To save as drafts in Kit:
 1. Go to **Emails** → **New email**
 2. Copy subject and content from template file
 3. Save as draft (don't send yet)
@@ -42,13 +42,13 @@ To save as drafts in Buttondown:
 
 **Time required:** 5-10 minutes/day
 
-1. **Check Buttondown dashboard** for newly confirmed subscribers
+1. **Check Kit dashboard** for newly confirmed subscribers
 2. **Identify which email to send** based on confirmation date:
    - Day 0-1: They just got the confirmation email
    - Day 2: Send Vision email
    - Day 5: Send Sneak Peek email
    - Day 10: Send Engagement email
-3. **Send the appropriate email** via Buttondown
+3. **Send the appropriate email** via Kit
 4. **Log in tracking spreadsheet** (see template below)
 
 ---
@@ -84,18 +84,18 @@ Create a Google Sheet with these columns:
 
 | Metric | Target | Where to Find |
 |--------|--------|---------------|
-| Confirmation email open rate | >60% | Buttondown analytics |
-| Confirmation rate (clicks) | >50% | Buttondown analytics |
-| Follow-up avg open rate | >40% | Buttondown analytics |
-| Unsubscribe rate | <2% | Buttondown analytics |
+| Confirmation email open rate | >60% | Kit analytics |
+| Confirmation rate (clicks) | >50% | Kit analytics |
+| Follow-up avg open rate | >40% | Kit analytics |
+| Unsubscribe rate | <2% | Kit analytics |
 | Reply rate | >5% | Count manually |
 
 ---
 
-## Buttondown Configuration Checklist
+## Kit Configuration Checklist
 
 - [ ] Custom confirmation email enabled
-- [ ] Confirmation email content added with `{{ confirmation_url }}`
+- [ ] Confirmation email content added with `{{ subscriber.confirmation_url }}`
 - [ ] Reply-to set to monitored inbox
 - [ ] Test confirmation flow works end-to-end
 - [ ] Email #2, #3, #4 saved as drafts
@@ -110,7 +110,7 @@ When any of these trigger points are reached:
 - Manual process taking >30 min/day
 - Missing sends due to human error
 
-**Then:** Upgrade to Buttondown Standard ($29/mo) for automations.
+**Then:** Upgrade to Kit Creator ($29/mo) for automations.
 
 See PRD Section 11 for automation setup instructions.
 
@@ -121,10 +121,10 @@ See PRD Section 11 for automation setup instructions.
 **Confirmation email not being received:**
 - Check spam folder
 - Verify subscriber email is correct
-- Check Buttondown logs for bounces
+- Check Kit logs for bounces
 
 **Links not working in emails:**
-- Ensure `{{ confirmation_url }}` is correctly formatted
+- Ensure `{{ subscriber.confirmation_url }}` is correctly formatted
 - Test send to personal email first
 
 **Low open rates:**

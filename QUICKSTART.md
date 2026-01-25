@@ -145,7 +145,7 @@ npx lighthouse https://getstorytime.com --view
 ### Phase 1: Validation (Current)
 - [x] CI/CD automation set up
 - [ ] Add Plausible analytics
-- [ ] Add Buttondown email forms
+- [ ] Add Kit (ConvertKit) email forms
 - [ ] Launch to target communities
 - [ ] Track signups
 

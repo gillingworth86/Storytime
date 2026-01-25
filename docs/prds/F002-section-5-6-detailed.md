@@ -295,20 +295,20 @@ class TimeoutError extends Error {
 
 ### 5.3 Platform-Specific API Integration
 
-#### 5.3.1 Buttondown API Specification
+#### 5.3.1 Kit API Specification
 
-**Endpoint:** `https://api.buttondown.email/v1/subscribers`
+**Endpoint:** `https://api.kit.com/v4/forms/{FORM_ID}/subscribers`
 
-**Authentication:** Header-based token
+**Authentication:** Bearer token in header (server-side only)
 ```
-Authorization: Token YOUR_API_KEY
+Authorization: Bearer YOUR_API_KEY
 ```
 
 **Request format:**
 ```json
 {
   "email": "user@example.com",
-  "metadata": {
+  "fields": {
     "signup_location": "hero",
     "signup_date": "2026-01-24T10:30:00Z",
     "signup_url": "https://getstorytime.vercel.app",
@@ -318,103 +318,31 @@ Authorization: Token YOUR_API_KEY
 }
 ```
 
-**Success response (201 Created):**
-```json
-{
-  "id": "abc123",
-  "email": "user@example.com",
-  "creation_date": "2026-01-24T10:30:00Z",
-  "metadata": {...},
-  "tags": ["hero", "landing-page"],
-  "subscriber_type": "unconfirmed"
-}
-```
-
-**Duplicate response (409 Conflict or 200 OK):**
-```json
-{
-  "email": "user@example.com",
-  "message": "Email already subscribed"
-}
-```
-
-**Error response (400 Bad Request):**
-```json
-{
-  "error": "Invalid email format"
-}
-```
-
-**Rate limits:** 60 requests/minute per API key
-
-**CORS:** Buttondown supports CORS for client-side requests
-
-**Documentation:** https://docs.buttondown.com/api-subscribers-create
-
----
-
-#### 5.3.2 Kit (ConvertKit) API Specification
-
-**Endpoint:** `https://api.convertkit.com/v3/forms/{form_id}/subscribe`
-
-**Authentication:** API key in request body (not header)
-
-**Request format:**
-```json
-{
-  "api_key": "YOUR_API_KEY",
-  "email": "user@example.com",
-  "fields": {
-    "signup_location": "hero",
-    "signup_date": "2026-01-24T10:30:00Z",
-    "signup_url": "https://getstorytime.vercel.app"
-  },
-  "tags": ["hero", "landing-page"]
-}
-```
-
 **Success response (200 OK):**
 ```json
 {
-  "subscription": {
-    "id": 123456,
-    "state": "inactive",
-    "created_at": "2026-01-24T10:30:00Z",
-    "source": "API",
-    "referrer": null,
-    "subscribable_id": 789,
-    "subscribable_type": "form",
-    "subscriber": {
-      "id": 987654,
-      "first_name": null,
-      "email_address": "user@example.com",
-      "state": "inactive",
-      "created_at": "2026-01-24T10:30:00Z",
-      "fields": {
-        "signup_location": "hero",
-        "signup_date": "2026-01-24T10:30:00Z"
-      }
-    }
-  }
+  "id": 123456,
+  "email": "user@example.com",
+  "state": "inactive",
+  "created_at": "2026-01-24T10:30:00Z"
 }
 ```
 
-**Duplicate response (200 OK - same as success):**
-Kit returns 200 OK even for duplicate emails, treating it as successful re-subscription.
+**Duplicate response (200 OK):**
+Kit returns 200 OK for duplicate emails, treating it as successful re-subscription.
 
 **Error response (401 Unauthorized):**
 ```json
 {
-  "error": "Invalid API key",
-  "message": "The API key you provided is invalid"
+  "error": "Invalid API key"
 }
 ```
 
-**Rate limits:** 120 requests/minute per API key
+**Rate limits:** ~120 requests/minute per API key
 
 **CORS:** Kit API does NOT support CORS for direct client-side calls (requires serverless function proxy)
 
-**Documentation:** https://developers.convertkit.com/#subscribe-to-a-form
+**Documentation:** https://developers.kit.com
 
 ---
 
@@ -422,12 +350,11 @@ Kit returns 200 OK even for duplicate emails, treating it as successful re-subsc
 
 **Approach:** Environment-based configuration using build-time replacement
 
-**Option 1: Manual configuration (current static HTML)**
+**Option 1: Manual configuration (static HTML + proxy)**
 ```javascript
 // Add to top of <script> block in index.html
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
-    apiKey: 'sk_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
+    apiEndpoint: '/api/subscribe',
     timeout: 5000
 };
 ```
@@ -476,11 +403,11 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${process.env.EMAIL_SERVICE_API_KEY}`
+                'Authorization': `Bearer ${process.env.EMAIL_SERVICE_API_KEY}`
             },
             body: JSON.stringify({
                 email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                 },
@@ -510,7 +437,6 @@ function isValidEmail(email) {
 Then update frontend to call `/api/subscribe` instead of external API.
 
 **Recommendation:**
-- Use **Option 1** for Buttondown (supports CORS, simpler)
 - Use **Option 3** for Kit (CORS restriction requires proxy)
 
 ---

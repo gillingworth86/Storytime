@@ -2,7 +2,7 @@
 
 **Purpose:** Preview features, generate excitement
 **Timing:** Day 5 (after confirmation)
-**Send Method:** Manual via Buttondown dashboard
+**Send Method:** Manual via Kit dashboard
 
 ---
 
@@ -26,7 +26,7 @@ Here's how story continuity actually works...
 
 ## Email Content
 
-Copy everything below the line into Buttondown when sending:
+Copy everything below the line into Kit when sending:
 
 ---
 
@@ -78,7 +78,7 @@ The Storytime Team
 
 ## Sending Instructions
 
-1. Go to Buttondown → **Emails** → **New email**
+1. Go to Kit → **Emails** → **New email**
 2. Copy the subject line and content above
 3. Set "Send to" = Subscribers who confirmed 5 days ago
 4. Preview and send

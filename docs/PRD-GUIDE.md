@@ -246,7 +246,7 @@ These standards ensure PRDs have sufficient detail for one-shot implementation.
 - Submission triggers double opt-in flow
 - Success confirmation appears within 2 seconds
 
-(NOT: "User submits email via Buttondown API" - that's premature)
+(NOT: "User submits email via Kit API" - that's premature)
 ```
 
 **Benefits:**
@@ -470,7 +470,7 @@ Claude automatically assesses if a feature is too large for one iteration:
 
 ### Small Feature (≤1 day)
 **Example:** F002 - Email Collection Integration
-- Single integration point (Buttondown API)
+- Single integration point (Kit API)
 - Clear scope and requirements
 - **Action:** Create single PRD, build in one shot
 

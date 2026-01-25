@@ -38,15 +38,15 @@
 
 ### P0 - Critical Path
 
-#### F002: Email Collection Integration (Buttondown)
+#### F002: Email Collection Integration (Kit)
 **Status:** 🔄 In Progress (separate session)
 **Priority:** P0
 **Effort:** Small
 
-Integrate Buttondown email service to collect and manage email signups. Replace placeholder forms with functional email capture.
+Integrate Kit (ConvertKit) email service to collect and manage email signups. Replace placeholder forms with functional email capture.
 
 **Success Metrics:**
-- Email submissions successfully captured in Buttondown
+- Email submissions successfully captured in Kit
 - Confirmation emails sent automatically
 - Double opt-in flow working
 - Export capability for email list
@@ -98,7 +98,7 @@ Add testimonials, user quotes, or early tester feedback to build trust and credi
 Create email sequence for new signups: confirmation, welcome message, value delivery, and engagement nurturing.
 
 **Implementation Strategy:**
-- **Phase A (Manual):** Send emails manually via Buttondown dashboard until 100 signups validated
+- **Phase A (Manual):** Send emails manually via Kit dashboard until 100 signups validated
 - **Phase B (Automated):** Implement automation after demand validation (requires platform decision - see Strategic Decisions below)
 
 **Success Metrics:**
@@ -292,24 +292,23 @@ When adding new features to backlog, use this format:
 **Affects:** F005, F008, and any future automation needs
 
 **Context:**
-Buttondown (chosen for F002) requires $29/mo for automations. Kit offers 1 free automation but requires serverless proxy (more complex implementation).
+Kit (chosen for F002) includes limited automation on the free tier but still requires a serverless proxy for API usage.
 
 **Options:**
 | Option | Cost | Complexity | Limitations |
 |--------|------|------------|-------------|
-| Buttondown Standard | $29/mo | Low (CORS) | None |
-| Kit Free | $0/mo | High (proxy) | 1 automation, branding |
-| Kit Creator | $39/mo | High (proxy) | None |
+| Kit Free | $0/mo | Medium (proxy) | Limited automations, branding |
+| Kit Creator | $29/mo | Medium (proxy) | Full automations |
 
 **Decision:**
 - **Manual-first approach** for F005 until demand validated
-- Send welcome emails manually via Buttondown dashboard
+- Send welcome emails manually via Kit dashboard
 - Reassess platform choice when:
   - 100 signups achieved (demand validated), OR
   - Manual sending becomes unsustainable (>10 signups/day)
 
 **Rationale:**
-- Don't pay $29/mo before validating product-market fit
+- Don't pay for a creator plan before validating product-market fit
 - Manual sending is acceptable for <100 subscribers
 - Preserves flexibility to switch platforms if needed
 - Aligns with lean validation philosophy

@@ -2,7 +2,7 @@
 
 **Purpose:** Share the product story, build emotional connection
 **Timing:** Day 2 (48 hours after confirmation)
-**Send Method:** Manual via Buttondown dashboard
+**Send Method:** Manual via Kit dashboard
 
 ---
 
@@ -26,7 +26,7 @@ It started with a simple request at bedtime...
 
 ## Email Content
 
-Copy everything below the line into Buttondown when sending:
+Copy everything below the line into Kit when sending:
 
 ---
 
@@ -80,7 +80,7 @@ P.S. - Still curious about your child's current favorite story! Hit reply if you
 
 ## Sending Instructions
 
-1. Go to Buttondown → **Emails** → **New email**
+1. Go to Kit → **Emails** → **New email**
 2. Copy the subject line and content above
 3. Set "Send to" = Subscribers who confirmed 2 days ago
 4. Preview and send

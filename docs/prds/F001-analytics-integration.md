@@ -1149,7 +1149,7 @@ if (ENABLE_ANALYTICS && window.plausible) {
 - **CSP and Plausible:** https://plausible.io/docs/troubleshoot-integration#content-security-policy-csp
 
 ### Related Features
-- **F002:** Email Collection Integration (Buttondown) - Will use analytics to measure
+- **F002:** Email Collection Integration (Kit) - Will use analytics to measure
 - **F003:** A/B Testing Framework - Depends on baseline analytics
 - **F005:** Email Welcome Sequence - Conversion tracking required
 

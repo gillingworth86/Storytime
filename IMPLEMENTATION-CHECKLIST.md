@@ -109,17 +109,17 @@ Use this checklist to track your progress through setting up complete CI/CD auto
   - [ ] Verified tracking in Plausible dashboard
   - [ ] Set up conversion goals for email signups
 
-### 📧 Buttondown Email
+### 📧 Kit (ConvertKit) Email
 
 - [ ] **Setup**
-  - [ ] Signed up at https://buttondown.email/
-  - [ ] Created newsletter
+  - [ ] Signed up at https://kit.com/
+  - [ ] Created form + sequence
   - [ ] Configured email sequence (4 emails)
-  - [ ] Copied form embed code
+  - [ ] Copied form embed code / action URL
 
 - [ ] **Integration**
   - [ ] Replaced placeholder forms in `index.html`
-  - [ ] Updated `netlify.toml` CSP headers for Buttondown
+  - [ ] Updated `netlify.toml` CSP headers for Kit (app.kit.com / api.kit.com)
   - [ ] Tested form submission
   - [ ] Verified welcome email sends
   - [ ] Verified follow-up emails scheduled

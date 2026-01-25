@@ -31,17 +31,17 @@
 
 ---
 
-### Step 3: Sign Up for Buttondown (10 minutes)
+### Step 3: Sign Up for Kit (ConvertKit) (10 minutes)
 
-1. Go to **buttondown.email**
-2. Click "Sign Up"
-3. Choose **Free** plan (up to 100 subscribers)
-4. Pick a newsletter name: `storytime` or `storytime-updates`
+1. Go to **kit.com**
+2. Click "Start free"
+3. Choose the **Free** plan (up to 10,000 subscribers)
+4. Set up your creator profile
 5. Verify email
-6. **Save your newsletter embed code**—we'll need this for Carrd
+6. **Create a form** for your waitlist (we'll embed it in Carrd)
 
-**Where to find embed code:**
-- Settings → Embedding → Copy the HTML form code
+**Where to find the form embed:**
+- Forms → Select your form → Embed → Copy the HTML or use the form action URL
 
 ---
 
@@ -109,14 +109,14 @@ Create these sections (in order):
    - Email capture form (same as hero)
    - Footer links
 
-#### 5.3 Add Buttondown Email Form
+#### 5.3 Add Kit Email Form
 
 1. In Carrd editor, add a "Form" element where you want email capture
 2. Click "Form Settings"
 3. Choose "Custom" action
-4. Paste Buttondown form action URL:
+4. Paste the Kit form action URL:
    ```
-   https://buttondown.email/api/emails/embed-subscribe/YOUR-NEWSLETTER-NAME
+   https://app.kit.com/forms/YOUR_FORM_ID/subscriptions
    ```
 5. Set method to "POST"
 6. Add email field with placeholder "Your email address"
@@ -125,7 +125,7 @@ Create these sections (in order):
 **Test the form:**
 - Click "Publish" → "Preview"
 - Submit a test email
-- Check Buttondown dashboard to confirm it arrived
+- Check Kit dashboard to confirm it arrived
 
 #### 5.4 Design Tips
 
@@ -166,7 +166,7 @@ Carrd Pro Plus includes built-in A/B testing:
 
 **Tracking:**
 - Plausible will track which variant gets most traffic
-- Buttondown signup numbers will show which converts best
+- Kit signup numbers will show which converts best
 - After 100 total visitors per variant, pick winner
 
 ---
@@ -224,7 +224,7 @@ Create a testing checklist:
 - [ ] Hero section loads correctly
 - [ ] All 4 headline variants are live and rotating
 - [ ] Email form submits successfully
-- [ ] Test email appears in Buttondown dashboard
+- [ ] Test email appears in Kit dashboard
 - [ ] Sample stories are readable and formatted well
 - [ ] Pricing section is clear
 - [ ] FAQ accordions expand/collapse
@@ -243,14 +243,14 @@ Create a testing checklist:
 
 ## Day 6: Email Sequence Setup
 
-### Step 10: Set Up Email Automation in Buttondown (2 hours)
+### Step 10: Set Up Email Automation in Kit (2 hours)
 
 #### 10.1 Welcome Email (Day 0)
 
-1. In Buttondown, go to "Emails" → "New Email"
-2. Create email using content from `email-sequence.md` (Email 1)
-3. Set to send **immediately upon signup**
-4. Use Buttondown's automation feature or set as "Welcome email"
+1. In Kit, go to **Sequences** → "New Sequence"
+2. Create the welcome email using content from `email-sequence.md` (Email 1)
+3. Set it to send **immediately upon signup**
+4. Attach the sequence to your signup form in **Automations**
 
 **Subject:** Welcome to Storytime! Quick question...
 
@@ -273,9 +273,9 @@ Create a testing checklist:
 - Schedule to send 14 days after signup
 - Pricing validation question
 
-**Buttondown automation:**
+**Kit automation:**
 - Use tags to segment subscribers
-- Set up automated sequence based on signup date
+- Trigger the sequence when someone subscribes via your form
 - Test by subscribing yourself with a test email
 
 ---
@@ -340,7 +340,7 @@ Prepare these for distribution:
 - [ ] Landing page is live on custom domain
 - [ ] SSL certificate is active (https)
 - [ ] All 4 headline variants are rotating
-- [ ] Email capture form works and submits to Buttondown
+- [ ] Email capture form works and submits to Kit
 - [ ] Welcome email sends immediately
 - [ ] Follow-up emails are scheduled
 - [ ] Plausible tracking is working
@@ -369,7 +369,7 @@ Prepare these for distribution:
 2. **Track immediately:**
    - Open Plausible dashboard
    - Monitor real-time traffic
-   - Watch for signup notifications from Buttondown
+   - Watch for signup notifications from Kit
 
 3. **Engage:**
    - Respond to every comment within 2 hours
@@ -415,14 +415,14 @@ Prepare these for distribution:
 ### Access URLs:
 - **Landing page:** https://getstorytime.com (your domain)
 - **Carrd dashboard:** https://carrd.co/dashboard
-- **Buttondown dashboard:** https://buttondown.email/
+- **Kit dashboard:** https://app.kit.com/
 - **Plausible analytics:** https://plausible.io/getstorytime.com
 
 ### Logins:
 Store these securely (use password manager):
 - Domain registrar login
 - Carrd login
-- Buttondown login
+- Kit login
 - Plausible login
 
 ---
@@ -430,10 +430,10 @@ Store these securely (use password manager):
 ## Troubleshooting
 
 ### Email form not working:
-- Check Buttondown form action URL is correct
+- Check Kit form action URL is correct
 - Verify POST method is set
 - Test with different email providers (Gmail, Outlook, etc.)
-- Check Buttondown dashboard for error logs
+- Check Kit dashboard for error logs
 
 ### Domain not connecting:
 - DNS propagation can take up to 24 hours
@@ -504,7 +504,7 @@ Track these weekly:
 
 1. Register domain ✓
 2. Sign up for Carrd Pro Plus ✓
-3. Sign up for Buttondown ✓
+3. Sign up for Kit ✓
 4. Sign up for Plausible trial ✓
 5. Build landing page ✓
 6. Launch and distribute ✓
