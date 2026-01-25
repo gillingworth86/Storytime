@@ -9,16 +9,31 @@ function isValidEmail(email) {
   return emailRegex.test(trimmed) && trimmed.length <= 254 && trimmed.length >= 5;
 }
 
+function normalizeFormId(formId) {
+  if (typeof formId !== 'string') {
+    return null;
+  }
+  const trimmed = formId.trim();
+  if (!trimmed) {
+    return null;
+  }
+  if (/^\d+$/.test(trimmed)) {
+    return trimmed;
+  }
+  const match = trimmed.match(/forms\/(\d+)/i) || trimmed.match(/(\d{4,})/);
+  return match ? match[1] : null;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
   const apiKey = process.env.KIT_API_KEY;
-  const formId = process.env.KIT_FORM_ID;
+  const formId = normalizeFormId(process.env.KIT_FORM_ID);
 
   if (!apiKey || !formId) {
-    return res.status(500).json({ error: 'Missing Kit configuration.' });
+    return res.status(500).json({ error: 'Missing or invalid Kit configuration.' });
   }
 
   const { email, location, signup_url: signupUrl, referrer, tags } = req.body || {};
