@@ -1,6 +1,6 @@
 # Storytime Product Backlog
 
-**Last Updated:** 2026-01-24
+**Last Updated:** 2026-01-25
 **Current Phase:** Phase 1 - Landing Page Validation
 **Goal:** 100 email signups in 3 weeks
 
@@ -20,7 +20,7 @@
 ### P0 - Critical Path
 
 #### F002: Email Collection Integration (Buttondown)
-**Status:** Not Started
+**Status:** 🔄 In Progress (separate session)
 **Priority:** P0
 **Effort:** Small
 
@@ -52,9 +52,10 @@ Implement lightweight A/B testing to optimize messaging, CTAs, and page layout f
 ---
 
 #### F004: Social Proof Section
-**Status:** Not Started
+**Status:** 🔄 In Progress (this session)
 **Priority:** P1
 **Effort:** Small
+**PRD:** [F004-social-proof-section.md](prds/F004-social-proof-section.md)
 
 Add testimonials, user quotes, or early tester feedback to build trust and credibility. Reduces skepticism and increases signup likelihood.
 
