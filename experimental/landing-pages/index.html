@@ -1355,14 +1355,12 @@
 
         // ========================================
         // F002: Email Collection Integration
-        // Buttondown API Configuration
+        // Kit Serverless Configuration
         // ========================================
 
         const EMAIL_CONFIG = {
-            // Buttondown API configuration
-            apiKey: '828fcb1b-af8d-409f-93ec-30de97aac3ca',
-            apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
-            timeout: 15000, // 5 second timeout
+            apiEndpoint: '/api/subscribe',
+            timeout: 15000, // 15 second timeout
             rateLimitPerMinute: 5
         };
 
@@ -1375,7 +1373,7 @@
         // Custom error classes
         class ApiError extends Error {
             constructor(status, data) {
-                super(data.detail || data.message || 'API request failed');
+                super(data.detail || data.message || data.error || 'API request failed');
                 this.status = status;
                 this.data = data;
             }
@@ -1410,8 +1408,8 @@
             return true;
         }
 
-        // Submit to Buttondown API
-        async function submitToButtondown(email, location) {
+        // Submit to Kit via serverless function
+        async function submitToKit(email, location) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), EMAIL_CONFIG.timeout);
 
@@ -1419,17 +1417,13 @@
                 const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Token ${EMAIL_CONFIG.apiKey}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email_address: email,
-                        metadata: {
-                            signup_location: location,
-                            signup_date: new Date().toISOString(),
-                            signup_url: window.location.href,
-                            referrer: document.referrer || 'direct'
-                        },
+                        email: email,
+                        location: location,
+                        signup_url: window.location.href,
+                        referrer: document.referrer || 'direct',
                         tags: [location, 'landing-page']
                     }),
                     signal: controller.signal
@@ -1555,8 +1549,8 @@
             setLoadingState(form, true);
 
             try {
-                // Submit to Buttondown
-                await submitToButtondown(email, location);
+                // Submit to Kit
+                await submitToKit(email, location);
 
                 // Success!
                 showMessage(messageContainer, 'success',
