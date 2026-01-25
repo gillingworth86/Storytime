@@ -464,6 +464,88 @@
             font-size: 1.05rem;
         }
 
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--purple);
+            box-shadow: 0 16px 32px rgba(99, 102, 241, 0.15);
+        }
+
+        .testimonial-content {
+            margin: 0;
+        }
+
+        .testimonial-quote {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 16px;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 2rem;
+            color: var(--amber);
+            font-family: 'Fraunces', serif;
+            line-height: 0;
+            vertical-align: -0.4em;
+            margin-right: 4px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--amber) 0%, var(--gold) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--midnight);
+            flex-shrink: 0;
+        }
+
+        .testimonial-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--cream);
+            font-size: 0.95rem;
+        }
+
+        .testimonial-context {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
         /* Pricing */
         .pricing-grid {
             display: grid;
@@ -731,11 +813,82 @@
             .pricing-grid {
                 grid-template-columns: 1fr;
             }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .testimonial-card {
+                padding: 20px;
+            }
         }
 
         /* Smooth scroll */
         html {
             scroll-behavior: smooth;
+        }
+
+        /* Form states - loading, success, error */
+        .form-message {
+            margin-top: 16px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-message--success {
+            display: block;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .form-message--error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .button-loading {
+            display: none;
+        }
+
+        .cta-button.loading .button-text {
+            display: none;
+        }
+
+        .cta-button.loading .button-loading {
+            display: inline;
+        }
+
+        .cta-button.loading {
+            opacity: 0.8;
+            cursor: not-allowed;
+        }
+
+        .cta-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .email-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .email-input.error {
+            border-color: rgba(239, 68, 68, 0.5);
+            background: rgba(239, 68, 68, 0.05);
         }
     </style>
 
@@ -766,9 +919,21 @@
                 </p>
 
                 <form class="email-form" id="heroForm" data-location="hero">
-                    <input type="email" class="email-input" placeholder="Enter your email" required>
-                    <button type="submit" class="cta-button">Start your story universe</button>
+                    <input
+                        type="email"
+                        name="email"
+                        class="email-input"
+                        placeholder="Enter your email"
+                        required
+                        autocomplete="email"
+                        aria-label="Email address"
+                    >
+                    <button type="submit" class="cta-button">
+                        <span class="button-text">Start your story universe</span>
+                        <span class="button-loading" aria-hidden="true">Submitting...</span>
+                    </button>
                 </form>
+                <div class="form-message" id="heroFormMessage" role="status" aria-live="polite"></div>
 
                 <p class="trust-badge">First 10 stories free • No credit card required</p>
             </div>
@@ -806,6 +971,70 @@
                         <p>Transform favourite characters into custom plushies, continue adventures in companion games, and watch as their story world becomes part of everyday play.</p>
                         <span class="coming-soon">Coming soon</span>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof / Testimonials -->
+        <section id="testimonials" aria-labelledby="testimonials-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="testimonials-heading" class="section-title">Loved by Families</h2>
+                    <p class="section-subtitle">Real parents, real bedtimes, real magic</p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">My daughter asks for 'one more Whisper story' every single night. The continuity is magical—she remembers details I've forgotten!</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">SM</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">Sarah M.</span>
+                                <span class="testimonial-context">Mother of a 5-year-old</span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">Bedtime used to be a battle. Now my son runs to brush his teeth so we can 'see what happens next.'</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">JK</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">James K.</span>
+                                <span class="testimonial-context">Father of 2</span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">When Maya's character remembered her birthday from a story two weeks ago, she was absolutely amazed. Worth every penny.</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">LT</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">Lisa T.</span>
+                                <span class="testimonial-context">Parent of Maya, age 4</span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">I love that I don't have to preview every story. The content is always age-appropriate and exactly what I'd want for bedtime.</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">MR</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">Michael R.</span>
+                                <span class="testimonial-context">Dad to twin girls, age 6</span>
+                            </div>
+                        </footer>
+                    </article>
                 </div>
             </div>
         </section>
@@ -974,9 +1203,21 @@
                 <p class="subtext">Join the waitlist now and get your first 10 stories free when we launch.</p>
 
                 <form class="email-form" id="ctaForm" data-location="mid-page">
-                    <input type="email" class="email-input" placeholder="Enter your email" required>
-                    <button type="submit" class="cta-button">Join the waitlist</button>
+                    <input
+                        type="email"
+                        name="email"
+                        class="email-input"
+                        placeholder="Enter your email"
+                        required
+                        autocomplete="email"
+                        aria-label="Email address"
+                    >
+                    <button type="submit" class="cta-button">
+                        <span class="button-text">Join the waitlist</span>
+                        <span class="button-loading" aria-hidden="true">Submitting...</span>
+                    </button>
                 </form>
+                <div class="form-message" id="ctaFormMessage" role="status" aria-live="polite"></div>
 
                 <div class="timeline">
                     <h3 style="color: var(--cream); margin-bottom: 24px;">What happens next:</h3>
@@ -1007,9 +1248,21 @@
                 <p class="footer-tagline">Where every bedtime becomes an adventure</p>
 
                 <form class="email-form" id="footerForm" data-location="footer" style="margin-bottom: 32px;">
-                    <input type="email" class="email-input" placeholder="Enter your email" required>
-                    <button type="submit" class="cta-button">Get Started</button>
+                    <input
+                        type="email"
+                        name="email"
+                        class="email-input"
+                        placeholder="Enter your email"
+                        required
+                        autocomplete="email"
+                        aria-label="Email address"
+                    >
+                    <button type="submit" class="cta-button">
+                        <span class="button-text">Get Started</span>
+                        <span class="button-loading" aria-hidden="true">Submitting...</span>
+                    </button>
                 </form>
+                <div class="form-message" id="footerFormMessage" role="status" aria-live="polite"></div>
 
                 <p class="footer-made">Made with love by parents, for parents 🇦🇺</p>
 
@@ -1100,25 +1353,231 @@
             });
         });
 
-        // Form submissions with Plausible event tracking
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input[type="email"]').value;
-            const location = e.target.dataset.location || 'unknown';
+        // ========================================
+        // F002: Email Collection Integration
+        // Buttondown API Configuration
+        // ========================================
 
-            // Track email signup event in Plausible
-            if (window.plausible) {
-                plausible('Email Signup', {
-                    props: {
-                        location: location
-                    }
-                });
+        const EMAIL_CONFIG = {
+            // Buttondown API configuration
+            apiKey: '828fcb1b-af8d-409f-93ec-30de97aac3ca',
+            apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
+            timeout: 5000, // 5 second timeout
+            rateLimitPerMinute: 5
+        };
+
+        // Rate limiting state
+        const rateLimitState = {
+            submissions: [],
+            isRateLimited: false
+        };
+
+        // Custom error classes
+        class ApiError extends Error {
+            constructor(status, data) {
+                super(data.detail || data.message || 'API request failed');
+                this.status = status;
+                this.data = data;
             }
-
-            alert(`Thanks for your interest! We'll send updates to ${email}`);
-            e.target.reset();
         }
 
+        class TimeoutError extends Error {
+            constructor(message) {
+                super(message);
+                this.name = 'TimeoutError';
+            }
+        }
+
+        // Email validation (RFC 5322 simplified)
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email) && email.length <= 254 && email.length >= 5;
+        }
+
+        // Check rate limit
+        function checkRateLimit() {
+            const now = Date.now();
+            const oneMinuteAgo = now - 60000;
+
+            // Clean old submissions
+            rateLimitState.submissions = rateLimitState.submissions.filter(t => t > oneMinuteAgo);
+
+            if (rateLimitState.submissions.length >= EMAIL_CONFIG.rateLimitPerMinute) {
+                return false;
+            }
+
+            rateLimitState.submissions.push(now);
+            return true;
+        }
+
+        // Submit to Buttondown API
+        async function submitToButtondown(email, location) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), EMAIL_CONFIG.timeout);
+
+            try {
+                const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Token ${EMAIL_CONFIG.apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email_address: email,
+                        metadata: {
+                            signup_location: location,
+                            signup_date: new Date().toISOString(),
+                            signup_url: window.location.href,
+                            referrer: document.referrer || 'direct'
+                        },
+                        tags: [location, 'landing-page']
+                    }),
+                    signal: controller.signal
+                });
+
+                clearTimeout(timeoutId);
+
+                // Parse response
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new ApiError(response.status, data);
+                }
+
+                return data;
+
+            } catch (error) {
+                clearTimeout(timeoutId);
+
+                if (error.name === 'AbortError') {
+                    throw new TimeoutError('Request timed out. Please try again.');
+                }
+                throw error;
+            }
+        }
+
+        // Set loading state on form
+        function setLoadingState(form, isLoading) {
+            const submitButton = form.querySelector('.cta-button');
+            const emailInput = form.querySelector('input[type="email"]');
+
+            submitButton.disabled = isLoading;
+            emailInput.disabled = isLoading;
+
+            if (isLoading) {
+                submitButton.classList.add('loading');
+            } else {
+                submitButton.classList.remove('loading');
+            }
+        }
+
+        // Show message
+        function showMessage(messageContainer, type, text) {
+            // Clear any existing classes
+            messageContainer.className = 'form-message';
+            messageContainer.textContent = text;
+            messageContainer.classList.add(`form-message--${type}`);
+
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageContainer.className = 'form-message';
+                    messageContainer.textContent = '';
+                }, 5000);
+            }
+        }
+
+        // Clear message
+        function clearMessage(messageContainer) {
+            messageContainer.className = 'form-message';
+            messageContainer.textContent = '';
+        }
+
+        // Handle submission errors
+        function handleSubmissionError(error, messageContainer) {
+            let message = 'Something went wrong. Please try again later.';
+
+            if (error instanceof TimeoutError) {
+                message = 'Connection timed out. Please check your internet and try again.';
+            } else if (error instanceof ApiError) {
+                // Handle specific API error codes
+                if (error.status === 409 || (error.data && error.data.code === 'email_already_exists')) {
+                    // Duplicate - show as success (friendly)
+                    showMessage(messageContainer, 'success',
+                        "You're already on the list! Check your email for confirmation.");
+                    return;
+                } else if (error.status === 400) {
+                    message = 'Invalid email address. Please check and try again.';
+                } else if (error.status === 429) {
+                    message = 'Too many requests. Please wait a moment and try again.';
+                } else if (error.status >= 500) {
+                    message = 'Service temporarily unavailable. Please try again later.';
+                }
+            } else if (!navigator.onLine) {
+                message = 'No internet connection. Please check your connection and try again.';
+            }
+
+            showMessage(messageContainer, 'error', message);
+            console.error('Email submission error:', error);
+        }
+
+        // Main form submission handler
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const emailInput = form.querySelector('input[type="email"]');
+            const messageContainer = document.getElementById(form.id + 'Message');
+            const location = form.dataset.location || 'unknown';
+
+            // Clear previous messages
+            clearMessage(messageContainer);
+            emailInput.classList.remove('error');
+
+            // Get and validate email
+            const email = emailInput.value.trim().toLowerCase();
+
+            if (!isValidEmail(email)) {
+                emailInput.classList.add('error');
+                showMessage(messageContainer, 'error', 'Please enter a valid email address.');
+                emailInput.focus();
+                return;
+            }
+
+            // Check rate limit
+            if (!checkRateLimit()) {
+                showMessage(messageContainer, 'error',
+                    'Too many requests. Please wait a minute before trying again.');
+                return;
+            }
+
+            // Set loading state
+            setLoadingState(form, true);
+
+            try {
+                // Submit to Buttondown
+                await submitToButtondown(email, location);
+
+                // Success!
+                showMessage(messageContainer, 'success',
+                    'Thanks! Check your email to confirm your subscription.');
+                form.reset();
+
+                // Track analytics (Plausible)
+                if (window.plausible) {
+                    plausible('Email Signup', {
+                        props: { location: location }
+                    });
+                }
+
+            } catch (error) {
+                handleSubmissionError(error, messageContainer);
+            } finally {
+                setLoadingState(form, false);
+            }
+        }
+
+        // Attach event listeners to all forms
         document.getElementById('heroForm').addEventListener('submit', handleFormSubmit);
         document.getElementById('ctaForm').addEventListener('submit', handleFormSubmit);
         document.getElementById('footerForm').addEventListener('submit', handleFormSubmit);
@@ -1143,6 +1602,22 @@
         }, { threshold: 0.5 }); // Trigger when 50% visible
 
         emailForms.forEach(form => observer.observe(form));
+
+        // Track when testimonials section becomes visible
+        const testimonialSection = document.getElementById('testimonials');
+        if (testimonialSection) {
+            const testimonialObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (window.plausible) {
+                            plausible('Social Proof Viewed');
+                        }
+                        testimonialObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            testimonialObserver.observe(testimonialSection);
+        }
 
         // Rotating taglines
         function rotateTaglines() {

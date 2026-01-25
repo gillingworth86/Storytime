@@ -698,4 +698,53 @@ If any answer is "No", the PRD needs more detail.
 
 ---
 
+## Pull Request Best Practices
+
+When creating a PR after implementation:
+
+### Before Creating PR
+1. **Review all commits** in the branch since diverging from base
+2. **Summarize the actual changes** made (not just the PRD intent)
+3. **Update PR title** to reflect what was built (not just the feature ID)
+
+### PR Title Format
+```
+feat: [Concise description of what was built] (FXXX)
+```
+
+**Good examples:**
+- `feat: Add social proof testimonials section (F004)`
+- `feat: Integrate Buttondown email collection (F002)`
+
+**Bad examples:**
+- `F004 implementation` (too vague)
+- `Create PRD for F004` (describes process, not outcome)
+
+### PR Description Must Include
+1. **Summary** - 2-3 bullet points of what changed
+2. **Test plan** - How to verify the changes work
+3. **Screenshots** - For UI changes (desktop + mobile)
+
+### Template
+```markdown
+## Summary
+- Added "Loved by Families" testimonials section after "How It Works"
+- Implemented 4 testimonials with styled initials avatars
+- Added Plausible "Social Proof Viewed" analytics event
+
+## Test plan
+- [ ] View testimonials section on desktop (2x2 grid)
+- [ ] View on mobile (<768px) - should stack vertically
+- [ ] Verify hover animation on cards
+- [ ] Check Plausible event fires when scrolling to section
+
+## Screenshots
+[Desktop screenshot]
+[Mobile screenshot]
+```
+
+**Key principle:** PR description should reflect the ACTUAL implementation, not just copy the PRD summary. Review commits before creating PR.
+
+---
+
 **Remember:** The goal is to enable ONE-SHOT feature delivery with excellent quality. Time spent on a thorough PRD pays off 10x during implementation.
