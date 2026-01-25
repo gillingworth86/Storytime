@@ -1,4 +1,4 @@
-const KIT_API_URL = 'https://api.convertkit.com/v3/forms';
+const KIT_API_URL = 'https://api.kit.com/v4/forms';
 
 function isValidEmail(email) {
   if (typeof email !== 'string') {
@@ -9,16 +9,31 @@ function isValidEmail(email) {
   return emailRegex.test(trimmed) && trimmed.length <= 254 && trimmed.length >= 5;
 }
 
+function normalizeFormId(formId) {
+  if (typeof formId !== 'string') {
+    return null;
+  }
+  const trimmed = formId.trim();
+  if (!trimmed) {
+    return null;
+  }
+  if (/^\d+$/.test(trimmed)) {
+    return trimmed;
+  }
+  const match = trimmed.match(/forms\/(\d+)/i) || trimmed.match(/(\d{4,})/);
+  return match ? match[1] : null;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
   const apiKey = process.env.KIT_API_KEY;
-  const formId = process.env.KIT_FORM_ID;
+  const formId = normalizeFormId(process.env.KIT_FORM_ID);
 
   if (!apiKey || !formId) {
-    return res.status(500).json({ error: 'Missing Kit configuration.' });
+    return res.status(500).json({ error: 'Missing or invalid Kit configuration.' });
   }
 
   const { email, location, signup_url: signupUrl, referrer, tags } = req.body || {};
@@ -35,16 +50,16 @@ export default async function handler(req, res) {
   };
 
   const requestBody = {
-    api_key: apiKey,
     email: email.trim().toLowerCase(),
     tags: Array.isArray(tags) ? tags : undefined,
     fields: metadata
   };
 
   try {
-    const response = await fetch(`${KIT_API_URL}/${formId}/subscribe`, {
+    const response = await fetch(`${KIT_API_URL}/${formId}/subscribers`, {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody)
