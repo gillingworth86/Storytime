@@ -1364,6 +1364,8 @@
             rateLimitPerMinute: 5
         };
 
+        const KIT_ENDPOINT = `https://api.convertkit.com/v3/forms/${EMAIL_CONFIG.kitFormId}/subscribe`;
+
         // Rate limiting state
         const rateLimitState = {
             submissions: [],
@@ -1412,9 +1414,10 @@
         async function submitToKit(email, location) {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), EMAIL_CONFIG.timeout);
+            const endpoint = EMAIL_CONFIG.kitProxyUrl || KIT_ENDPOINT;
 
             try {
-                const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -1434,7 +1437,7 @@
                 // Parse response
                 const data = await response.json().catch(() => ({}));
 
-                if (!response.ok) {
+                if (!response.ok || data.error) {
                     throw new ApiError(response.status, data);
                 }
 
@@ -1494,18 +1497,20 @@
             if (error instanceof TimeoutError) {
                 message = 'Connection timed out. Please check your internet and try again.';
             } else if (error instanceof ApiError) {
-                // Handle specific API error codes
-                if (error.status === 409 || (error.data && error.data.code === 'email_already_exists')) {
-                    // Duplicate - show as success (friendly)
-                    showMessage(messageContainer, 'success',
-                        "You're already on the list! Check your email for confirmation.");
-                    return;
-                } else if (error.status === 400) {
+                const errorMessage = (error.data && (error.data.error || error.data.message)) || '';
+                // Handle specific Kit error codes
+                if (error.status === 400 || error.status === 422) {
                     message = 'Invalid email address. Please check and try again.';
+                } else if (error.status === 401 || error.status === 403) {
+                    message = 'We could not verify this request. Please try again later.';
+                } else if (error.status === 404) {
+                    message = 'Signup form not found. Please try again later.';
                 } else if (error.status === 429) {
                     message = 'Too many requests. Please wait a moment and try again.';
                 } else if (error.status >= 500) {
                     message = 'Service temporarily unavailable. Please try again later.';
+                } else if (errorMessage) {
+                    message = errorMessage;
                 }
             } else if (!navigator.onLine) {
                 message = 'No internet connection. Please check your connection and try again.';
