@@ -394,22 +394,6 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 - **Webhook Support:** ✅ YES
 - **Complexity:** LOW (can use directly from client-side)
 
-**Example API Call:**
-```javascript
-fetch('https://api.buttondown.email/v1/subscribers', {
-    method: 'POST',
-    headers: {
-        'Authorization': 'Token sk_xxxxx',
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        email: 'user@example.com',
-        metadata: { location: 'hero' },
-        tags: ['landing-page']
-    })
-});
-```
-
 **Double Opt-In:**
 - ✅ Built-in, configurable
 - ✅ Customizable confirmation email template
@@ -497,20 +481,26 @@ fetch('https://api.buttondown.email/v1/subscribers', {
 - **Webhook Support:** ✅ YES (paid plans)
 - **Complexity:** MEDIUM-HIGH (requires serverless proxy)
 
-**Example API Call:**
+**Example API Call (Kit payload schema):**
 ```javascript
-// MUST use serverless proxy (no direct client-side calls)
-fetch('/api/subscribe', { // Our proxy endpoint
+// Use a serverless proxy (no direct client-side calls)
+fetch('https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe', {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
+        api_key: 'ck_xxxxx',
         email: 'user@example.com',
-        location: 'hero'
+        fields: {
+            signup_location: 'hero',
+            signup_url: 'https://getstorytime.vercel.app'
+        },
+        tags: ['hero', 'landing-page']
     })
 });
+```
 
-// Proxy forwards to:
-// POST https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe
-// Body: { api_key: 'SECRET', email: '...', fields: {...} }
+**Proxy note:** For browser usage, wrap this request in a serverless proxy that injects
+`api_key` server-side and forwards the same payload to Kit.
 ```
 
 **Double Opt-In:**
@@ -735,7 +725,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
 - Minimal data collection
 
 ✅ **CSP compatibility:**
-- Add `https://api.buttondown.email` to `connect-src`
+- Add `https://api.convertkit.com` (or your `/api/subscribe` serverless endpoint) to `connect-src`
 - Simple one-line change in `vercel.json`
 
 **See Section 5 for complete implementation details**
@@ -1217,7 +1207,7 @@ Buttondown is objectively better - simpler, faster, cheaper, and more aligned wi
 ```javascript
 // Configuration object (to be added at top of script)
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.[tool].com/v1/subscribers', // Platform-specific
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe', // Kit endpoint (proxy required in browser)
     apiKey: 'YOUR_API_KEY_HERE', // Stored as environment variable or config
     timeout: 5000, // 5 second timeout
     retryAttempts: 2 // Retry failed requests twice
@@ -1281,12 +1271,12 @@ async function submitToEmailService(email, location) {
         const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${EMAIL_CONFIG.apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: EMAIL_CONFIG.apiKey,
                 email: email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                     signup_url: window.location.href,
@@ -1354,12 +1344,15 @@ function handleSubmissionError(error, messageContainer) {
         showMessage(messageContainer, 'error',
             'Connection timed out. Please check your internet and try again.');
     } else if (error instanceof ApiError) {
-        if (error.status === 409 || error.message.includes('already subscribed')) {
-            showMessage(messageContainer, 'success',
-                'You\'re already on the list! Check your email for confirmation.');
-        } else if (error.status === 400) {
+        if (error.status === 400 || error.status === 422) {
             showMessage(messageContainer, 'error',
                 'Invalid email address. Please check and try again.');
+        } else if (error.status === 401) {
+            showMessage(messageContainer, 'error',
+                'Subscription service misconfigured. Please try again later.');
+        } else if (error.status === 404) {
+            showMessage(messageContainer, 'error',
+                'Signup form unavailable. Please try again later.');
         } else {
             showMessage(messageContainer, 'error',
                 'Something went wrong. Please try again later.');
@@ -1376,7 +1369,7 @@ function handleSubmissionError(error, messageContainer) {
 // Custom error classes
 class ApiError extends Error {
     constructor(status, data) {
-        super(data.message || 'API request failed');
+        super(data.error || data.message || 'API request failed');
         this.status = status;
         this.data = data;
     }
@@ -1423,65 +1416,7 @@ class TimeoutError extends Error {
 
 ### 5.3 Platform-Specific API Integration
 
-#### 5.3.1 Buttondown API Specification
-
-**Endpoint:** `https://api.buttondown.email/v1/subscribers`
-
-**Authentication:** Header-based token
-```
-Authorization: Token YOUR_API_KEY
-```
-
-**Request format:**
-```json
-{
-  "email": "user@example.com",
-  "metadata": {
-    "signup_location": "hero",
-    "signup_date": "2026-01-24T10:30:00Z",
-    "signup_url": "https://getstorytime.vercel.app",
-    "referrer": "https://google.com"
-  },
-  "tags": ["hero", "landing-page"]
-}
-```
-
-**Success response (201 Created):**
-```json
-{
-  "id": "abc123",
-  "email": "user@example.com",
-  "creation_date": "2026-01-24T10:30:00Z",
-  "metadata": {...},
-  "tags": ["hero", "landing-page"],
-  "subscriber_type": "unconfirmed"
-}
-```
-
-**Duplicate response (409 Conflict or 200 OK):**
-```json
-{
-  "email": "user@example.com",
-  "message": "Email already subscribed"
-}
-```
-
-**Error response (400 Bad Request):**
-```json
-{
-  "error": "Invalid email format"
-}
-```
-
-**Rate limits:** 60 requests/minute per API key
-
-**CORS:** Buttondown supports CORS for client-side requests
-
-**Documentation:** https://docs.buttondown.com/api-subscribers-create
-
----
-
-#### 5.3.2 Kit (ConvertKit) API Specification
+#### 5.3.1 Kit API Specification
 
 **Endpoint:** `https://api.convertkit.com/v3/forms/{form_id}/subscribe`
 
@@ -1495,7 +1430,8 @@ Authorization: Token YOUR_API_KEY
   "fields": {
     "signup_location": "hero",
     "signup_date": "2026-01-24T10:30:00Z",
-    "signup_url": "https://getstorytime.vercel.app"
+    "signup_url": "https://getstorytime.vercel.app",
+    "referrer": "https://google.com"
   },
   "tags": ["hero", "landing-page"]
 }
@@ -1530,11 +1466,17 @@ Authorization: Token YOUR_API_KEY
 **Duplicate response (200 OK - same as success):**
 Kit returns 200 OK even for duplicate emails, treating it as successful re-subscription.
 
+**Error response (400/422 Bad Request):**
+```json
+{
+  "error": "Email is invalid"
+}
+```
+
 **Error response (401 Unauthorized):**
 ```json
 {
-  "error": "Invalid API key",
-  "message": "The API key you provided is invalid"
+  "error": "Invalid API key"
 }
 ```
 
@@ -1554,8 +1496,8 @@ Kit returns 200 OK even for duplicate emails, treating it as successful re-subsc
 ```javascript
 // Add to top of <script> block in index.html
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
-    apiKey: 'sk_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe',
+    apiKey: 'ck_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
     timeout: 5000
 };
 ```
@@ -1603,12 +1545,12 @@ export default async function handler(req, res) {
         const response = await fetch(process.env.EMAIL_SERVICE_ENDPOINT, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${process.env.EMAIL_SERVICE_API_KEY}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: process.env.EMAIL_SERVICE_API_KEY,
                 email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                 },
@@ -1619,7 +1561,7 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || 'API error');
+            throw new Error(data.error || data.message || 'API error');
         }
 
         return res.status(200).json({ success: true, data });
@@ -1638,7 +1580,6 @@ function isValidEmail(email) {
 Then update frontend to call `/api/subscribe` instead of external API.
 
 **Recommendation:**
-- Use **Option 1** for Buttondown (supports CORS, simpler)
 - Use **Option 3** for Kit (CORS restriction requires proxy)
 
 ---
@@ -1958,7 +1899,7 @@ END STATE: 😊 Subscribed, awaiting launch updates
 ### Critical Edge Cases
 
 **EDGE-001: Duplicate Email**
-- Detection: API returns 409
+- Detection: API returns 200 OK with existing subscription
 - User sees: "You're already on the list!" (success style, not error)
 - No duplicate record created
 
@@ -1993,7 +1934,7 @@ END STATE: 😊 Subscribed, awaiting launch updates
 | Offline | - | "No internet connection..." |
 | Timeout | - | "Connection timed out..." |
 | Invalid email | - | "Please enter a valid email..." |
-| Duplicate | 409 | "You're already on the list!" |
+| Duplicate | 200 | "You're already on the list!" |
 | Rate limit | 429 | "Too many requests..." |
 | Server error | 500/503 | "Service temporarily unavailable..." |
 | Unknown | Other | "Something went wrong..." |
@@ -2005,12 +1946,12 @@ END STATE: 😊 Subscribed, awaiting launch updates
 ### Threat Mitigation
 
 **API Key Security:**
-- Buttondown: Visible in source (acceptable - designed for client-side)
-- Rate-limited: 60 req/min prevents abuse
+- Kit: Keep API key server-side (use serverless proxy)
+- Rate-limited: 120 req/min prevents abuse
 - Can rotate if compromised
 
 **Data Privacy:**
-- Email sent ONLY to Buttondown (HTTPS)
+- Email sent ONLY to Kit (HTTPS)
 - NO email in localStorage/cookies
 - NO email in analytics (Plausible)
 
@@ -2022,7 +1963,7 @@ END STATE: 😊 Subscribed, awaiting launch updates
 
 **Security Headers:**
 ```
-Content-Security-Policy: connect-src 'self' https://plausible.io https://api.buttondown.email;
+Content-Security-Policy: connect-src 'self' https://plausible.io https://api.convertkit.com;
 Strict-Transport-Security: max-age=31536000
 X-Content-Type-Options: nosniff
 X-Frame-Options: DENY
@@ -2038,7 +1979,7 @@ X-Frame-Options: DENY
 - [ ] Submit valid email → Success message
 - [ ] Submit duplicate → "Already subscribed" message
 - [ ] Submit invalid → Validation error
-- [ ] Email appears in Buttondown dashboard
+- [ ] Email appears in Kit dashboard
 - [ ] Confirmation email arrives within 2 min
 - [ ] All 3 forms work (hero, mid-page, footer)
 
@@ -2071,7 +2012,7 @@ X-Frame-Options: DENY
 **2. Add to Vercel Environment Variables**
 ```
 EMAIL_SERVICE_API_KEY=sk_xxxxx
-EMAIL_SERVICE_ENDPOINT=https://api.buttondown.email/v1/subscribers
+EMAIL_SERVICE_ENDPOINT=https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe
 ```
 
 **3. Update Code**

@@ -89,7 +89,7 @@ These sections provide the full implementation details that should replace the s
 ```javascript
 // Configuration object (to be added at top of script)
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.[tool].com/v1/subscribers', // Platform-specific
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe', // Kit endpoint (proxy required in browser)
     apiKey: 'YOUR_API_KEY_HERE', // Stored as environment variable or config
     timeout: 5000, // 5 second timeout
     retryAttempts: 2 // Retry failed requests twice
@@ -153,12 +153,12 @@ async function submitToEmailService(email, location) {
         const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${EMAIL_CONFIG.apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: EMAIL_CONFIG.apiKey,
                 email: email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                     signup_url: window.location.href,
@@ -226,12 +226,15 @@ function handleSubmissionError(error, messageContainer) {
         showMessage(messageContainer, 'error',
             'Connection timed out. Please check your internet and try again.');
     } else if (error instanceof ApiError) {
-        if (error.status === 409 || error.message.includes('already subscribed')) {
-            showMessage(messageContainer, 'success',
-                'You\'re already on the list! Check your email for confirmation.');
-        } else if (error.status === 400) {
+        if (error.status === 400 || error.status === 422) {
             showMessage(messageContainer, 'error',
                 'Invalid email address. Please check and try again.');
+        } else if (error.status === 401) {
+            showMessage(messageContainer, 'error',
+                'Subscription service misconfigured. Please try again later.');
+        } else if (error.status === 404) {
+            showMessage(messageContainer, 'error',
+                'Signup form unavailable. Please try again later.');
         } else {
             showMessage(messageContainer, 'error',
                 'Something went wrong. Please try again later.');
@@ -248,7 +251,7 @@ function handleSubmissionError(error, messageContainer) {
 // Custom error classes
 class ApiError extends Error {
     constructor(status, data) {
-        super(data.message || 'API request failed');
+        super(data.error || data.message || 'API request failed');
         this.status = status;
         this.data = data;
     }
@@ -295,65 +298,7 @@ class TimeoutError extends Error {
 
 ### 5.3 Platform-Specific API Integration
 
-#### 5.3.1 Buttondown API Specification
-
-**Endpoint:** `https://api.buttondown.email/v1/subscribers`
-
-**Authentication:** Header-based token
-```
-Authorization: Token YOUR_API_KEY
-```
-
-**Request format:**
-```json
-{
-  "email": "user@example.com",
-  "metadata": {
-    "signup_location": "hero",
-    "signup_date": "2026-01-24T10:30:00Z",
-    "signup_url": "https://getstorytime.vercel.app",
-    "referrer": "https://google.com"
-  },
-  "tags": ["hero", "landing-page"]
-}
-```
-
-**Success response (201 Created):**
-```json
-{
-  "id": "abc123",
-  "email": "user@example.com",
-  "creation_date": "2026-01-24T10:30:00Z",
-  "metadata": {...},
-  "tags": ["hero", "landing-page"],
-  "subscriber_type": "unconfirmed"
-}
-```
-
-**Duplicate response (409 Conflict or 200 OK):**
-```json
-{
-  "email": "user@example.com",
-  "message": "Email already subscribed"
-}
-```
-
-**Error response (400 Bad Request):**
-```json
-{
-  "error": "Invalid email format"
-}
-```
-
-**Rate limits:** 60 requests/minute per API key
-
-**CORS:** Buttondown supports CORS for client-side requests
-
-**Documentation:** https://docs.buttondown.com/api-subscribers-create
-
----
-
-#### 5.3.2 Kit (ConvertKit) API Specification
+#### 5.3.1 Kit API Specification
 
 **Endpoint:** `https://api.convertkit.com/v3/forms/{form_id}/subscribe`
 
@@ -367,7 +312,8 @@ Authorization: Token YOUR_API_KEY
   "fields": {
     "signup_location": "hero",
     "signup_date": "2026-01-24T10:30:00Z",
-    "signup_url": "https://getstorytime.vercel.app"
+    "signup_url": "https://getstorytime.vercel.app",
+    "referrer": "https://google.com"
   },
   "tags": ["hero", "landing-page"]
 }
@@ -402,11 +348,17 @@ Authorization: Token YOUR_API_KEY
 **Duplicate response (200 OK - same as success):**
 Kit returns 200 OK even for duplicate emails, treating it as successful re-subscription.
 
+**Error response (400/422 Bad Request):**
+```json
+{
+  "error": "Email is invalid"
+}
+```
+
 **Error response (401 Unauthorized):**
 ```json
 {
-  "error": "Invalid API key",
-  "message": "The API key you provided is invalid"
+  "error": "Invalid API key"
 }
 ```
 
@@ -426,8 +378,8 @@ Kit returns 200 OK even for duplicate emails, treating it as successful re-subsc
 ```javascript
 // Add to top of <script> block in index.html
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
-    apiKey: 'sk_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe',
+    apiKey: 'ck_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
     timeout: 5000
 };
 ```
@@ -475,12 +427,12 @@ export default async function handler(req, res) {
         const response = await fetch(process.env.EMAIL_SERVICE_ENDPOINT, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${process.env.EMAIL_SERVICE_API_KEY}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: process.env.EMAIL_SERVICE_API_KEY,
                 email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                 },
@@ -491,7 +443,7 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || 'API error');
+            throw new Error(data.error || data.message || 'API error');
         }
 
         return res.status(200).json({ success: true, data });
@@ -510,7 +462,6 @@ function isValidEmail(email) {
 Then update frontend to call `/api/subscribe` instead of external API.
 
 **Recommendation:**
-- Use **Option 1** for Buttondown (supports CORS, simpler)
 - Use **Option 3** for Kit (CORS restriction requires proxy)
 
 ---
