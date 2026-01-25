@@ -17,11 +17,11 @@ jobs:
       - name: Install GitHub CLI
         run: |
           sudo apt-get update
-          sudo apt-get install -y 
+          sudo apt-get install -y gh
 
       - name: Run backlog setup script
-  env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  run: |
-    chmod +x .claude/scripts/setup-backlog-issues.sh
-    ./.claude/scripts/setup-backlog-issues.sh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          chmod +x .claude/scripts/setup-backlog-issues.sh
+          ./.claude/scripts/setup-backlog-issues.sh
