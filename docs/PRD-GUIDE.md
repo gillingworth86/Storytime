@@ -75,6 +75,128 @@ After deployment:
 - Validate all acceptance criteria met
 - Move feature to "Completed" in backlog
 
+### Claude's PRD Creation Process
+
+When you request a PRD, Claude follows this process:
+
+**1. Setup & Planning:**
+- Creates todo list for all 13 sections
+- Asks about section order preference (if strategic choice exists)
+- Explains sequencing rationale
+
+**2. Sequential Section Delivery:**
+- Completes one section at a time
+- Shows section for review before proceeding
+- Gets explicit approval at each gate
+- Updates todos in real-time
+
+**3. Strategic Sequencing:**
+- Typically: Sections 3-6 first (define WHAT)
+- Then: Sections 7-13 (define HOW)
+- Then: Section 2 (platform choice with data)
+- Finally: Section 1 (executive summary)
+
+**4. Quality Verification:**
+- Each section checked against quality standards
+- Specific, testable criteria
+- Concrete specifications (not vague)
+- Code examples where helpful
+
+**5. User Involvement:**
+- Strategic decisions presented for your input
+- Progress visibility through todos
+- Course correction opportunities at each section
+
+---
+
+## Best Practices for PRD Creation Process
+
+### Incremental Section Delivery
+
+**DON'T:** Create entire PRD before showing user (risks misalignment and wasted effort)
+
+**DO:** Complete and review section-by-section
+- Complete one section at a time
+- Show section to user for review
+- Get explicit approval before proceeding
+- Allows course corrections early
+
+**Benefits:**
+- User sees progress in real-time
+- Early feedback prevents rework
+- Builds trust through transparency
+- Reduces "why is this taking so long?" perception
+
+---
+
+### Process Transparency with TodoWrite
+
+**Always:**
+- Create todos for EACH PRD section at the start (not just "write PRD")
+- Update status in real-time (pending → in_progress → completed)
+- Show parallel vs sequential work clearly
+- Mark todos completed immediately after finishing (don't batch)
+
+**Example todo structure:**
+```
+- Section 3: User Stories (in_progress)
+- Section 4: Functional Requirements (pending)
+- Section 5: Technical Specifications (pending)
+- Sections 1-2: Executive Summary & Analysis (pending - strategic, do last)
+- Sections 7-13: Remaining sections (pending)
+```
+
+**Why this matters:**
+- Users want to see "threads you're pulling"
+- Breakdown of work reduces perceived wait time
+- Visibility into process builds trust
+- Helps resume work if interrupted
+
+---
+
+### Involve User in Strategic Decisions
+
+**Don't assume - always ask:**
+- Section order preference (which first?)
+- Platform decision timing (now or after requirements?)
+- Level of detail needed (comprehensive vs minimal?)
+- Implementation approach (client-side vs server-side?)
+
+**Template:**
+"I have two approaches: [Option A with rationale] vs [Option B with rationale]. Which would be most efficient for your needs?"
+
+**Why:**
+- Users have context we don't (their priorities, timeline)
+- Participation in efficiency decisions builds ownership
+- Different projects may need different approaches
+
+---
+
+### Strategic Section Sequencing
+
+**Optimal PRD creation order:**
+
+1. **Sections 3-6 first** (User Stories, Requirements, Technical Specs, UX)
+   - These define WHAT we need
+   - Platform-agnostic at this stage
+
+2. **Sections 7-13 next** (Edge Cases, Security, Testing, Deployment, Metrics, Implementation)
+   - These define HOW and operational details
+   - Security/testing needs may reveal platform constraints
+
+3. **Section 2 then** (Platform Analysis)
+   - Informed by all requirements
+   - Data-driven choice based on documented needs
+
+4. **Section 1 last** (Executive Summary)
+   - Summarizes completed analysis
+   - Can't write good summary without the details
+
+**Rationale:**
+- Requirements inform platform choice (not vice versa)
+- Doing analysis AFTER requirements = data-driven decision
+- Doing analysis BEFORE requirements = premature optimization
+
 ---
 
 ## PRD Structure
@@ -101,6 +223,244 @@ Every PRD follows a 13-section template:
 ### Supporting Sections
 12. **Open Questions & Decisions** - Items to resolve before building
 13. **References & Resources** - Documentation, examples, related work
+
+---
+
+## PRD Content Quality Standards
+
+These standards ensure PRDs have sufficient detail for one-shot implementation.
+
+### Platform-Agnostic Requirements Documentation
+
+**Best practice:**
+- Write functional requirements platform-agnostically
+- Use [TOOL] placeholder when decision isn't finalized
+- Document what needs to happen, not how with specific tool
+- In technical specs, document BOTH/ALL platform options
+- Make platform decision AFTER documenting all requirements
+
+**Example:**
+```markdown
+**REQ-002: Email Submission**
+- User can submit email via [TOOL] integration
+- Submission triggers double opt-in flow
+- Success confirmation appears within 2 seconds
+
+(NOT: "User submits email via Buttondown API" - that's premature)
+```
+
+**Benefits:**
+- Requirements remain pure (not biased by tool limitations)
+- Platform analysis is data-driven
+- Easy to swap platforms later if needed
+- Forces clarity about actual needs vs tool features
+
+---
+
+### User Stories Need Comprehensive Acceptance Criteria
+
+**Standard:**
+- Each user story needs 5-7 specific, testable acceptance criteria
+- Cover happy path AND edge cases
+- Include performance expectations
+- Include error handling
+- Include data persistence
+
+**Template:**
+```markdown
+**As a** [role]
+**I want** [capability]
+**So that** [benefit]
+
+**Acceptance Criteria:**
+1. [Specific, testable criterion - happy path]
+2. [Edge case handling]
+3. [Performance expectation with numbers]
+4. [Error handling scenario]
+5. [Success state verification]
+6. [Data persistence verification]
+7. [Accessibility requirement]
+```
+
+**Quality test:**
+- Can a developer implement from acceptance criteria alone?
+- Can a tester write test cases from acceptance criteria?
+- Are criteria specific enough to be binary pass/fail?
+
+---
+
+### Functional Requirements Need Priority and Dependencies
+
+**Standard format:**
+```markdown
+**REQ-XXX: [Requirement Name]**
+- Description: [What it does]
+- Priority: Must-have (P0) | Should-have | Nice-to-have
+- Acceptance: [How we know it's done]
+- Dependencies: [What this requires]
+```
+
+**Priority definitions:**
+- **Must-have (P0)**: Core functionality, launch blocker
+- **Should-have**: Important but not launch-critical
+- **Nice-to-have**: Enhances experience but optional
+
+---
+
+### Technical Specs Need Multiple Implementation Options
+
+**Best practice:**
+- Document architecture pattern (client-side vs server-side)
+- Show request/response formats for each platform option
+- Include CORS, rate limiting, authentication details
+- Provide code examples for key implementations (~50-200 lines)
+- Document security implications of each approach
+- Compare approaches with pros/cons
+
+**Example structure:**
+```markdown
+### 5.3 Platform-Specific API Integration
+
+#### 5.3.1 Platform A API
+- Endpoint, auth, request format, response format
+- CORS support, rate limits
+- Pros: [list], Cons: [list]
+- Code example: [~50 lines]
+
+#### 5.3.2 Platform B API
+- Endpoint, auth, request format, response format
+- CORS support, rate limits
+- Pros: [list], Cons: [list]
+- Code example: [~50 lines]
+```
+
+---
+
+### UX Specifications Need Emotional Journey Mapping
+
+**Section 6 must include:**
+
+1. **Complete user journey with emotional states at each step**
+   ```markdown
+   STAGE: EMAIL SUBMISSION
+   User Action: Clicks submit button
+   Emotional State: 😬 Anticipation, slight anxiety
+   Duration: <1 second (critical moment)
+   Design Goal: Immediate acknowledgment
+   Critical UX:
+   - Button responds within 100ms
+   - Loading indicator appears immediately
+   - Clear visual feedback (button state change)
+   - No uncertainty about whether click registered
+   ```
+
+2. **Precise timing specifications** (not vague like "fast"):
+   - Button press feedback: 100ms
+   - Loading state appearance: <100ms after click
+   - API response target: <1s (timeout at 5s)
+   - Success message fade-in: 300ms
+   - Success message auto-hide: 5s
+   - Animation easing: ease-out for entrances, ease-in for exits
+
+3. **All UI states specified:**
+   - Default, hover, active, loading, success, error, disabled
+   - For EACH interactive element
+
+4. **Animation timing table:**
+   | Element | Duration | Easing | Purpose |
+   |---------|----------|--------|---------|
+   | Button press | 100ms | ease-out | Immediate tactile feedback |
+   | Success fade-in | 300ms | ease-out | Celebratory appearance |
+
+---
+
+### Copy and Messaging Deserve Dedicated Specification
+
+**Section 6 must include:**
+- Tone definition (friendly, warm, professional, casual)
+- Exact copy for: buttons, placeholders, success messages, error messages
+- Show alternatives with different tones
+- Include rationale for tone choices
+
+**Example:**
+```markdown
+#### Success Messages
+✅ "Thanks! Check your email..." (Warm, exclamation shows enthusiasm)
+❌ "Thank you. Please check your email." (Too formal, period = stern)
+❌ "Success! Email sent." (Technical, not human)
+```
+
+---
+
+### Error States Are Equal Citizens to Success States
+
+**Best practice:**
+- Document ALL error scenarios in Section 7 (Edge Cases)
+- Specify exact error messages (copy matters!)
+- Include error recovery paths (how user fixes it)
+- Test error messaging tone (blame-free, helpful)
+- Map error types to user messages
+
+**Error message guidelines:**
+- Blame the system, not the user
+- Provide clear next step
+- Be specific but not technical
+- Maintain warm, friendly tone even in errors
+
+**Example:**
+```markdown
+❌ "Invalid email address" (blames user, unhelpful)
+✅ "Hmm, that email doesn't look quite right. Can you double-check it?" (warm, helpful)
+```
+
+---
+
+### Accessibility Needs Concrete Implementation Specs
+
+**Section 6 must include:**
+- Exact ARIA attributes needed (not just "make it accessible")
+- Keyboard navigation (tab order, enter/space behavior)
+- Screen reader announcements for each state
+- Focus indicator specifications (color, size, offset)
+- Color contrast ratios with numbers (not just "high contrast")
+- WCAG level target (AA vs AAA)
+
+**Example:**
+```markdown
+**Email Input Field:**
+- aria-label="Email address"
+- aria-required="true"
+- aria-invalid="false" (changes to "true" on validation error)
+- aria-describedby="emailError" (when error present)
+
+**Screen reader announces:**
+- On focus: "Email address, required, edit text"
+- On error: "Invalid email. Please enter a valid email address"
+- On success: "Success! Check your email to confirm your subscription"
+```
+
+---
+
+### Mobile-Specific Considerations Need Separate Section
+
+**Section 6 must include:**
+- Minimum touch target sizes (44px iOS HIG minimum)
+- Input types for mobile keyboards (`type="email"`)
+- Viewport zoom behavior (16px font minimum to prevent zoom)
+- Mobile vs desktop layouts separately
+- iOS vs Android differences where applicable
+
+---
+
+### Security Section Needs Risk Assessment
+
+**Section 8 must include:**
+- Risk level for each approach (LOW/MED/HIGH)
+- Mitigation strategies for each risk
+- CSP headers needed (exact directives)
+- Rate limiting (client-side and server-side)
+- PII handling (where email goes, what's logged)
+- GDPR compliance approach
 
 ---
 
@@ -187,20 +547,68 @@ Validation: Check Plausible dashboard shows events
 
 ## Quality Standards
 
+### Pre-Implementation Quality Checklist
+
+Before marking a section as "complete", verify:
+
+**User Stories (Section 3):**
+- [ ] 5-7 specific acceptance criteria per story
+- [ ] Acceptance criteria are testable (binary pass/fail)
+- [ ] Edge cases covered in acceptance criteria
+- [ ] Performance expectations specified
+
+**Functional Requirements (Section 4):**
+- [ ] Each requirement has priority (P0/Should/Nice-to-have)
+- [ ] Dependencies documented
+- [ ] Acceptance criteria specific and measurable
+- [ ] Platform-agnostic (uses [TOOL] if decision pending)
+
+**Technical Specifications (Section 5):**
+- [ ] Code examples provided (~50-200 lines total)
+- [ ] Multiple implementation options compared
+- [ ] CORS, rate limiting, auth details specified
+- [ ] Security implications documented
+
+**UX & Design (Section 6):**
+- [ ] Complete user journey with emotional states mapped
+- [ ] Timing specified in milliseconds (not "fast")
+- [ ] All UI states documented (default, hover, active, loading, success, error, disabled)
+- [ ] Exact copy provided (not placeholders)
+- [ ] Error states given equal detail to success states
+- [ ] Animation durations and easing functions specified
+- [ ] Accessibility specs concrete (ARIA attributes, keyboard nav, screen reader announcements)
+- [ ] Mobile considerations included (touch targets, input types, viewport)
+
+**Edge Cases & Errors (Section 7):**
+- [ ] Every error scenario has exact message copy
+- [ ] Error messages are blame-free and helpful
+- [ ] Recovery paths documented
+
+**Security (Section 8):**
+- [ ] Risk assessment for each approach (LOW/MED/HIGH)
+- [ ] Mitigation strategies specified
+- [ ] CSP headers documented
+
 ### Excellent PRD (Ready to Build) ✅
 - All requirements are crystal clear
 - Every edge case has a defined solution
-- Technical approach is validated and documented
+- Technical approach is validated with code examples
 - Complete test scenarios provided
 - Success criteria are measurable
+- Timing specifications in milliseconds
+- Error messages have exact copy
+- Accessibility implementation is concrete
 - Claude can build without any questions
 
 ### Poor PRD (Not Ready) ❌
 - Vague requirements ("make it good", "improve UX")
 - Missing edge cases or error handling
 - Unvalidated technical assumptions
+- No code examples
 - No test scenarios
-- Unclear success criteria
+- Vague timing ("fast", "responsive")
+- Generic error handling ("show error message")
+- Vague accessibility ("make it accessible")
 - Would require clarifications during build
 
 **Goal:** Every PRD must be "Excellent" before development starts.
@@ -215,6 +623,27 @@ Validation: Check Plausible dashboard shows events
 - ✅ Validate that success metrics align with goals
 - ✅ Ensure technical approach fits the architecture
 - ✅ Resolve all open questions before building
+
+---
+
+### Template Phrases for PRD Review & Feedback
+
+**Starting a section:**
+"Now working on Section X: [Name]. I'll document [what this section covers] and show you for review when complete."
+
+**Completing a section:**
+"**Section X complete!** I've documented: [bullet list of what's included]. Ready for your review!"
+
+**Requesting feedback:**
+"Does this Section X capture all the [user stories/requirements/etc.] you need? Should I add or modify anything before moving to Section Y?"
+
+**Strategic decisions:**
+"I have two approaches: [Option A with rationale] vs [Option B with rationale]. Which would be most efficient for your needs?"
+
+**Showing progress:**
+"I've completed sections 3-6. Remaining: sections 7-13 (technical details), then section 2 (platform choice), then section 1 (summary). This sequencing allows data-driven platform decision."
+
+---
 
 ### DON'T:
 - ❌ Skip the PRD for "quick" features (they're rarely quick)
