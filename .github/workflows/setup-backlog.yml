@@ -1,0 +1,32 @@
+name: Setup Storytime Backlog
+
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  setup-backlog:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: Authenticate gh with GITHUB_TOKEN
+        run: |
+          echo "${GITHUB_TOKEN}" | gh auth login --with-token
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run backlog setup script
+        run: |
+          chmod +x .claude/scripts/setup-backlog-issues.sh
+          ./.claude/scripts/setup-backlog-issues.sh
