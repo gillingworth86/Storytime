@@ -1204,9 +1204,8 @@
         // ========================================
 
         const EMAIL_CONFIG = {
-            // IMPORTANT: Replace with your actual Buttondown API key
-            // Get your API key from: https://buttondown.email/settings/api
-            apiKey: 'YOUR_BUTTONDOWN_API_KEY',
+            // Buttondown API configuration
+            apiKey: '828fcb1b-af8d-409f-93ec-30de97aac3ca',
             apiEndpoint: 'https://api.buttondown.email/v1/subscribers',
             timeout: 5000, // 5 second timeout
             rateLimitPerMinute: 5
@@ -1269,7 +1268,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: email,
+                        email_address: email,
                         metadata: {
                             signup_location: location,
                             signup_date: new Date().toISOString(),
