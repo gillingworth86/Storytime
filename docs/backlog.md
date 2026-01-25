@@ -89,11 +89,16 @@ Add testimonials, user quotes, or early tester feedback to build trust and credi
 **Status:** Not Started
 **Priority:** P1
 **Effort:** Small
+**Approach:** Manual-first, automate after validation
 
-Create automated email sequence for new signups: confirmation, welcome message, value delivery, and engagement nurturing.
+Create email sequence for new signups: confirmation, welcome message, value delivery, and engagement nurturing.
+
+**Implementation Strategy:**
+- **Phase A (Manual):** Send emails manually via Buttondown dashboard until 100 signups validated
+- **Phase B (Automated):** Implement automation after demand validation (requires platform decision - see Strategic Decisions below)
 
 **Success Metrics:**
-- 3-5 email sequence created
+- 3-5 email sequence designed and documented
 - 40%+ open rate on welcome email
 - 10%+ click-through rate
 - Reduce unsubscribe rate below 2%
@@ -275,6 +280,40 @@ When adding new features to backlog, use this format:
 
 ---
 
+## Strategic Decisions
+
+### SD-001: Email Automation Platform (Deferred)
+**Status:** Deferred until demand validation
+**Decision Date:** TBD (after 100 signups)
+**Affects:** F005, F008, and any future automation needs
+
+**Context:**
+Buttondown (chosen for F002) requires $29/mo for automations. Kit offers 1 free automation but requires serverless proxy (more complex implementation).
+
+**Options:**
+| Option | Cost | Complexity | Limitations |
+|--------|------|------------|-------------|
+| Buttondown Standard | $29/mo | Low (CORS) | None |
+| Kit Free | $0/mo | High (proxy) | 1 automation, branding |
+| Kit Creator | $39/mo | High (proxy) | None |
+
+**Decision:**
+- **Manual-first approach** for F005 until demand validated
+- Send welcome emails manually via Buttondown dashboard
+- Reassess platform choice when:
+  - 100 signups achieved (demand validated), OR
+  - Manual sending becomes unsustainable (>10 signups/day)
+
+**Rationale:**
+- Don't pay $29/mo before validating product-market fit
+- Manual sending is acceptable for <100 subscribers
+- Preserves flexibility to switch platforms if needed
+- Aligns with lean validation philosophy
+
+**Review Trigger:** 100 email signups OR 3 weeks elapsed
+
+---
+
 ## Notes
 
 - Feature IDs are sequential (F001, F002, etc.)
@@ -282,6 +321,7 @@ When adding new features to backlog, use this format:
 - Effort estimates are for single developer
 - All P0 features must complete before Phase 2
 - Review backlog weekly during Phase 1
+- Strategic decisions documented in SD-XXX format
 
 ---
 
