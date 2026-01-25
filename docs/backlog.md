@@ -1,6 +1,25 @@
 # Storytime Product Backlog
 
-**Last Updated:** 2026-01-24
+> **Source of Truth:** GitHub Issues with label `backlog`
+>
+> This file is a **reference document only**. The authoritative backlog is managed via GitHub Issues.
+>
+> **Quick Commands:**
+> ```bash
+> # View available work
+> gh issue list --label "backlog" --label "status:available" --state open
+>
+> # View all backlog items
+> gh issue list --label "backlog" --state open
+> ```
+>
+> **Setup:** If issues don't exist yet, run `.claude/scripts/setup-backlog-issues.sh`
+>
+> **Management Guide:** See `.claude/skills/backlog-management.md`
+
+---
+
+**Last Updated:** 2026-01-25
 **Current Phase:** Phase 1 - Landing Page Validation
 **Goal:** 100 email signups in 3 weeks
 
