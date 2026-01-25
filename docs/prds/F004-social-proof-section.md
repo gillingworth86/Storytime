@@ -1,6 +1,6 @@
 # PRD: F004 - Social Proof Section
 
-**Status:** Draft
+**Status:** Approved
 **Priority:** P1 (High Value)
 **Effort Estimate:** 1 day
 **Owner:** TBD
@@ -82,7 +82,7 @@ Research on conversion optimization consistently shows social proof as one of th
 | Initials/icons | ⭐⭐⭐ | Low | Fast | MVP recommendation |
 | No avatars | ⭐⭐ | None | Fastest | Not recommended |
 
-**Decision:** Start with initials avatars (fast MVP), upgrade to real photos when beta testers provide them.
+**Decision:** Use AI-generated avatars for MVP. Upgrade to real photos when beta testers provide them.
 
 ### 2.5 Number of Testimonials
 
@@ -365,7 +365,7 @@ This is a **frontend-only** feature. No backend, database, or external API integ
 - Pros: No photo sourcing needed, faster to implement
 - Cons: Less personal, slightly lower trust
 
-**Recommendation:** Start with Option C (Initials Avatars) for MVP speed, upgrade to real photos when available.
+**Recommendation:** Use Option B (AI-generated avatars) for MVP. Upgrade to real photos when beta testers provide them.
 
 ### 5.5 File Changes
 
@@ -881,21 +881,19 @@ Consider testing after initial deployment:
 
 ## 13. Open Questions & Decisions
 
-### Questions (to be resolved before build)
+### Questions (resolved)
 
-- [ ] **Q1:** Do we have real testimonials from beta testers or friends/family?
-  - **Answer:** *TBD - need to confirm with stakeholder*
-  - **Decision Maker:** Product owner
-  - **Fallback:** Use well-crafted placeholder testimonials
+- [x] **Q1:** Do we have real testimonials from beta testers or friends/family?
+  - **Answer:** No - no product yet
+  - **Decision:** Use aspirational placeholder testimonials representing expected user feedback. Replace with real testimonials once beta testers available.
 
-- [ ] **Q2:** Avatar strategy - real photos, AI-generated, or initials?
-  - **Answer:** *TBD*
-  - **Recommendation:** Start with initials for speed, upgrade later
-  - **Decision Maker:** Product owner
+- [x] **Q2:** Avatar strategy - real photos, AI-generated, or initials?
+  - **Answer:** AI-generated photos are acceptable
+  - **Decision:** Use AI-generated avatars (e.g., Generated.Photos or similar service)
 
-- [ ] **Q3:** Exact testimonial quotes to use?
-  - **Answer:** *Draft quotes provided in Section 6.6*
-  - **Decision Maker:** Product owner to approve or revise
+- [x] **Q3:** Exact testimonial quotes to use?
+  - **Answer:** Use draft quotes from Section 6.6 as starting point
+  - **Decision:** Proceed with draft copy; can be refined post-implementation
 
 ### Decisions Made
 
@@ -961,4 +959,4 @@ Consider testing after initial deployment:
 - [x] Implementation plan realistic
 - [ ] No open questions remaining (3 questions pending)
 
-**Ready for Build:** ☐ Yes ☒ No (resolve Q1-Q3 first)
+**Ready for Build:** ☒ Yes ☐ No
