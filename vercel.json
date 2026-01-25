@@ -1,9 +1,18 @@
 {
   "version": 2,
   "buildCommand": null,
-  "outputDirectory": "experimental/landing-pages",
   "cleanUrls": true,
   "trailingSlash": false,
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "experimental/landing-pages/**",
+      "use": "@vercel/static"
+    }
+  ],
 
   "headers": [
     {
@@ -70,8 +79,12 @@
 
   "rewrites": [
     {
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/experimental/landing-pages/index.html"
     }
   ]
 }
