@@ -464,6 +464,88 @@
             font-size: 1.05rem;
         }
 
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--purple);
+            box-shadow: 0 16px 32px rgba(99, 102, 241, 0.15);
+        }
+
+        .testimonial-content {
+            margin: 0;
+        }
+
+        .testimonial-quote {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 2rem;
+            color: var(--amber);
+            font-family: 'Fraunces', serif;
+            line-height: 0;
+            vertical-align: -0.4em;
+            margin-right: 4px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .testimonial-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--amber) 0%, var(--gold) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--midnight);
+            flex-shrink: 0;
+        }
+
+        .testimonial-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: var(--cream);
+            font-size: 0.95rem;
+        }
+
+        .testimonial-context {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
         /* Pricing */
         .pricing-grid {
             display: grid;
@@ -731,6 +813,15 @@
             .pricing-grid {
                 grid-template-columns: 1fr;
             }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .testimonial-card {
+                padding: 24px;
+            }
         }
 
         /* Smooth scroll */
@@ -806,6 +897,70 @@
                         <p>Transform favourite characters into custom plushies, continue adventures in companion games, and watch as their story world becomes part of everyday play.</p>
                         <span class="coming-soon">Coming soon</span>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof / Testimonials -->
+        <section id="testimonials" aria-labelledby="testimonials-heading">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="testimonials-heading" class="section-title">Loved by Families</h2>
+                    <p class="section-subtitle">Real parents, real bedtimes, real magic</p>
+                </div>
+
+                <div class="testimonials-grid">
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">My daughter asks for 'one more Whisper story' every single night. The continuity is magical—she remembers details I've forgotten!</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">SM</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">Sarah M.</span>
+                                <span class="testimonial-context">Mother of a 5-year-old</span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">Bedtime used to be a battle. Now my son runs to brush his teeth so we can 'see what happens next.'</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">JK</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">James K.</span>
+                                <span class="testimonial-context">Father of 2</span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">When Maya's character remembered her birthday from a story two weeks ago, she was absolutely amazed. Worth every penny.</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">LT</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">Lisa T.</span>
+                                <span class="testimonial-context">Parent of Maya, age 4</span>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card">
+                        <blockquote class="testimonial-content">
+                            <p class="testimonial-quote">I love that I don't have to preview every story. The content is always age-appropriate and exactly what I'd want for bedtime.</p>
+                        </blockquote>
+                        <footer class="testimonial-author">
+                            <div class="testimonial-avatar" aria-hidden="true">MR</div>
+                            <div class="testimonial-meta">
+                                <span class="testimonial-name">Michael R.</span>
+                                <span class="testimonial-context">Dad to twin girls, age 6</span>
+                            </div>
+                        </footer>
+                    </article>
                 </div>
             </div>
         </section>
@@ -1143,6 +1298,22 @@
         }, { threshold: 0.5 }); // Trigger when 50% visible
 
         emailForms.forEach(form => observer.observe(form));
+
+        // Track when testimonials section becomes visible
+        const testimonialSection = document.getElementById('testimonials');
+        if (testimonialSection) {
+            const testimonialObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (window.plausible) {
+                            plausible('Social Proof Viewed');
+                        }
+                        testimonialObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            testimonialObserver.observe(testimonialSection);
+        }
 
         // Rotating taglines
         function rotateTaglines() {
