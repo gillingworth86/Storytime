@@ -917,6 +917,23 @@
             border: 1px solid rgba(34, 197, 94, 0.3);
             color: #86efac;
         }
+
+        /* Disabled form state (after successful subscription) */
+        .form-disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .form-disabled .email-input {
+            background: rgba(255, 255, 255, 0.02);
+            cursor: not-allowed;
+        }
+
+        .form-disabled .cta-button {
+            background: linear-gradient(135deg, rgba(156, 163, 175, 0.5) 0%, rgba(156, 163, 175, 0.3) 100%);
+            cursor: not-allowed;
+            box-shadow: none;
+        }
     </style>
 
     <!-- Kit (ConvertKit) - Email form handling -->
@@ -1406,6 +1423,116 @@
                 }
             });
         });
+
+        // ========================================
+        // Kit Form Enhancement
+        // Handles: form deactivation, location tracking
+        // ========================================
+
+        (function() {
+            const allForms = document.querySelectorAll('.email-form');
+            let hasSubscribed = false;
+
+            // Disable a form (gray out, prevent interaction)
+            function disableForm(form) {
+                const input = form.querySelector('input[type="email"]');
+                const button = form.querySelector('button[type="submit"]');
+
+                if (input) {
+                    input.disabled = true;
+                    input.placeholder = 'Already subscribed';
+                    input.value = '';
+                }
+                if (button) {
+                    button.disabled = true;
+                }
+                form.classList.add('form-disabled');
+            }
+
+            // Disable all forms except the one that was submitted
+            function disableOtherForms(submittedForm) {
+                allForms.forEach(form => {
+                    if (form !== submittedForm) {
+                        disableForm(form);
+                    }
+                });
+            }
+
+            // Track successful submission via Plausible
+            function trackSubmission(location) {
+                if (window.plausible) {
+                    plausible('Email Signup', {
+                        props: { location: location }
+                    });
+                }
+            }
+
+            // Watch for Kit's success message appearing in a form
+            function watchForSuccess(form) {
+                const alertEl = form.querySelector('.formkit-alert');
+                if (!alertEl) return;
+
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        // Check if success message appeared
+                        if (alertEl.textContent.toLowerCase().includes('success') ||
+                            alertEl.classList.contains('formkit-alert-success')) {
+
+                            if (!hasSubscribed) {
+                                hasSubscribed = true;
+                                const location = form.dataset.location || 'unknown';
+
+                                // Track the submission
+                                trackSubmission(location);
+
+                                // Disable other forms
+                                disableOtherForms(form);
+
+                                // Store in localStorage to persist across page reloads
+                                try {
+                                    localStorage.setItem('storytime_subscribed', 'true');
+                                    localStorage.setItem('storytime_sub_location', location);
+                                } catch (e) {
+                                    // localStorage not available
+                                }
+                            }
+                        }
+                    });
+                });
+
+                observer.observe(alertEl, {
+                    childList: true,
+                    characterData: true,
+                    subtree: true,
+                    attributes: true,
+                    attributeFilter: ['class']
+                });
+            }
+
+            // Check if user already subscribed (from localStorage)
+            function checkPreviousSubscription() {
+                try {
+                    if (localStorage.getItem('storytime_subscribed') === 'true') {
+                        hasSubscribed = true;
+                        allForms.forEach(form => disableForm(form));
+
+                        // Show a message on the first form
+                        const firstAlert = document.querySelector('.formkit-alert');
+                        if (firstAlert) {
+                            firstAlert.textContent = "You're already on the list!";
+                            firstAlert.classList.add('formkit-alert-success');
+                            firstAlert.style.display = 'block';
+                        }
+                    }
+                } catch (e) {
+                    // localStorage not available
+                }
+            }
+
+            // Initialize
+            allForms.forEach(form => watchForSuccess(form));
+            checkPreviousSubscription();
+        })();
 
         // Track when email forms become visible (scroll tracking)
         const emailForms = document.querySelectorAll('.email-form');
