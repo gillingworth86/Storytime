@@ -890,6 +890,33 @@
             border-color: rgba(239, 68, 68, 0.5);
             background: rgba(239, 68, 68, 0.05);
         }
+
+        /* Kit form alert styles */
+        .formkit-alert {
+            list-style: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 0 0 16px 0;
+            text-align: center;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        .formkit-alert:empty {
+            display: none;
+        }
+
+        .formkit-alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .formkit-alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
     </style>
 
     <!-- Kit (ConvertKit) - Email form handling -->
@@ -929,6 +956,7 @@
                     data-format="inline"
                     data-version="5"
                     data-options='{"settings":{"after_subscribe":{"action":"message","success_message":"Success! Now check your email to confirm your subscription.","redirect_url":""}}}'>
+                    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
                     <input
                         type="email"
                         name="email_address"
@@ -1220,6 +1248,7 @@
                     data-format="inline"
                     data-version="5"
                     data-options='{"settings":{"after_subscribe":{"action":"message","success_message":"Success! Now check your email to confirm your subscription.","redirect_url":""}}}'>
+                    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
                     <input
                         type="email"
                         name="email_address"
@@ -1272,6 +1301,7 @@
                     data-format="inline"
                     data-version="5"
                     data-options='{"settings":{"after_subscribe":{"action":"message","success_message":"Success! Now check your email to confirm your subscription.","redirect_url":""}}}'>
+                    <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
                     <input
                         type="email"
                         name="email_address"
