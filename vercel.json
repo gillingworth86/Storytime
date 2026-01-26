@@ -29,7 +29,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://f.convertkit.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io https://api.convertkit.com https://app.kit.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://app.kit.com;"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://*.convertkit.com https://*.kit.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io https://*.convertkit.com https://*.kit.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.kit.com https://*.convertkit.com;"
         }
       ]
     },
