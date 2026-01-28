@@ -75,12 +75,13 @@ The Storytime Team
 
 ## Kit Configuration Notes
 
-1. Navigate to **Settings → Emails → Confirmation email**
-2. Enable **"Custom confirmation email"**
-3. Paste the content above
-4. **CRITICAL:** Ensure `{{ subscriber.confirmation_url }}` is inside the confirm button/link
-5. Send a test email to verify formatting
-6. Test the confirmation link works
+1. Navigate to **Settings → Email → Confirmation email**
+2. Click **Edit** or **Customize**
+3. Switch to **HTML mode**
+4. Use `html/01-confirmation-welcome.html` for styled version
+5. **CRITICAL:** Ensure `{{ confirmation_url }}` is inside the confirm button/link
+6. Send a test email to verify formatting
+7. Test the confirmation link works
 
 ## Target Metrics
 

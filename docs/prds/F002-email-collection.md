@@ -381,21 +381,6 @@ The Storytime landing page at https://getstorytime.vercel.app contains three ema
 - **Webhook Support:** ✅ YES
 - **Complexity:** MEDIUM (requires serverless proxy)
 
-**Example API Call (via proxy):**
-```javascript
-// Client -> proxy
-await fetch('/api/subscribe', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email: 'user@example.com', location: 'hero' })
-});
-
-// Proxy -> Kit:
-// POST https://api.kit.com/v4/forms/{FORM_ID}/subscribers
-// Headers: Authorization: Bearer <API_KEY>
-// Body: { email: 'user@example.com', fields: { location: 'hero' }, tags: ['landing-page'] }
-```
-
 **Double Opt-In:**
 - ✅ Built-in, configurable
 - ✅ Customizable confirmation email template
@@ -427,12 +412,107 @@ await fetch('/api/subscribe', {
 
 ---
 
-#### 2.2.2 Alternative ESPs (MailerLite / Mailchimp)
+#### 2.2.2 Kit (formerly ConvertKit)
 
-Use these if you already have an account or need a simpler drag-and-drop editor. They generally:
-- Require the same serverless proxy pattern for API usage
-- Offer fewer creator-focused automations than Kit
-- Have pricing tiers that scale quickly after the free tier
+**Overview:**
+- Founded: 2013
+- Focus: Creator-focused, email marketing
+- Philosophy: Built for creators, podcasters, bloggers
+- Website: https://kit.com
+
+**Pricing:**
+| Subscribers | Free Tier | Creator Plan | Creator Pro |
+|-------------|-----------|--------------|-------------|
+| 0-1,000 | ✅ Free (limited) | $9/mo | $25/mo |
+| 1,001-3,000 | N/A | $25/mo | $50/mo |
+| 3,001-5,000 | N/A | $41/mo | $66/mo |
+
+**Pricing notes:**
+- Free tier: 10,000 subscriber limit BUT single automation only
+- API access: Requires paid plan ($9/mo minimum)
+- Charged for ALL subscribers (not just confirmed)
+- Annual billing: 2 months free (~16% discount)
+- **Critical for us:** Need Creator plan ($9/mo) for API access
+
+**API Assessment:**
+- **CORS Support:** ❌ NO (server-side only)
+- **Authentication:** API secret in request body (not ideal for client-side)
+- **Rate Limiting:** 120 requests/minute
+- **Documentation:** Good (but less dev-focused)
+- **Endpoints Needed:** `POST /v3/forms/{id}/subscribe`
+- **Response Format:** Nested JSON (more complex)
+- **Webhook Support:** ✅ YES (paid plans)
+- **Complexity:** MEDIUM-HIGH (requires serverless proxy)
+
+**Example API Call (Kit payload schema):**
+```javascript
+// Use a serverless proxy (no direct client-side calls)
+fetch('https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        api_key: 'ck_xxxxx',
+        email: 'user@example.com',
+        fields: {
+            signup_location: 'hero',
+            signup_url: 'https://getstorytime.vercel.app'
+        },
+        tags: ['hero', 'landing-page']
+    })
+});
+```
+
+**Proxy note:** For browser usage, wrap this request in a serverless proxy that injects
+`api_key` server-side and forwards the same payload to Kit.
+```
+
+**Double Opt-In:**
+- ✅ Built-in, configurable
+- ✅ Customizable confirmation email
+- ✅ GDPR-compliant
+- ✅ Tracks subscriber state (inactive until confirmed)
+- ❌ Less granular control vs Buttondown
+
+**Features:**
+- ✅ Visual automation builder
+- ✅ Landing pages (built-in, not needed)
+- ✅ Email sequences
+- ✅ Tagging & segmentation
+- ✅ Analytics dashboard
+- ✅ A/B testing (Pro plan)
+- ✅ Advanced reporting (Pro plan)
+- ✅ Multiple users (Pro plan)
+- ✅ 70+ integrations
+- ✅ Migration service (they'll migrate your list)
+- ❌ Less privacy-focused (more marketing-oriented)
+
+**Pros:**
+- ✅ Well-established brand (trusted by creators)
+- ✅ Generous free tier (10,000 subscribers)
+- ✅ Visual automation builder (easier for non-devs)
+- ✅ Extensive integrations (Shopify, WordPress, etc.)
+- ✅ Free migration service
+- ✅ Great for long-term email marketing
+
+**Cons:**
+- ❌ API requires paid plan ($9/mo minimum)
+- ❌ No CORS support (must use serverless proxy)
+- ❌ More complex implementation
+- ❌ API secret in request body (awkward authentication)
+- ❌ Charges for unconfirmed subscribers
+- ❌ More marketing-focused (less developer-friendly)
+- ❌ Overkill features for simple waitlist
+
+**Documentation Quality:** ⭐⭐⭐⭐☆ (4/5)
+- Comprehensive but less focused
+- Good examples
+- More marketing-oriented docs
+- API docs buried deeper
+
+**Support:**
+- Email support
+- Live chat (paid plans)
+- Knowledge base
 - Active community
 - 99.9% uptime
 
@@ -475,8 +555,14 @@ Kit wins on overall fit for a creator-focused waitlist with future automation ne
 - $0 on free tier
 - Paid plans only if automation/reporting needs grow
 
-✅ **CSP updates:**
-- Add `https://api.kit.com` to `connect-src`
+✅ **Better privacy:**
+- Aligns with Plausible analytics choice
+- GDPR-compliant by default
+- Minimal data collection
+
+✅ **CSP compatibility:**
+- Add `https://api.convertkit.com` (or your `/api/subscribe` serverless endpoint) to `connect-src`
+- Simple one-line change in `vercel.json`
 
 **See Section 5 for complete implementation details**
 
@@ -956,7 +1042,7 @@ Kit wins on overall fit for a creator-focused waitlist with future automation ne
 ```javascript
 // Configuration object (to be added at top of script)
 const EMAIL_CONFIG = {
-    apiEndpoint: '/api/subscribe', // Serverless proxy endpoint
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe', // Kit endpoint (proxy required in browser)
     apiKey: 'YOUR_API_KEY_HERE', // Stored as environment variable or config
     timeout: 5000, // 5 second timeout
     retryAttempts: 2 // Retry failed requests twice
@@ -1020,12 +1106,12 @@ async function submitToEmailService(email, location) {
         const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${EMAIL_CONFIG.apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: EMAIL_CONFIG.apiKey,
                 email: email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                     signup_url: window.location.href,
@@ -1093,12 +1179,15 @@ function handleSubmissionError(error, messageContainer) {
         showMessage(messageContainer, 'error',
             'Connection timed out. Please check your internet and try again.');
     } else if (error instanceof ApiError) {
-        if (error.status === 409 || error.message.includes('already subscribed')) {
-            showMessage(messageContainer, 'success',
-                'You\'re already on the list! Check your email for confirmation.');
-        } else if (error.status === 400) {
+        if (error.status === 400 || error.status === 422) {
             showMessage(messageContainer, 'error',
                 'Invalid email address. Please check and try again.');
+        } else if (error.status === 401) {
+            showMessage(messageContainer, 'error',
+                'Subscription service misconfigured. Please try again later.');
+        } else if (error.status === 404) {
+            showMessage(messageContainer, 'error',
+                'Signup form unavailable. Please try again later.');
         } else {
             showMessage(messageContainer, 'error',
                 'Something went wrong. Please try again later.');
@@ -1115,7 +1204,7 @@ function handleSubmissionError(error, messageContainer) {
 // Custom error classes
 class ApiError extends Error {
     constructor(status, data) {
-        super(data.message || 'API request failed');
+        super(data.error || data.message || 'API request failed');
         this.status = status;
         this.data = data;
     }
@@ -1164,16 +1253,14 @@ class TimeoutError extends Error {
 
 #### 5.3.1 Kit API Specification
 
-**Endpoint:** `https://api.kit.com/v4/forms/{FORM_ID}/subscribers`
+**Endpoint:** `https://api.convertkit.com/v3/forms/{form_id}/subscribe`
 
-**Authentication:** Bearer token in header (server-side only)
-```
-Authorization: Bearer YOUR_API_KEY
-```
+**Authentication:** API key in request body (not header)
 
 **Request format:**
 ```json
 {
+  "api_key": "YOUR_API_KEY",
   "email": "user@example.com",
   "fields": {
     "signup_location": "hero",
@@ -1198,6 +1285,13 @@ Authorization: Bearer YOUR_API_KEY
 **Duplicate response (200 OK):**
 Kit returns 200 OK for duplicate emails, treating it as successful re-subscription.
 
+**Error response (400/422 Bad Request):**
+```json
+{
+  "error": "Email is invalid"
+}
+```
+
 **Error response (401 Unauthorized):**
 ```json
 {
@@ -1221,7 +1315,8 @@ Kit returns 200 OK for duplicate emails, treating it as successful re-subscripti
 ```javascript
 // Add to top of <script> block in index.html
 const EMAIL_CONFIG = {
-    apiEndpoint: '/api/subscribe',
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe',
+    apiKey: 'ck_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
     timeout: 5000
 };
 ```
@@ -1269,12 +1364,12 @@ export default async function handler(req, res) {
         const response = await fetch(process.env.EMAIL_SERVICE_ENDPOINT, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${process.env.EMAIL_SERVICE_API_KEY}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: process.env.EMAIL_SERVICE_API_KEY,
                 email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                 },
@@ -1285,7 +1380,7 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || 'API error');
+            throw new Error(data.error || data.message || 'API error');
         }
 
         return res.status(200).json({ success: true, data });
@@ -1623,7 +1718,7 @@ END STATE: 😊 Subscribed, awaiting launch updates
 ### Critical Edge Cases
 
 **EDGE-001: Duplicate Email**
-- Detection: API returns 409
+- Detection: API returns 200 OK with existing subscription
 - User sees: "You're already on the list!" (success style, not error)
 - No duplicate record created
 
@@ -1658,7 +1753,7 @@ END STATE: 😊 Subscribed, awaiting launch updates
 | Offline | - | "No internet connection..." |
 | Timeout | - | "Connection timed out..." |
 | Invalid email | - | "Please enter a valid email..." |
-| Duplicate | 409 | "You're already on the list!" |
+| Duplicate | 200 | "You're already on the list!" |
 | Rate limit | 429 | "Too many requests..." |
 | Server error | 500/503 | "Service temporarily unavailable..." |
 | Unknown | Other | "Something went wrong..." |
@@ -1670,8 +1765,8 @@ END STATE: 😊 Subscribed, awaiting launch updates
 ### Threat Mitigation
 
 **API Key Security:**
-- Stored server-side in proxy (never exposed client-side)
-- Rate-limited: ~120 req/min prevents abuse
+- Kit: Keep API key server-side (use serverless proxy)
+- Rate-limited: 120 req/min prevents abuse
 - Can rotate if compromised
 
 **Data Privacy:**
