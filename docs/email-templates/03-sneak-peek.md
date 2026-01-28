@@ -2,7 +2,7 @@
 
 **Purpose:** Preview features, generate excitement
 **Timing:** Day 5 (after confirmation)
-**Send Method:** Manual via Buttondown dashboard
+**Send Method:** Automated via Kit sequence (Day 5)
 
 ---
 
@@ -76,13 +76,13 @@ The Storytime Team
 
 ---
 
-## Sending Instructions
+## Kit Setup Instructions
 
-1. Go to Buttondown → **Emails** → **New email**
-2. Copy the subject line and content above
-3. Set "Send to" = Subscribers who confirmed 5 days ago
-4. Preview and send
-5. Log in tracking spreadsheet
+1. Go to Kit → **Sequences** → Your welcome sequence
+2. Add email with **5-day delay** after confirmation
+3. Use `html/03-sneak-peek.html` for styled version
+4. Preview and save
+5. Sequence handles sending automatically
 
 ## Target Metrics
 
