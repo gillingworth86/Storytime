@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "buildCommand": null,
-  "outputDirectory": "experimental/landing-pages",
   "cleanUrls": true,
   "trailingSlash": false,
 
@@ -31,7 +29,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io https://api.buttondown.email; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://*.convertkit.com https://*.kit.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://plausible.io https://*.convertkit.com https://*.kit.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://*.kit.com https://*.convertkit.com;"
         }
       ]
     },
@@ -71,7 +69,7 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html"
+      "destination": "/experimental/landing-pages/index.html"
     }
   ]
 }

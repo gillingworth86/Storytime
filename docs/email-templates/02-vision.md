@@ -26,7 +26,7 @@ It started with a simple request at bedtime...
 
 ## Email Content
 
-Copy everything below the line into Buttondown when sending:
+Copy everything below the line into Kit when sending:
 
 ---
 

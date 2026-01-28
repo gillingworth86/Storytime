@@ -26,7 +26,7 @@ Here's how story continuity actually works...
 
 ## Email Content
 
-Copy everything below the line into Buttondown when sending:
+Copy everything below the line into Kit when sending:
 
 ---
 

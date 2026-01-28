@@ -32,14 +32,14 @@ Complete copy for your landing page including:
 
 Plus: Complete survey questions for Email 3
 
-**→ Use this to set up Buttondown automation**
+**→ Use this to set up Kit (ConvertKit) automation**
 
 ---
 
 ### 3. **tool-stack-recommendations.md**
 Detailed comparison of tools with final recommendations:
 - **Landing page:** Carrd Pro Plus ($19/year) ✓
-- **Email marketing:** Buttondown (free tier) ✓
+- **Email marketing:** Kit (ConvertKit) free tier ✓
 - **Analytics:** Plausible ($9/month) ✓
 - **Domain:** Namecheap/Porkbun (~$12-15) ✓
 
@@ -81,13 +81,13 @@ Step-by-step guide from setup to launch:
 ### Day 1: Register & Setup (1-2 hours)
 1. Register domain at Namecheap: `getstorytime.com` (or alternative)
 2. Sign up for Carrd Pro Plus ($19/year)
-3. Sign up for Buttondown (free)
+3. Sign up for Kit (ConvertKit) (free)
 4. Sign up for Plausible 30-day trial (free)
 
 ### Day 2-4: Build (3-4 hours)
 5. Build landing page in Carrd using `landing-page-copy.md`
 6. Set up 4 headline variants for A/B testing
-7. Add Buttondown email form
+7. Add Kit email form
 8. Connect custom domain
 
 ### Day 5: Analytics (1 hour)
@@ -95,7 +95,7 @@ Step-by-step guide from setup to launch:
 10. Test everything thoroughly
 
 ### Day 6: Emails (2 hours)
-11. Set up email sequence in Buttondown using `email-sequence.md`
+11. Set up email sequence in Kit using `email-sequence.md`
 12. Create feature survey (Google Forms)
 
 ### Day 7: Launch (2 hours)
@@ -145,7 +145,7 @@ Step-by-step guide from setup to launch:
 | Item | Cost | Status |
 |------|------|--------|
 | Carrd Pro Plus | $19/year | Required |
-| Buttondown | FREE | Required |
+| Kit (ConvertKit) | FREE | Required |
 | Plausible | $9/month | Required (cancel after test) |
 | Domain | $12-15/year | Required |
 | **Total** | **~$40-43** | ✓ Within budget |
@@ -181,7 +181,7 @@ Before distributing:
 - [ ] Landing page live on custom domain
 - [ ] SSL certificate active (https)
 - [ ] All 4 headline variants rotating
-- [ ] Email form submits successfully to Buttondown
+- [ ] Email form submits successfully to Kit
 - [ ] Welcome email sends immediately upon signup
 - [ ] Follow-up emails scheduled (Day 3, 7, 14)
 - [ ] Plausible tracking working
@@ -199,7 +199,7 @@ Before distributing:
 ### After setup, bookmark these:
 - **Landing page:** https://getstorytime.com
 - **Carrd dashboard:** https://carrd.co/dashboard
-- **Buttondown:** https://buttondown.email/
+- **Kit dashboard:** https://app.kit.com/
 - **Plausible:** https://plausible.io/getstorytime.com
 
 ---
@@ -267,7 +267,7 @@ Document these during the test:
 
 ### Tools documentation:
 - Carrd: https://carrd.co/docs
-- Buttondown: https://buttondown.email/help
+- Kit: https://help.kit.com
 - Plausible: https://plausible.io/docs
 
 ---

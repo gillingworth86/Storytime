@@ -26,7 +26,7 @@ Your answer will directly shape what we build...
 
 ## Email Content
 
-Copy everything below the line into Buttondown when sending:
+Copy everything below the line into Kit when sending:
 
 ---
 

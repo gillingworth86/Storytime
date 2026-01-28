@@ -120,7 +120,7 @@ The HTML templates include these branded elements:
 - Check Kit logs for bounces
 
 **Links not working in emails:**
-- Ensure `{{ confirmation_url }}` is correctly formatted
+- Ensure `{{ subscriber.confirmation_url }}` is correctly formatted
 - Test send to personal email first
 
 **Low open rates:**

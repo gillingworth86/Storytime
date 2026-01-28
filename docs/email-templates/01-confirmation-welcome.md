@@ -1,8 +1,8 @@
 # Confirmation/Welcome Email Template
 
 **Purpose:** Combined double opt-in confirmation + welcome + story preview
-**Timing:** Automatic (sent by Buttondown on signup)
-**Kit Setup:** Settings → Email → Confirmation email
+**Timing:** Automatic (sent by Kit on signup)
+**Kit Setup:** Settings → Emails → Confirmation email
 
 ---
 
@@ -22,7 +22,7 @@ Click to confirm + get a sneak peek of the magic inside...
 
 ## Email Content
 
-Copy everything below the line into Buttondown's confirmation email editor:
+Copy everything below the line into Kit's confirmation email editor:
 
 ---
 
@@ -34,7 +34,7 @@ Welcome to the Storytime universe!
 
 You're one click away from joining a community of parents who believe bedtime stories should be more than random tales—they should be adventures that remember, characters that return, and worlds that grow with your child.
 
-<a href="{{ confirmation_url }}" style="display: inline-block; background-color: #fbbf24; color: #0f1419; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold;">Confirm Your Spot</a>
+<a href="{{ subscriber.confirmation_url }}" style="display: inline-block; background-color: #fbbf24; color: #0f1419; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold;">Confirm Your Spot</a>
 
 👆 Click to confirm your subscription
 

@@ -300,14 +300,16 @@ class TimeoutError extends Error {
 
 #### 5.3.1 Kit API Specification
 
-**Endpoint:** `https://api.convertkit.com/v3/forms/{form_id}/subscribe`
+**Endpoint:** `https://api.kit.com/v4/forms/{FORM_ID}/subscribers`
 
-**Authentication:** API key in request body (not header)
+**Authentication:** Bearer token in header (server-side only)
+```
+Authorization: Bearer YOUR_API_KEY
+```
 
 **Request format:**
 ```json
 {
-  "api_key": "YOUR_API_KEY",
   "email": "user@example.com",
   "fields": {
     "signup_location": "hero",
@@ -322,31 +324,15 @@ class TimeoutError extends Error {
 **Success response (200 OK):**
 ```json
 {
-  "subscription": {
-    "id": 123456,
-    "state": "inactive",
-    "created_at": "2026-01-24T10:30:00Z",
-    "source": "API",
-    "referrer": null,
-    "subscribable_id": 789,
-    "subscribable_type": "form",
-    "subscriber": {
-      "id": 987654,
-      "first_name": null,
-      "email_address": "user@example.com",
-      "state": "inactive",
-      "created_at": "2026-01-24T10:30:00Z",
-      "fields": {
-        "signup_location": "hero",
-        "signup_date": "2026-01-24T10:30:00Z"
-      }
-    }
-  }
+  "id": 123456,
+  "email": "user@example.com",
+  "state": "inactive",
+  "created_at": "2026-01-24T10:30:00Z"
 }
 ```
 
-**Duplicate response (200 OK - same as success):**
-Kit returns 200 OK even for duplicate emails, treating it as successful re-subscription.
+**Duplicate response (200 OK):**
+Kit returns 200 OK for duplicate emails, treating it as successful re-subscription.
 
 **Error response (400/422 Bad Request):**
 ```json
@@ -362,11 +348,11 @@ Kit returns 200 OK even for duplicate emails, treating it as successful re-subsc
 }
 ```
 
-**Rate limits:** 120 requests/minute per API key
+**Rate limits:** ~120 requests/minute per API key
 
 **CORS:** Kit API does NOT support CORS for direct client-side calls (requires serverless function proxy)
 
-**Documentation:** https://developers.convertkit.com/#subscribe-to-a-form
+**Documentation:** https://developers.kit.com
 
 ---
 
@@ -374,12 +360,11 @@ Kit returns 200 OK even for duplicate emails, treating it as successful re-subsc
 
 **Approach:** Environment-based configuration using build-time replacement
 
-**Option 1: Manual configuration (current static HTML)**
+**Option 1: Manual configuration (static HTML + proxy)**
 ```javascript
 // Add to top of <script> block in index.html
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe',
-    apiKey: 'ck_live_xxxxxxxxxxxxx', // TODO: Move to environment variable
+    apiEndpoint: '/api/subscribe',
     timeout: 5000
 };
 ```
@@ -427,7 +412,8 @@ export default async function handler(req, res) {
         const response = await fetch(process.env.EMAIL_SERVICE_ENDPOINT, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${process.env.EMAIL_SERVICE_API_KEY}`
             },
             body: JSON.stringify({
                 api_key: process.env.EMAIL_SERVICE_API_KEY,
