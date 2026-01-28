@@ -39,12 +39,35 @@ These templates use the Storytime brand design system:
 
 These templates use Kit's Liquid templating syntax:
 
-| Variable | Description |
-|----------|-------------|
-| `{{ confirmation_url }}` | Double opt-in confirmation link (Email #1 only) |
-| `{{ unsubscribe_url }}` | Unsubscribe link |
-| `{{ address }}` | Physical mailing address (CAN-SPAM compliance) |
-| `{{ subscriber.first_name }}` | Subscriber's first name (if collected) |
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `{{ confirmation_url }}` | Double opt-in confirmation link | Yes (Email #1 only) |
+| `{{ unsubscribe_url }}` | Unsubscribe link | Yes (all emails) |
+| `{{ subscriber_preferences_url }}` | Subscriber preferences link | Yes (all emails) |
+| `{{ address }}` | Physical mailing address | Yes (CAN-SPAM) |
+| `{{ message_content }}` | Content from visual editor | Yes (wrapper template only) |
+| `{{ subscriber.first_name }}` | Subscriber's first name | Optional |
+
+**Important:** Kit requires `{{ unsubscribe_url }}`, `{{ subscriber_preferences_url }}`, and `{{ address }}` in all email templates for compliance.
+
+## Email Client Compatibility
+
+These templates are designed for maximum email client compatibility:
+
+- **No JavaScript** - Email clients block JS execution
+- **Table-based layout** - Required for Outlook compatibility
+- **Solid background colors** - CSS gradients don't render in all clients
+- **Inline styles** - More reliable than `<style>` blocks in some clients
+- **System fonts** - Web fonts may not load in email
+- **MSO conditionals** - Outlook-specific fixes included
+
+## Template Types
+
+### Standalone Emails (01-04)
+Complete HTML emails for use in Kit's "Custom HTML" mode. Copy entire file contents into Kit.
+
+### Wrapper Template (kit-wrapper-template.html)
+A wrapper template for Kit's visual editor. Uses `{{ message_content }}` to inject content you write in Kit's editor. Use this if you prefer Kit's visual editor over raw HTML.
 
 ## Loading Templates into Kit
 
