@@ -2,7 +2,6 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
-
   "headers": [
     {
       "source": "/(.*)",
@@ -52,20 +51,18 @@
       ]
     }
   ],
-
   "redirects": [
     {
       "source": "/privacy",
-      "destination": "/privacy.html",
+      "destination": "/experimental/landing-pages/privacy.html",
       "permanent": false
     },
     {
       "source": "/terms",
-      "destination": "/terms.html",
+      "destination": "/experimental/landing-pages/terms.html",
       "permanent": false
     }
   ],
-
   "rewrites": [
     {
       "source": "/(.*)",

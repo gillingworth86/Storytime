@@ -1,5 +1,7 @@
 {
-  "extends": ["html-validate:recommended"],
+  "extends": [
+    "html-validate:recommended"
+  ],
   "rules": {
     "close-attr": "error",
     "close-order": "error",
@@ -19,8 +21,14 @@
     "void-style": "off",
     "no-implicit-button-type": "off",
     "no-inline-style": "off",
-    "attribute-boolean-style": ["error", {"style": "omit"}],
-    "attr-quotes": ["error", {"style": "double"}]
+    "attribute-boolean-style": [
+      "error",
+      {
+        "style": "omit"
+      }
+    ],
+    "attr-quotes": "off",
+    "doctype-style": "off"
   },
   "elements": [
     "html5"

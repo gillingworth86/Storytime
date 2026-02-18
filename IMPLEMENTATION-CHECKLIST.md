@@ -1,3 +1,8 @@
+> [!WARNING]
+> **Historical document (Netlify-era):** This checklist is retained for reference only and is not the active setup path.
+>
+> Use [`QUICKSTART.md`](QUICKSTART.md) and [`docs/current-state.md`](docs/current-state.md) for the current Vercel-first workflow.
+
 # 📋 Storytime CI/CD Implementation Checklist
 
 Use this checklist to track your progress through setting up complete CI/CD automation.

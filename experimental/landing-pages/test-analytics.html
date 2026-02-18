@@ -1,283 +1,292 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>F001 Analytics Integration Test Suite</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        h1 {
-            color: #333;
-        }
-        .test-section {
-            background: white;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .test-case {
-            padding: 15px;
-            margin: 10px 0;
-            border-left: 4px solid #ccc;
-            background: #f9f9f9;
-        }
-        .test-case.pass {
-            border-left-color: #4caf50;
-            background: #f1f8f1;
-        }
-        .test-case.fail {
-            border-left-color: #f44336;
-            background: #fef1f1;
-        }
-        .test-case.pending {
-            border-left-color: #ff9800;
-            background: #fff8f1;
-        }
-        .test-title {
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .test-result {
-            font-size: 14px;
-            color: #666;
-        }
-        button {
-            background: #6366f1;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 5px;
-        }
-        button:hover {
-            background: #4f46e5;
-        }
-        .status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .status.pass {
-            background: #4caf50;
-            color: white;
-        }
-        .status.fail {
-            background: #f44336;
-            color: white;
-        }
-        .status.pending {
-            background: #ff9800;
-            color: white;
-        }
-        .console-output {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            margin-top: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .console-output .log {
-            color: #4ec9b0;
-        }
-        .console-output .error {
-            color: #f48771;
-        }
-        .console-output .success {
-            color: #b5cea8;
-        }
-        .test-form {
-            padding: 20px;
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        .test-form input {
-            padding: 10px;
-            width: 250px;
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      h1 {
+        color: #333;
+      }
+      .test-section {
+        background: white;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .test-case {
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #ccc;
+        background: #f9f9f9;
+      }
+      .test-case.pass {
+        border-left-color: #4caf50;
+        background: #f1f8f1;
+      }
+      .test-case.fail {
+        border-left-color: #f44336;
+        background: #fef1f1;
+      }
+      .test-case.pending {
+        border-left-color: #ff9800;
+        background: #fff8f1;
+      }
+      .test-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .test-result {
+        font-size: 14px;
+        color: #666;
+      }
+      button {
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 5px;
+      }
+      button:hover {
+        background: #4f46e5;
+      }
+      .status {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .status.pass {
+        background: #4caf50;
+        color: white;
+      }
+      .status.fail {
+        background: #f44336;
+        color: white;
+      }
+      .status.pending {
+        background: #ff9800;
+        color: white;
+      }
+      .console-output {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 15px;
+        border-radius: 6px;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        margin-top: 10px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .console-output .log {
+        color: #4ec9b0;
+      }
+      .console-output .error {
+        color: #f48771;
+      }
+      .console-output .success {
+        color: #b5cea8;
+      }
+      .test-form {
+        padding: 20px;
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      .test-form input {
+        padding: 10px;
+        width: 250px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🧪 F001: Analytics Integration Test Suite</h1>
     <p><strong>Test Date:</strong> <span id="testDate"></span></p>
     <p><strong>Environment:</strong> <span id="environment"></span></p>
 
     <div class="test-section">
-        <h2>Automated Tests</h2>
-        <button onclick="runAllTests()">Run All Tests</button>
-        <button onclick="clearResults()">Clear Results</button>
+      <h2>Automated Tests</h2>
+      <button onclick="runAllTests()">Run All Tests</button>
+      <button onclick="clearResults()">Clear Results</button>
 
-        <div id="test-results"></div>
+      <div id="test-results"></div>
 
-        <div id="console-output" class="console-output" style="display: none;">
-            <div id="console-content"></div>
-        </div>
+      <div id="console-output" class="console-output" style="display: none">
+        <div id="console-content"></div>
+      </div>
     </div>
 
     <div class="test-section">
-        <h2>Manual Test: Form Submission</h2>
-        <p>Test the email signup form and verify Plausible event tracking.</p>
+      <h2>Manual Test: Form Submission</h2>
+      <p>Test the email signup form and verify Plausible event tracking.</p>
 
-        <div class="test-form">
-            <form id="testForm" data-location="test-page">
-                <input type="email" placeholder="test@example.com" required>
-                <button type="submit">Submit Test Form</button>
-            </form>
-            <p style="margin-top: 10px; font-size: 14px; color: #666;">
-                After submitting, check the browser console and Plausible dashboard for the "Email Signup" event.
-            </p>
-        </div>
+      <div class="test-form">
+        <form id="testForm" data-location="test-page">
+          <input type="email" placeholder="test@example.com" required />
+          <button type="submit">Submit Test Form</button>
+        </form>
+        <p style="margin-top: 10px; font-size: 14px; color: #666">
+          After submitting, check the browser console and Plausible dashboard
+          for the "Email Signup" event.
+        </p>
+      </div>
     </div>
 
     <div class="test-section">
-        <h2>Manual Verification Checklist</h2>
-        <div id="manual-checklist"></div>
+      <h2>Manual Verification Checklist</h2>
+      <div id="manual-checklist"></div>
     </div>
 
     <script>
-        // Set test date and environment
-        document.getElementById('testDate').textContent = new Date().toLocaleString();
-        document.getElementById('environment').textContent = window.location.hostname;
+      // Set test date and environment
+      document.getElementById("testDate").textContent =
+        new Date().toLocaleString();
+      document.getElementById("environment").textContent =
+        window.location.hostname;
 
-        // Console logging helper
-        function log(message, type = 'log') {
-            const consoleOutput = document.getElementById('console-output');
-            const consoleContent = document.getElementById('console-content');
-            consoleOutput.style.display = 'block';
+      // Console logging helper
+      function log(message, type = "log") {
+        const consoleOutput = document.getElementById("console-output");
+        const consoleContent = document.getElementById("console-content");
+        consoleOutput.style.display = "block";
 
-            const logEntry = document.createElement('div');
-            logEntry.className = type;
-            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-            consoleContent.appendChild(logEntry);
-            consoleContent.scrollTop = consoleContent.scrollHeight;
-        }
+        const logEntry = document.createElement("div");
+        logEntry.className = type;
+        logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        consoleContent.appendChild(logEntry);
+        consoleContent.scrollTop = consoleContent.scrollHeight;
+      }
 
-        // Test suite
-        const tests = [
-            {
-                name: 'REQ-001: Plausible Script Loaded',
-                description: 'Verify that the Plausible analytics script is loaded and accessible',
-                test: () => {
-                    return typeof window.plausible === 'function';
-                }
-            },
-            {
-                name: 'REQ-002: Plausible Script Source',
-                description: 'Verify Plausible script tag exists in the document',
-                test: () => {
-                    const scripts = Array.from(document.querySelectorAll('script'));
-                    return scripts.some(script => script.src.includes('plausible.io'));
-                }
-            },
-            {
-                name: 'REQ-003: Form Elements Exist',
-                description: 'Verify email forms exist on the page',
-                test: () => {
-                    const forms = document.querySelectorAll('form');
-                    return forms.length > 0;
-                }
-            },
-            {
-                name: 'REQ-004: Forms Have Location Attribute',
-                description: 'Verify forms have data-location attribute for tracking',
-                test: () => {
-                    const forms = document.querySelectorAll('form');
-                    if (forms.length === 0) return false;
+      // Test suite
+      const tests = [
+        {
+          name: "REQ-001: Plausible Script Loaded",
+          description:
+            "Verify that the Plausible analytics script is loaded and accessible",
+          test: () => {
+            return typeof window.plausible === "function";
+          },
+        },
+        {
+          name: "REQ-002: Plausible Script Source",
+          description: "Verify Plausible script tag exists in the document",
+          test: () => {
+            const scripts = Array.from(document.querySelectorAll("script"));
+            return scripts.some((script) =>
+              script.src.includes("plausible.io"),
+            );
+          },
+        },
+        {
+          name: "REQ-003: Form Elements Exist",
+          description: "Verify email forms exist on the page",
+          test: () => {
+            const forms = document.querySelectorAll("form");
+            return forms.length > 0;
+          },
+        },
+        {
+          name: "REQ-004: Forms Have Location Attribute",
+          description: "Verify forms have data-location attribute for tracking",
+          test: () => {
+            const forms = document.querySelectorAll("form");
+            if (forms.length === 0) return false;
 
-                    // Check that at least one form has data-location
-                    return Array.from(forms).some(form => form.dataset.location);
-                }
-            },
-            {
-                name: 'REQ-005: Plausible Event Function Works',
-                description: 'Test that plausible event tracking function can be called',
-                test: () => {
-                    try {
-                        // Test that we can call plausible without errors
-                        if (typeof window.plausible === 'function') {
-                            // Mock event call (won't send to server in test)
-                            window.plausible('Test Event', { props: { test: true } });
-                            return true;
-                        }
-                        return false;
-                    } catch (error) {
-                        log(`Error calling plausible: ${error.message}`, 'error');
-                        return false;
-                    }
-                }
-            },
-            {
-                name: 'REQ-006: No CSP Violations',
-                description: 'Verify no Content Security Policy violations in console',
-                test: () => {
-                    // This is a manual check - automated CSP detection is complex
-                    // Instruct user to check console
-                    return 'manual';
-                }
-            },
-            {
-                name: 'REQ-007: IntersectionObserver Support',
-                description: 'Verify browser supports IntersectionObserver for form visibility tracking',
-                test: () => {
-                    return 'IntersectionObserver' in window;
-                }
+            // Check that at least one form has data-location
+            return Array.from(forms).some((form) => form.dataset.location);
+          },
+        },
+        {
+          name: "REQ-005: Plausible Event Function Works",
+          description:
+            "Test that plausible event tracking function can be called",
+          test: () => {
+            try {
+              // Test that we can call plausible without errors
+              if (typeof window.plausible === "function") {
+                // Mock event call (won't send to server in test)
+                window.plausible("Test Event", { props: { test: true } });
+                return true;
+              }
+              return false;
+            } catch (error) {
+              log(`Error calling plausible: ${error.message}`, "error");
+              return false;
             }
-        ];
+          },
+        },
+        {
+          name: "REQ-006: No CSP Violations",
+          description:
+            "Verify no Content Security Policy violations in console",
+          test: () => {
+            // This is a manual check - automated CSP detection is complex
+            // Instruct user to check console
+            return "manual";
+          },
+        },
+        {
+          name: "REQ-007: IntersectionObserver Support",
+          description:
+            "Verify browser supports IntersectionObserver for form visibility tracking",
+          test: () => {
+            return "IntersectionObserver" in window;
+          },
+        },
+      ];
 
-        // Run all automated tests
-        function runAllTests() {
-            const resultsDiv = document.getElementById('test-results');
-            resultsDiv.innerHTML = '';
-            log('Starting test suite...', 'log');
+      // Run all automated tests
+      function runAllTests() {
+        const resultsDiv = document.getElementById("test-results");
+        resultsDiv.innerHTML = "";
+        log("Starting test suite...", "log");
 
-            let passed = 0;
-            let failed = 0;
-            let manual = 0;
+        let passed = 0;
+        let failed = 0;
+        let manual = 0;
 
-            tests.forEach((testCase, index) => {
-                const testDiv = document.createElement('div');
-                testDiv.className = 'test-case pending';
+        tests.forEach((testCase, index) => {
+          const testDiv = document.createElement("div");
+          testDiv.className = "test-case pending";
 
-                const result = testCase.test();
-                let status, statusClass;
+          const result = testCase.test();
+          let status, statusClass;
 
-                if (result === 'manual') {
-                    status = 'Manual Check Required';
-                    statusClass = 'pending';
-                    manual++;
-                } else if (result === true) {
-                    status = 'Pass';
-                    statusClass = 'pass';
-                    passed++;
-                    log(`✓ ${testCase.name}`, 'success');
-                } else {
-                    status = 'Fail';
-                    statusClass = 'fail';
-                    failed++;
-                    log(`✗ ${testCase.name}`, 'error');
-                }
+          if (result === "manual") {
+            status = "Manual Check Required";
+            statusClass = "pending";
+            manual++;
+          } else if (result === true) {
+            status = "Pass";
+            statusClass = "pass";
+            passed++;
+            log(`✓ ${testCase.name}`, "success");
+          } else {
+            status = "Fail";
+            statusClass = "fail";
+            failed++;
+            log(`✗ ${testCase.name}`, "error");
+          }
 
-                testDiv.className = `test-case ${statusClass}`;
-                testDiv.innerHTML = `
+          testDiv.className = `test-case ${statusClass}`;
+          testDiv.innerHTML = `
                     <div class="test-title">
                         Test ${index + 1}: ${testCase.name}
                         <span class="status ${statusClass}">${status}</span>
@@ -285,107 +294,124 @@
                     <div class="test-result">${testCase.description}</div>
                 `;
 
-                resultsDiv.appendChild(testDiv);
-            });
+          resultsDiv.appendChild(testDiv);
+        });
 
-            // Summary
-            log(`\nTest Summary: ${passed} passed, ${failed} failed, ${manual} manual checks`, 'log');
+        // Summary
+        log(
+          `\nTest Summary: ${passed} passed, ${failed} failed, ${manual} manual checks`,
+          "log",
+        );
 
-            if (failed === 0) {
-                log('✓ All automated tests passed!', 'success');
-            } else {
-                log(`✗ ${failed} test(s) failed`, 'error');
-            }
+        if (failed === 0) {
+          log("✓ All automated tests passed!", "success");
+        } else {
+          log(`✗ ${failed} test(s) failed`, "error");
         }
+      }
 
-        // Clear results
-        function clearResults() {
-            document.getElementById('test-results').innerHTML = '';
-            document.getElementById('console-content').innerHTML = '';
-            document.getElementById('console-output').style.display = 'none';
-        }
+      // Clear results
+      function clearResults() {
+        document.getElementById("test-results").innerHTML = "";
+        document.getElementById("console-content").innerHTML = "";
+        document.getElementById("console-output").style.display = "none";
+      }
 
-        // Manual checklist
-        const manualChecklist = [
-            {
-                task: 'Open browser developer tools (F12) → Console tab',
-                instruction: 'Verify no JavaScript errors appear'
-            },
-            {
-                task: 'Check for CSP violations',
-                instruction: 'Look for "Content Security Policy" errors in console - there should be none'
-            },
-            {
-                task: 'Verify Plausible script loads',
-                instruction: 'Open Network tab → Filter for "plausible.io" → Verify script loaded (Status 200)'
-            },
-            {
-                task: 'Test form submission',
-                instruction: 'Fill out test form above → Submit → Check console for "Email Signup" event log'
-            },
-            {
-                task: 'Verify Plausible dashboard',
-                instruction: 'Open https://plausible.io/getstorytime.vercel.app → Wait 60 seconds → Verify pageview appears'
-            },
-            {
-                task: 'Test form visibility tracking',
-                instruction: 'Scroll forms in/out of view → Check console for "Form Viewed" events'
-            },
-            {
-                task: 'Test ad blocker scenario',
-                instruction: 'Enable ad blocker → Reload page → Verify site still works (no errors)'
-            },
-            {
-                task: 'Lighthouse performance test',
-                instruction: 'Run Chrome Lighthouse audit → Verify Performance score is 90+'
-            }
-        ];
+      // Manual checklist
+      const manualChecklist = [
+        {
+          task: "Open browser developer tools (F12) → Console tab",
+          instruction: "Verify no JavaScript errors appear",
+        },
+        {
+          task: "Check for CSP violations",
+          instruction:
+            'Look for "Content Security Policy" errors in console - there should be none',
+        },
+        {
+          task: "Verify Plausible script loads",
+          instruction:
+            'Open Network tab → Filter for "plausible.io" → Verify script loaded (Status 200)',
+        },
+        {
+          task: "Test form submission",
+          instruction:
+            'Fill out test form above → Submit → Check console for "Email Signup" event log',
+        },
+        {
+          task: "Verify Plausible dashboard",
+          instruction:
+            "Open https://plausible.io/getstorytime.vercel.app → Wait 60 seconds → Verify pageview appears",
+        },
+        {
+          task: "Test form visibility tracking",
+          instruction:
+            'Scroll forms in/out of view → Check console for "Form Viewed" events',
+        },
+        {
+          task: "Test ad blocker scenario",
+          instruction:
+            "Enable ad blocker → Reload page → Verify site still works (no errors)",
+        },
+        {
+          task: "Lighthouse performance test",
+          instruction:
+            "Run Chrome Lighthouse audit → Verify Performance score is 90+",
+        },
+      ];
 
-        const checklistDiv = document.getElementById('manual-checklist');
-        manualChecklist.forEach((item, index) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'test-case';
-            itemDiv.innerHTML = `
+      const checklistDiv = document.getElementById("manual-checklist");
+      manualChecklist.forEach((item, index) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "test-case";
+        itemDiv.innerHTML = `
                 <div class="test-title">Manual Check ${index + 1}: ${item.task}</div>
                 <div class="test-result">${item.instruction}</div>
             `;
-            checklistDiv.appendChild(itemDiv);
-        });
+        checklistDiv.appendChild(itemDiv);
+      });
 
-        // Handle test form submission
-        document.getElementById('testForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = e.target.querySelector('input[type="email"]').value;
-            const location = e.target.dataset.location || 'unknown';
+      // Handle test form submission
+      document
+        .getElementById("testForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = e.target.querySelector('input[type="email"]').value;
+          const location = e.target.dataset.location || "unknown";
 
-            log(`Form submitted: ${email} from location: ${location}`, 'log');
+          log(`Form submitted: ${email} from location: ${location}`, "log");
 
-            // Track email signup event in Plausible
-            if (window.plausible) {
-                try {
-                    plausible('Email Signup', {
-                        props: {
-                            location: location
-                        }
-                    });
-                    log('✓ Plausible "Email Signup" event fired successfully', 'success');
-                } catch (error) {
-                    log(`✗ Error firing Plausible event: ${error.message}`, 'error');
-                }
-            } else {
-                log('✗ Plausible not available - event not tracked', 'error');
+          // Track email signup event in Plausible
+          if (window.plausible) {
+            try {
+              plausible("Email Signup", {
+                props: {
+                  location: location,
+                },
+              });
+              log(
+                '✓ Plausible "Email Signup" event fired successfully',
+                "success",
+              );
+            } catch (error) {
+              log(`✗ Error firing Plausible event: ${error.message}`, "error");
             }
+          } else {
+            log("✗ Plausible not available - event not tracked", "error");
+          }
 
-            alert(`Test form submitted: ${email}\n\nCheck the console output below and the Plausible dashboard.`);
-            e.target.reset();
+          alert(
+            `Test form submitted: ${email}\n\nCheck the console output below and the Plausible dashboard.`,
+          );
+          e.target.reset();
         });
 
-        // Auto-run tests on page load
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                log('Page loaded. Ready to run tests.', 'log');
-            }, 500);
-        });
+      // Auto-run tests on page load
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          log("Page loaded. Ready to run tests.", "log");
+        }, 500);
+      });
     </script>
-</body>
+  </body>
 </html>
