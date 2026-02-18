@@ -5,6 +5,7 @@
 # Vercel provides native Git integration with automatic deployments on push to master
 #
 # Active Workflow: quality-checks.yml (runs quality checks only, no deployment)
+# Netlify bot PR/commit comments are deactivated with this workflow.
 #
 # This file is preserved for reference. To restore Netlify deployment, rename this file
 # and restore netlify.toml from netlify.toml.backup
@@ -169,9 +170,9 @@ on:
 #           production-deploy: ${{ startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.deploy_type == 'production') }}
 #           github-token: ${{ secrets.GITHUB_TOKEN }}
 #           deploy-message: "Deploy from GitHub Actions - ${{ github.event.head_commit.message }}"
-#           enable-pull-request-comment: true
-#           enable-commit-comment: true
-#           overwrites-pull-request-comment: true
+#           enable-pull-request-comment: false  # DEPRECATED: netlifybot disabled
+#           enable-commit-comment: false  # DEPRECATED: netlifybot disabled
+#           overwrites-pull-request-comment: false  # DEPRECATED: netlifybot disabled
 #         env:
 #           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 #           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
