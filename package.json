@@ -9,7 +9,8 @@
     "lighthouse": "lighthouse https://getstorytime.com --view",
     "lighthouse:local": "lighthouse http://localhost:8000 --view",
     "format:check": "prettier --check experimental/landing-pages/*.html",
-    "format:fix": "prettier --write experimental/landing-pages/*.html"
+    "format:fix": "prettier --write experimental/landing-pages/*.html",
+    "lint:docs-active": "bash -lc \"if rg -n 'Netlify' README.md QUICKSTART.md; then echo 'Outdated Netlify references found in active docs'; exit 1; fi\""
   },
   "devDependencies": {
     "html-validate": "^8.9.0",

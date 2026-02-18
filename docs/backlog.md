@@ -17,9 +17,12 @@
 >
 > **Management Guide:** See `.claude/skills/backlog-management.md`
 
+> **Sync Cadence:** Weekly (or after major merges), reconcile status fields in this document/PRDs with GitHub Issues.
+>
+
 ---
 
-**Last Updated:** 2026-01-25
+**Last Updated:** 2026-02-18
 **Current Phase:** Phase 1 - Landing Page Validation
 **Goal:** 100 email signups in 3 weeks
 
