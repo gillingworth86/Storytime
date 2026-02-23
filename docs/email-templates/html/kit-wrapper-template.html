@@ -1,0 +1,245 @@
+<!--
+  Storytime Email Template for Kit
+
+  This is a WRAPPER TEMPLATE for Kit's visual email editor.
+  Use this in: Kit Dashboard → Settings → Email templates → Create new template
+
+  The {{ message_content }} variable will be replaced with content you write
+  in Kit's visual editor when composing emails.
+
+  For COMPLETE standalone emails (confirmation, sequences), see the
+  numbered HTML files which should be used in "Custom HTML" mode.
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+    <title>Storytime</title>
+
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+
+    <style>
+        /* Reset */
+        body, table, td, p, a, li, blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        table, td {
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            max-width: 100%;
+        }
+
+        /* Base */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            background-color: #0f1419;
+        }
+
+        /* Message content styling */
+        .message-content {
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        .message-content div {
+            padding-bottom: 10px;
+        }
+
+        .message-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: Georgia, 'Times New Roman', serif;
+            color: #fef3c7;
+            margin: 0 0 16px 0;
+        }
+
+        h1 { font-size: 32px; }
+        h2 { font-size: 24px; }
+        h3 { font-size: 18px; }
+
+        p, li, ul, ol, div {
+            font-size: 16px;
+            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #d1d5db;
+        }
+
+        p *, li * {
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+        }
+
+        p, ul, ol {
+            margin-bottom: 1em;
+        }
+
+        /* Blockquote - Story excerpt style */
+        blockquote {
+            border-left: 4px solid #fbbf24;
+            margin: 20px 0;
+            padding: 20px 24px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #f9fafb;
+            font-style: italic;
+            font-family: Georgia, 'Times New Roman', serif;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 0 12px 12px 0;
+        }
+
+        /* Links */
+        a {
+            text-decoration: none;
+            color: #fbbf24;
+        }
+
+        a:hover {
+            color: #f59e0b;
+            text-decoration: underline;
+        }
+
+        /* Buttons */
+        .button {
+            border: none;
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #0f1419 !important;
+            padding: 14px 28px;
+            display: inline-block;
+            margin: 10px 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            color: #0f1419 !important;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid rgba(251, 191, 36, 0.3);
+            padding: 24px 0;
+            margin-top: 32px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #6b7280;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #6b7280;
+        }
+
+        .footer a:hover {
+            color: #9ca3af;
+        }
+
+        /* Mobile */
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                padding: 16px !important;
+            }
+            .content {
+                padding: 24px 16px !important;
+            }
+        }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0f1419;">
+    <!-- Email wrapper - solid fallback for clients that don't support gradients -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #0f1419;">
+        <tr>
+            <td align="center" style="padding: 40px 16px; background-color: #1a1f3a;">
+
+                <!--[if mso]>
+                <center>
+                <table><tr><td width="600">
+                <![endif]-->
+
+                <!-- Main container -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" class="container" style="max-width: 600px; width: 100%;">
+
+                    <!-- Header with logo -->
+                    <tr>
+                        <td align="center" style="padding-bottom: 32px;">
+                            <h1 style="font-family: Georgia, 'Times New Roman', serif; font-size: 32px; font-weight: 700; margin: 0; color: #fef3c7;">
+                                Storytime
+                            </h1>
+                        </td>
+                    </tr>
+
+                    <!-- Email content card -->
+                    <tr>
+                        <td class="content" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 24px; padding: 40px 32px;">
+
+                            <!-- Kit message content variable - REQUIRED -->
+                            <div class="message-content">
+                                {{ message_content }}
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer - REQUIRED for compliance -->
+                    <tr>
+                        <td style="padding: 32px 16px; text-align: center;">
+                            <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; color: #9ca3af; margin: 0 0 16px 0;">
+                                Made with love by parents, for parents
+                            </p>
+                            <div class="footer" style="border-top: none; padding: 0; margin: 0;">
+                                <a href="{{ unsubscribe_url }}" style="color: #6b7280;">Unsubscribe</a> |
+                                <a href="{{ subscriber_preferences_url }}" style="color: #6b7280;">Update your profile</a> |
+                                <a href="https://getstorytime.vercel.app" style="color: #6b7280;">Visit website</a>
+                            </div>
+                            <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; color: #4b5563; margin: 16px 0 0 0;">
+                                {{ address }}
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <!--[if mso]>
+                </td></tr></table>
+                </center>
+                <![endif]-->
+
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -3,80 +3,67 @@
 This directory contains email templates for the Storytime welcome sequence.
 
 **PRD Reference:** `docs/prds/F005-email-welcome-sequence.md`
-**GitHub Issue:** #29
+**GitHub Issue:** #18 (with sub-issues #29, #30)
+**Email Platform:** Kit (formerly ConvertKit)
 
 ---
+
+## Directory Structure
+
+```
+email-templates/
+├── README.md                    # This file
+├── 01-confirmation-welcome.md   # Markdown content - confirmation email
+├── 02-vision.md                 # Markdown content - Day 2
+├── 03-sneak-peek.md             # Markdown content - Day 5
+├── 04-engagement.md             # Markdown content - Day 10
+└── html/
+    ├── README.md                # Kit setup instructions
+    ├── _base-template.html      # Base HTML template
+    ├── 01-confirmation-welcome.html
+    ├── 02-vision.html
+    ├── 03-sneak-peek.html
+    └── 04-engagement.html
+```
 
 ## Quick Start
 
-### Step 1: Configure Confirmation/Welcome Email (Automatic)
+### For Kit Setup (HTML Templates)
 
-This email is sent automatically by Kit when someone signs up.
+See `html/README.md` for detailed Kit configuration instructions.
 
-1. Log into [Kit](https://app.kit.com/)
-2. Go to **Settings** → **Emails** → **Confirmation email**
-3. Enable **"Custom confirmation email"**
-4. Copy content from `01-confirmation-welcome.md`
-5. **CRITICAL:** Ensure `{{ subscriber.confirmation_url }}` is in the confirm button
-6. Save and send a test email
+**Quick steps:**
+1. Go to Kit Dashboard → Settings → Email → Confirmation email
+2. Paste `html/01-confirmation-welcome.html` (ensure `{{ confirmation_url }}` is present)
+3. Create a new Sequence with emails #2, #3, #4
+4. Connect sequence to your signup form
 
-### Step 2: Create Follow-up Email Templates (Manual Sending)
+### Template Overview
 
-These emails are sent manually based on days since confirmation.
-
-| Email | File | When to Send |
-|-------|------|--------------|
-| Vision | `02-vision.md` | Day 2 after confirmation |
-| Sneak Peek | `03-sneak-peek.md` | Day 5 after confirmation |
-| Engagement | `04-engagement.md` | Day 10 after confirmation |
-
-To save as drafts in Kit:
-1. Go to **Emails** → **New email**
-2. Copy subject and content from template file
-3. Save as draft (don't send yet)
-4. Repeat for all 3 templates
+| Email | File | Timing | Subject Line |
+|-------|------|--------|--------------|
+| Confirmation/Welcome | `01-*` | Immediate | Confirm your spot in the Storytime universe |
+| Vision | `02-*` | Day 2 | Why I'm building Storytime |
+| Sneak Peek | `03-*` | Day 5 | How Storytime remembers (sneak peek inside) |
+| Engagement | `04-*` | Day 10 | Quick question (I'd love your input) |
 
 ---
 
-## Daily Manual Process (Phase A)
+## File Types
 
-**Time required:** 5-10 minutes/day
+### Markdown Files (*.md)
+- **Purpose:** Human-readable content for review and editing
+- **Use:** Edit these to update email copy
+- **Format:** Plain text with formatting hints
 
-1. **Check Kit dashboard** for newly confirmed subscribers
-2. **Identify which email to send** based on confirmation date:
-   - Day 0-1: They just got the confirmation email
-   - Day 2: Send Vision email
-   - Day 5: Send Sneak Peek email
-   - Day 10: Send Engagement email
-3. **Send the appropriate email** via Kit
-4. **Log in tracking spreadsheet** (see template below)
-
----
-
-## Tracking Spreadsheet Template
-
-Create a Google Sheet with these columns:
-
-| Subscriber Email | Confirmed Date | Email 1 (Welcome) | Email 2 (Vision) | Email 3 (Sneak Peek) | Email 4 (Engagement) | Notes |
-|------------------|----------------|-------------------|------------------|----------------------|----------------------|-------|
-| user@example.com | 2026-01-25 | ✅ Auto | ⏳ 01-27 | ⏳ 01-30 | ⏳ 02-04 | |
-
-**Legend:**
-- ✅ = Sent (with date)
-- ⏳ = Scheduled (with target date)
-- ❌ = Unsubscribed
-- 📩 = Replied (add to VIP list)
-
----
-
-## Template Files
-
-| File | Purpose |
-|------|---------|
-| `01-confirmation-welcome.md` | Automatic confirmation + welcome + story excerpt |
-| `02-vision.md` | Day 2 - Founder story, build emotional connection |
-| `03-sneak-peek.md` | Day 5 - Feature preview, generate excitement |
-| `04-engagement.md` | Day 10 - Request feedback, identify engaged users |
+### HTML Files (html/*.html)
+- **Purpose:** Production-ready templates for Kit
+- **Use:** Copy/paste directly into Kit's HTML editor
+- **Features:**
+  - Matches Storytime landing page design
+  - Mobile responsive
+  - Email client compatible (Outlook, Gmail, Apple Mail)
+  - Kit template variables included
 
 ---
 
@@ -94,25 +81,34 @@ Create a Google Sheet with these columns:
 
 ## Kit Configuration Checklist
 
-- [ ] Custom confirmation email enabled
-- [ ] Confirmation email content added with `{{ subscriber.confirmation_url }}`
+- [ ] Custom confirmation email configured with HTML template
+- [ ] `{{ confirmation_url }}` verified in confirmation button
 - [ ] Reply-to set to monitored inbox
-- [ ] Test confirmation flow works end-to-end
-- [ ] Email #2, #3, #4 saved as drafts
-- [ ] Tracking spreadsheet created
+- [ ] Welcome sequence created with 3 emails (Day 2, 5, 10)
+- [ ] Sequence connected to signup form
+- [ ] Test emails sent and verified in multiple clients
+- [ ] Mobile rendering tested
 
 ---
 
-## Phase B: Automation (Future)
+## Updating Email Content
 
-When any of these trigger points are reached:
-- 100 signups achieved
-- Manual process taking >30 min/day
-- Missing sends due to human error
+### Workflow
 
-**Then:** Upgrade to Kit Creator ($29/mo) for automations.
+1. **Edit Markdown** - Update content in `*.md` files
+2. **Update HTML** - Apply changes to `html/*.html` files
+3. **Test locally** - Open HTML in browser to preview
+4. **Update Kit** - Paste new HTML into Kit dashboard
+5. **Send test** - Verify rendering in email clients
 
-See PRD Section 11 for automation setup instructions.
+### Design Elements
+
+The HTML templates include these branded elements:
+- **Gradient background:** Midnight → Twilight → Deep Purple
+- **Card layout:** Subtle glass-morphism effect
+- **Gold accents:** Buttons, highlights, borders
+- **Story excerpts:** Styled quote blocks
+- **Feature lists:** Emoji + text formatting
 
 ---
 
@@ -132,6 +128,21 @@ See PRD Section 11 for automation setup instructions.
 - Verify emails aren't landing in spam
 - Test different send times
 
+**Broken layout:**
+- Use the HTML templates (not Markdown)
+- Test in multiple email clients
+- Check Kit's preview feature
+
 ---
 
-**Last Updated:** 2026-01-25
+## Phase B: Automation
+
+Currently using Kit's built-in automation:
+- Confirmation email: Automatic on signup
+- Follow-up sequence: Automatic delays (Day 2, 5, 10)
+
+All automation is handled by Kit - no manual intervention required once configured.
+
+---
+
+**Last Updated:** 2026-01-28

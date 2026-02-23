@@ -2,7 +2,7 @@
 
 **Purpose:** Request feedback, deepen relationship, identify engaged subscribers
 **Timing:** Day 10 (after confirmation)
-**Send Method:** Manual via Kit dashboard
+**Send Method:** Automated via Kit sequence (Day 10)
 
 ---
 
@@ -81,14 +81,14 @@ P.S. - Everyone who replies gets added to our "VIP early access" list. You'll ge
 
 ---
 
-## Sending Instructions
+## Kit Setup Instructions
 
-1. Go to Kit → **Emails** → **New email**
-2. Copy the subject line and content above
-3. Set "Send to" = Subscribers who confirmed 10 days ago
-4. Preview and send
-5. Log in tracking spreadsheet
-6. **Important:** Track replies for VIP list
+1. Go to Kit → **Sequences** → Your welcome sequence
+2. Add email with **10-day delay** after confirmation
+3. Use `html/04-engagement.html` for styled version
+4. Preview and save
+5. Sequence handles sending automatically
+6. **Important:** Monitor replies for VIP list
 
 ## Target Metrics
 

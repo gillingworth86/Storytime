@@ -89,7 +89,7 @@ These sections provide the full implementation details that should replace the s
 ```javascript
 // Configuration object (to be added at top of script)
 const EMAIL_CONFIG = {
-    apiEndpoint: 'https://api.[tool].com/v1/subscribers', // Platform-specific
+    apiEndpoint: 'https://api.convertkit.com/v3/forms/{FORM_ID}/subscribe', // Kit endpoint (proxy required in browser)
     apiKey: 'YOUR_API_KEY_HERE', // Stored as environment variable or config
     timeout: 5000, // 5 second timeout
     retryAttempts: 2 // Retry failed requests twice
@@ -153,12 +153,12 @@ async function submitToEmailService(email, location) {
         const response = await fetch(EMAIL_CONFIG.apiEndpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${EMAIL_CONFIG.apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                api_key: EMAIL_CONFIG.apiKey,
                 email: email,
-                metadata: {
+                fields: {
                     signup_location: location,
                     signup_date: new Date().toISOString(),
                     signup_url: window.location.href,
@@ -226,12 +226,15 @@ function handleSubmissionError(error, messageContainer) {
         showMessage(messageContainer, 'error',
             'Connection timed out. Please check your internet and try again.');
     } else if (error instanceof ApiError) {
-        if (error.status === 409 || error.message.includes('already subscribed')) {
-            showMessage(messageContainer, 'success',
-                'You\'re already on the list! Check your email for confirmation.');
-        } else if (error.status === 400) {
+        if (error.status === 400 || error.status === 422) {
             showMessage(messageContainer, 'error',
                 'Invalid email address. Please check and try again.');
+        } else if (error.status === 401) {
+            showMessage(messageContainer, 'error',
+                'Subscription service misconfigured. Please try again later.');
+        } else if (error.status === 404) {
+            showMessage(messageContainer, 'error',
+                'Signup form unavailable. Please try again later.');
         } else {
             showMessage(messageContainer, 'error',
                 'Something went wrong. Please try again later.');
@@ -248,7 +251,7 @@ function handleSubmissionError(error, messageContainer) {
 // Custom error classes
 class ApiError extends Error {
     constructor(status, data) {
-        super(data.message || 'API request failed');
+        super(data.error || data.message || 'API request failed');
         this.status = status;
         this.data = data;
     }
@@ -331,6 +334,13 @@ Authorization: Bearer YOUR_API_KEY
 **Duplicate response (200 OK):**
 Kit returns 200 OK for duplicate emails, treating it as successful re-subscription.
 
+**Error response (400/422 Bad Request):**
+```json
+{
+  "error": "Email is invalid"
+}
+```
+
 **Error response (401 Unauthorized):**
 ```json
 {
@@ -406,6 +416,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${process.env.EMAIL_SERVICE_API_KEY}`
             },
             body: JSON.stringify({
+                api_key: process.env.EMAIL_SERVICE_API_KEY,
                 email,
                 fields: {
                     signup_location: location,
@@ -418,7 +429,7 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.error || 'API error');
+            throw new Error(data.error || data.message || 'API error');
         }
 
         return res.status(200).json({ success: true, data });
