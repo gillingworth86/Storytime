@@ -1,1 +1,498 @@
-{}
+{
+  "meta": {
+    "version": "0.1.0",
+    "status": "Layer 1 complete",
+    "principles": [
+      "Parsimony",
+      "Orthogonality within layers",
+      "Layer integrity",
+      "Directed causality with feedback",
+      "Observable at the boundary",
+      "Context independence",
+      "Value neutrality",
+      "Completeness over elegance"
+    ],
+    "analytical_modes": {
+      "first_response": "Primary causal direction only. Upward for expression, downward for diagnosis. Feedback edges inactive.",
+      "longitudinal": "Feedback edges active. Models development, pattern formation, trait change over time."
+    },
+    "layers": {
+      "1": "Drives",
+      "2": "States",
+      "3": "Traits",
+      "4": "Behaviours"
+    }
+  },
+  "layers": {
+    "1": {
+      "name": "Drives",
+      "description": "Universal, pre-conscious motivational forces. The why behind all behaviour. Context-independent and stable across time.",
+      "validity_criteria": [
+        "Universal - present in all humans regardless of culture, personality, or context",
+        "Motivational - creates directional pressure that moves behaviour",
+        "Stable - persistent across time and situation",
+        "Irreducible - cannot be decomposed into a combination of other drives",
+        "Pre-conscious - operates below deliberate reasoning",
+        "Social-emotional scope - biological drives only qualify where they have a direct, irreducible social-emotional mechanism not captured by other nodes"
+      ],
+      "exclusions": [
+        "Goals",
+        "Values",
+        "Emotions",
+        "Behaviours",
+        "Purely biological drives"
+      ],
+      "nodes": {
+        "BEL": {
+          "id": "BEL",
+          "name": "Belonging",
+          "description": "The need to be connected to and accepted by others.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "STA": {
+          "id": "STA",
+          "name": "Status",
+          "description": "The need to be regarded as valuable, capable, or superior relative to others.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "SAF": {
+          "id": "SAF",
+          "name": "Safety",
+          "description": "The need to avoid threat, harm, or loss across physical and social domains.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "AUT": {
+          "id": "AUT",
+          "name": "Autonomy",
+          "description": "The need to be the origin of one's own actions; to not be controlled.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "MEA": {
+          "id": "MEA",
+          "name": "Meaning",
+          "description": "The need for experience to cohere into something that matters beyond the immediate moment.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "CMP": {
+          "id": "CMP",
+          "name": "Competence",
+          "description": "The need to be effective, to master things, to not fail.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "REC": {
+          "id": "REC",
+          "name": "Recognition",
+          "description": "The need to be seen and acknowledged as an individual, distinct from status and belonging.",
+          "status": "confirmed",
+          "research_support": "moderate",
+          "flags": ["monitor in integration testing"]
+        },
+        "PLA": {
+          "id": "PLA",
+          "name": "Play",
+          "description": "The need to engage with experience in a non-instrumental, exploratory mode.",
+          "status": "confirmed",
+          "research_support": "strong"
+        },
+        "NOV": {
+          "id": "NOV",
+          "name": "Novelty",
+          "description": "The need for stimulation, engagement, and new experience.",
+          "status": "provisional",
+          "research_support": "moderate",
+          "flags": ["weakest irreducibility case", "monitor in integration testing"]
+        },
+        "TRN": {
+          "id": "TRN",
+          "name": "Transcendence",
+          "description": "The need to experience connection to something larger than the self.",
+          "status": "provisional",
+          "research_support": "moderate",
+          "flags": ["universality claim weakest in set", "monitor in integration testing"]
+        },
+        "CON": {
+          "id": "CON",
+          "name": "Contribution",
+          "description": "The need to benefit others; prosocial motivation distinct from belonging and meaning.",
+          "status": "confirmed",
+          "research_support": "moderate",
+          "flags": ["closest irreducibility call in set", "retest during integration"]
+        }
+      },
+      "edges": {
+        "intra_layer": [
+          {
+            "source": "BEL",
+            "target": "STA",
+            "relationship": "conflict",
+            "mechanism": "Belonging requires acceptance as part of the group; status requires differentiation within or above it.",
+            "conditional": false
+          },
+          {
+            "source": "BEL",
+            "target": "SAF",
+            "relationship": "complementarity",
+            "mechanism": "Social connection is a primary safety mechanism; isolation activates threat response.",
+            "conditional": false
+          },
+          {
+            "source": "BEL",
+            "target": "AUT",
+            "relationship": "conflict",
+            "mechanism": "Belonging pulls toward conformity and group coherence; autonomy pulls toward self-determination independent of the group.",
+            "conditional": false
+          },
+          {
+            "source": "BEL",
+            "target": "MEA",
+            "relationship": "complementarity",
+            "mechanism": "Shared meaning systems are a primary source of both simultaneously.",
+            "conditional": false
+          },
+          {
+            "source": "BEL",
+            "target": "REC",
+            "relationship": "conditional",
+            "mechanism": "Complementary within a group (being seen strengthens connection) but conflicting at the boundary (standing out risks exclusion).",
+            "conditional": true,
+            "condition": "Within-group vs group boundary context"
+          },
+          {
+            "source": "BEL",
+            "target": "PLA",
+            "relationship": "complementarity",
+            "mechanism": "Social play is a primary belonging mechanism.",
+            "conditional": false
+          },
+          {
+            "source": "BEL",
+            "target": "NOV",
+            "relationship": "conflict",
+            "mechanism": "Novelty introduces unpredictability that can threaten group stability; belonging favours familiarity.",
+            "conditional": false,
+            "notes": "mild"
+          },
+          {
+            "source": "BEL",
+            "target": "TRN",
+            "relationship": "complementarity",
+            "mechanism": "Collective transcendence (ritual, shared experience) satisfies both simultaneously.",
+            "conditional": false
+          },
+          {
+            "source": "BEL",
+            "target": "CON",
+            "relationship": "complementarity",
+            "mechanism": "Prosocial behaviour strengthens social bonds; mechanism overlaps but drives are distinct.",
+            "conditional": false
+          },
+          {
+            "source": "STA",
+            "target": "SAF",
+            "relationship": "complementarity",
+            "mechanism": "Higher status generates resources and social protection.",
+            "conditional": false
+          },
+          {
+            "source": "STA",
+            "target": "AUT",
+            "relationship": "conditional",
+            "mechanism": "Complementary at high status (rank confers freedom); conflicting at low status (hierarchy constrains).",
+            "conditional": true,
+            "condition": "Relative status level"
+          },
+          {
+            "source": "STA",
+            "target": "MEA",
+            "relationship": "conflict",
+            "mechanism": "Status is externally conferred and relative; meaning is internally constructed and non-comparative.",
+            "conditional": false,
+            "notes": "mild"
+          },
+          {
+            "source": "STA",
+            "target": "CMP",
+            "relationship": "complementarity",
+            "mechanism": "Competence is the primary legitimate status-acquisition mechanism.",
+            "conditional": false
+          },
+          {
+            "source": "STA",
+            "target": "REC",
+            "relationship": "complementarity",
+            "mechanism": "Both involve being valued; status is rank-based, recognition is witness-based, but they reinforce each other.",
+            "conditional": false
+          },
+          {
+            "source": "STA",
+            "target": "PLA",
+            "relationship": "conflict",
+            "mechanism": "Play is explicitly non-instrumental; status is inherently comparative and instrumental.",
+            "conditional": false
+          },
+          {
+            "source": "STA",
+            "target": "TRN",
+            "relationship": "conflict",
+            "mechanism": "Transcendence involves self-dissolution; status requires self-assertion and differentiation.",
+            "conditional": false,
+            "flags": ["logically supported, empirically under-tested"]
+          },
+          {
+            "source": "STA",
+            "target": "CON",
+            "relationship": "conditional",
+            "mechanism": "Public contribution generates status; private/anonymous contribution conflicts with status-seeking as a motivation.",
+            "conditional": true,
+            "condition": "Public vs anonymous contribution"
+          },
+          {
+            "source": "SAF",
+            "target": "AUT",
+            "relationship": "conflict",
+            "mechanism": "Autonomy involves tolerating risk and uncertainty; safety drives risk avoidance.",
+            "conditional": false
+          },
+          {
+            "source": "SAF",
+            "target": "MEA",
+            "relationship": "complementarity",
+            "mechanism": "Coherent meaning systems provide existential safety; meaninglessness activates threat response.",
+            "conditional": false
+          },
+          {
+            "source": "SAF",
+            "target": "CMP",
+            "relationship": "complementarity",
+            "mechanism": "Competence reduces vulnerability and increases predictability of outcomes.",
+            "conditional": false
+          },
+          {
+            "source": "SAF",
+            "target": "PLA",
+            "relationship": "conditional",
+            "mechanism": "Play requires a safe enough environment to operate (complementary as foundation) but safety drive at high intensity suppresses play.",
+            "conditional": true,
+            "condition": "Intensity of safety drive activation"
+          },
+          {
+            "source": "SAF",
+            "target": "NOV",
+            "relationship": "conflict",
+            "mechanism": "Novelty introduces unpredictability; safety requires predictability and control of environment.",
+            "conditional": false
+          },
+          {
+            "source": "SAF",
+            "target": "TRN",
+            "relationship": "conflict",
+            "mechanism": "Transcendence involves boundary dissolution and surrender of control, which activates safety threat.",
+            "conditional": false
+          },
+          {
+            "source": "SAF",
+            "target": "CON",
+            "relationship": "conflict",
+            "mechanism": "Contribution requires extending resources toward others, creating vulnerability; high safety drive suppresses generosity under scarcity.",
+            "conditional": false,
+            "notes": "mild"
+          },
+          {
+            "source": "AUT",
+            "target": "MEA",
+            "relationship": "complementarity",
+            "mechanism": "Self-authored meaning is a primary and durable meaning source.",
+            "conditional": false
+          },
+          {
+            "source": "AUT",
+            "target": "CMP",
+            "relationship": "complementarity",
+            "mechanism": "Competence enables autonomous action; without capability, autonomy is theoretical.",
+            "conditional": false
+          },
+          {
+            "source": "AUT",
+            "target": "REC",
+            "relationship": "conflict",
+            "mechanism": "Recognition requires others' validation, which introduces external dependency that constrains autonomy.",
+            "conditional": false,
+            "notes": "mild"
+          },
+          {
+            "source": "AUT",
+            "target": "PLA",
+            "relationship": "complementarity",
+            "mechanism": "Play is intrinsically self-directed and non-instrumental; autonomy is its enabling condition.",
+            "conditional": false
+          },
+          {
+            "source": "AUT",
+            "target": "NOV",
+            "relationship": "complementarity",
+            "mechanism": "Novelty-seeking is amplified by autonomy; constraint suppresses exploratory behaviour.",
+            "conditional": false
+          },
+          {
+            "source": "AUT",
+            "target": "TRN",
+            "relationship": "conflict",
+            "mechanism": "Transcendence involves surrendering self-determination; autonomy resists that surrender.",
+            "conditional": false
+          },
+          {
+            "source": "AUT",
+            "target": "CON",
+            "relationship": "complementarity",
+            "mechanism": "Self-directed contribution (chosen, not obligated) is autonomy-satisfying; coerced contribution frustrates both drives simultaneously.",
+            "conditional": false
+          },
+          {
+            "source": "MEA",
+            "target": "CMP",
+            "relationship": "complementarity",
+            "mechanism": "Mastery and efficacy are primary meaning-generating experiences.",
+            "conditional": false
+          },
+          {
+            "source": "MEA",
+            "target": "PLA",
+            "relationship": "conditional",
+            "mechanism": "Play can generate meaning through flow and engagement, but meaning requires coherence and play is explicitly non-goal-directed; conflict at the boundary.",
+            "conditional": true,
+            "condition": "Whether play produces integrable experience or pure process"
+          },
+          {
+            "source": "MEA",
+            "target": "NOV",
+            "relationship": "conflict",
+            "mechanism": "Novelty generates raw experience but meaning requires integration and coherence; too much novelty disrupts meaning-making.",
+            "conditional": false,
+            "notes": "mild"
+          },
+          {
+            "source": "MEA",
+            "target": "TRN",
+            "relationship": "complementarity",
+            "mechanism": "Transcendent experience is a primary meaning-generating event; the two are mutually reinforcing.",
+            "conditional": false
+          },
+          {
+            "source": "MEA",
+            "target": "CON",
+            "relationship": "complementarity",
+            "mechanism": "Contribution generates meaning as a feedback product; mutually reinforcing but contribution precedes meaning, not vice versa.",
+            "conditional": false,
+            "notes": "Directional: CON → MEA in first response mode"
+          },
+          {
+            "source": "CMP",
+            "target": "REC",
+            "relationship": "complementarity",
+            "mechanism": "Demonstrated competence generates recognition; recognition confirms competence.",
+            "conditional": false
+          },
+          {
+            "source": "CMP",
+            "target": "PLA",
+            "relationship": "complementarity",
+            "mechanism": "Play is a primary competence-development mechanism; mastery through exploration.",
+            "conditional": false
+          },
+          {
+            "source": "CMP",
+            "target": "NOV",
+            "relationship": "complementarity",
+            "mechanism": "Novelty challenges existing competence and drives development; the edge of capability is where both drives are most active.",
+            "conditional": false
+          },
+          {
+            "source": "CMP",
+            "target": "CON",
+            "relationship": "complementarity",
+            "mechanism": "Effective contribution requires and develops competence; the two co-activate in caregiving and mentorship contexts.",
+            "conditional": false
+          },
+          {
+            "source": "REC",
+            "target": "TRN",
+            "relationship": "conflict",
+            "mechanism": "Transcendence involves dissolution of individual self-boundary; recognition requires individual distinction to be maintained.",
+            "conditional": false
+          },
+          {
+            "source": "REC",
+            "target": "CON",
+            "relationship": "complementarity",
+            "mechanism": "Contribution is a primary recognition-generating mechanism; being witnessed as a benefactor satisfies both simultaneously.",
+            "conditional": false
+          },
+          {
+            "source": "PLA",
+            "target": "NOV",
+            "relationship": "complementarity",
+            "mechanism": "Play is the primary mode through which novelty is explored safely.",
+            "conditional": false
+          },
+          {
+            "source": "PLA",
+            "target": "TRN",
+            "relationship": "complementarity",
+            "mechanism": "Play at high intensity (flow states, collective play) is a reliable transcendence-generating mechanism.",
+            "conditional": false
+          },
+          {
+            "source": "NOV",
+            "target": "TRN",
+            "relationship": "complementarity",
+            "mechanism": "Intense novel experience is a consistent transcendence trigger.",
+            "conditional": false
+          }
+        ]
+      }
+    }
+  },
+  "discard_register": [
+    {
+      "candidate": "Fairness/Reciprocity",
+      "discarded_from": "Layer 1",
+      "reason": "Fails irreducibility - decomposes into Safety + Belonging",
+      "destination": "Layer 3: Traits",
+      "notes": "Fairness-orientation is a stable dispositional tendency varying between individuals"
+    },
+    {
+      "candidate": "Continuity/Legacy",
+      "discarded_from": "Layer 1",
+      "reason": "Fails irreducibility - decomposes into Meaning + time extension",
+      "destination": "Layer 2: States",
+      "notes": "Mortality salience as an acute state is the relevant Layer 2 construct"
+    },
+    {
+      "candidate": "Intimacy",
+      "discarded_from": "Layer 1",
+      "reason": "Fails irreducibility - decomposes into Belonging + Recognition at high intensity",
+      "destination": "Layer 4: Behaviours",
+      "notes": "Intimacy-seeking and intimacy-building are observable interpersonal behaviours"
+    },
+    {
+      "candidate": "Control",
+      "discarded_from": "Layer 1",
+      "reason": "Fails irreducibility - decomposes into Autonomy + Safety",
+      "destination": "Layer 3: Traits",
+      "notes": "Control-seeking as a stable dispositional tendency is a trait modulator"
+    },
+    {
+      "candidate": "Justice",
+      "discarded_from": "Layer 1",
+      "reason": "Fails irreducibility and scope - value not drive; collapses into fairness/reciprocity at interpersonal level",
+      "destination": "Layer 3: Traits",
+      "notes": "Justice-orientation as dispositional tendency belongs with fairness in traits"
+    }
+  ]
+}
