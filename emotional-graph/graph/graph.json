@@ -1,7 +1,7 @@
 {
   "meta": {
-    "version": "0.1.0",
-    "status": "Layer 1 complete",
+    "version": "0.2.0",
+    "status": "All layers complete. Inter-layer edges mapped. Integration testing pending.",
     "principles": [
       "Parsimony",
       "Orthogonality within layers",
@@ -21,478 +21,488 @@
       "2": "States",
       "3": "Traits",
       "4": "Behaviours"
+    },
+    "inter_layer_edge_types": {
+      "activates": "Drive to State. Sub-types: threat, deprivation, satisfaction, activation, exposure, violation, loss, existential_threat, chronic_violation.",
+      "sensitises": "Trait to State. Sub-types: lowers_threshold, raises_threshold, amplifies, dampens.",
+      "expresses_as": "State to Behaviour. Always trait-mediated. trait_condition field specifies the mediating trait configuration.",
+      "modulates": "Trait to Behaviour. Sub-types: amplifies, suppresses.",
+      "reinforces": "Behaviour to State. Feedback. Longitudinal mode only.",
+      "shapes": "State to Trait. Feedback. Longitudinal mode only. Requires chronic or repeated activation."
+    },
+    "node_counts": {
+      "drives": 11,
+      "states": 20,
+      "traits": 18,
+      "behaviours": 21
     }
   },
   "layers": {
     "1": {
       "name": "Drives",
       "description": "Universal, pre-conscious motivational forces. The why behind all behaviour. Context-independent and stable across time.",
-      "validity_criteria": [
-        "Universal - present in all humans regardless of culture, personality, or context",
-        "Motivational - creates directional pressure that moves behaviour",
-        "Stable - persistent across time and situation",
-        "Irreducible - cannot be decomposed into a combination of other drives",
-        "Pre-conscious - operates below deliberate reasoning",
-        "Social-emotional scope - biological drives only qualify where they have a direct, irreducible social-emotional mechanism not captured by other nodes"
-      ],
-      "exclusions": [
-        "Goals",
-        "Values",
-        "Emotions",
-        "Behaviours",
-        "Purely biological drives"
-      ],
+      "validity_criteria": ["Universal", "Motivational", "Stable", "Irreducible", "Pre-conscious", "Social-emotional scope"],
       "nodes": {
-        "BEL": {
-          "id": "BEL",
-          "name": "Belonging",
-          "description": "The need to be connected to and accepted by others.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "STA": {
-          "id": "STA",
-          "name": "Status",
-          "description": "The need to be regarded as valuable, capable, or superior relative to others.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "SAF": {
-          "id": "SAF",
-          "name": "Safety",
-          "description": "The need to avoid threat, harm, or loss across physical and social domains.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "AUT": {
-          "id": "AUT",
-          "name": "Autonomy",
-          "description": "The need to be the origin of one's own actions; to not be controlled.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "MEA": {
-          "id": "MEA",
-          "name": "Meaning",
-          "description": "The need for experience to cohere into something that matters beyond the immediate moment.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "CMP": {
-          "id": "CMP",
-          "name": "Competence",
-          "description": "The need to be effective, to master things, to not fail.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "REC": {
-          "id": "REC",
-          "name": "Recognition",
-          "description": "The need to be seen and acknowledged as an individual, distinct from status and belonging.",
-          "status": "confirmed",
-          "research_support": "moderate",
-          "flags": ["monitor in integration testing"]
-        },
-        "PLA": {
-          "id": "PLA",
-          "name": "Play",
-          "description": "The need to engage with experience in a non-instrumental, exploratory mode.",
-          "status": "confirmed",
-          "research_support": "strong"
-        },
-        "NOV": {
-          "id": "NOV",
-          "name": "Novelty",
-          "description": "The need for stimulation, engagement, and new experience.",
-          "status": "provisional",
-          "research_support": "moderate",
-          "flags": ["weakest irreducibility case", "monitor in integration testing"]
-        },
-        "TRN": {
-          "id": "TRN",
-          "name": "Transcendence",
-          "description": "The need to experience connection to something larger than the self.",
-          "status": "provisional",
-          "research_support": "moderate",
-          "flags": ["universality claim weakest in set", "monitor in integration testing"]
-        },
-        "CON": {
-          "id": "CON",
-          "name": "Contribution",
-          "description": "The need to benefit others; prosocial motivation distinct from belonging and meaning.",
-          "status": "confirmed",
-          "research_support": "moderate",
-          "flags": ["closest irreducibility call in set", "retest during integration"]
-        }
+        "BEL": {"id": "BEL", "name": "Belonging", "description": "The need to be connected to and accepted by others.", "status": "confirmed", "research_support": "strong"},
+        "STA": {"id": "STA", "name": "Status", "description": "The need to be regarded as valuable, capable, or superior relative to others.", "status": "confirmed", "research_support": "strong"},
+        "SAF": {"id": "SAF", "name": "Safety", "description": "The need to avoid threat, harm, or loss across physical and social domains.", "status": "confirmed", "research_support": "strong"},
+        "AUT": {"id": "AUT", "name": "Autonomy", "description": "The need to be the origin of one's own actions; to not be controlled.", "status": "confirmed", "research_support": "strong"},
+        "MEA": {"id": "MEA", "name": "Meaning", "description": "The need for experience to cohere into something that matters beyond the immediate moment.", "status": "confirmed", "research_support": "strong"},
+        "CMP": {"id": "CMP", "name": "Competence", "description": "The need to be effective, to master things, to not fail.", "status": "confirmed", "research_support": "strong"},
+        "REC": {"id": "REC", "name": "Recognition", "description": "The need to be seen and acknowledged as an individual, distinct from status and belonging.", "status": "confirmed", "research_support": "moderate", "flags": ["monitor in integration testing"]},
+        "PLA": {"id": "PLA", "name": "Play", "description": "The need to engage with experience in a non-instrumental, exploratory mode.", "status": "confirmed", "research_support": "strong"},
+        "NOV": {"id": "NOV", "name": "Novelty", "description": "The need for stimulation, engagement, and new experience.", "status": "provisional", "research_support": "moderate", "flags": ["weakest irreducibility case"]},
+        "TRN": {"id": "TRN", "name": "Transcendence", "description": "The need to experience connection to something larger than the self.", "status": "provisional", "research_support": "moderate", "flags": ["universality claim weakest in set"]},
+        "CON": {"id": "CON", "name": "Contribution", "description": "The need to benefit others; prosocial motivation distinct from belonging and meaning.", "status": "confirmed", "research_support": "moderate", "flags": ["closest irreducibility call"]}
       },
       "edges": {
         "intra_layer": [
-          {
-            "source": "BEL",
-            "target": "STA",
-            "relationship": "conflict",
-            "mechanism": "Belonging requires acceptance as part of the group; status requires differentiation within or above it.",
-            "conditional": false
-          },
-          {
-            "source": "BEL",
-            "target": "SAF",
-            "relationship": "complementarity",
-            "mechanism": "Social connection is a primary safety mechanism; isolation activates threat response.",
-            "conditional": false
-          },
-          {
-            "source": "BEL",
-            "target": "AUT",
-            "relationship": "conflict",
-            "mechanism": "Belonging pulls toward conformity and group coherence; autonomy pulls toward self-determination independent of the group.",
-            "conditional": false
-          },
-          {
-            "source": "BEL",
-            "target": "MEA",
-            "relationship": "complementarity",
-            "mechanism": "Shared meaning systems are a primary source of both simultaneously.",
-            "conditional": false
-          },
-          {
-            "source": "BEL",
-            "target": "REC",
-            "relationship": "conditional",
-            "mechanism": "Complementary within a group (being seen strengthens connection) but conflicting at the boundary (standing out risks exclusion).",
-            "conditional": true,
-            "condition": "Within-group vs group boundary context"
-          },
-          {
-            "source": "BEL",
-            "target": "PLA",
-            "relationship": "complementarity",
-            "mechanism": "Social play is a primary belonging mechanism.",
-            "conditional": false
-          },
-          {
-            "source": "BEL",
-            "target": "NOV",
-            "relationship": "conflict",
-            "mechanism": "Novelty introduces unpredictability that can threaten group stability; belonging favours familiarity.",
-            "conditional": false,
-            "notes": "mild"
-          },
-          {
-            "source": "BEL",
-            "target": "TRN",
-            "relationship": "complementarity",
-            "mechanism": "Collective transcendence (ritual, shared experience) satisfies both simultaneously.",
-            "conditional": false
-          },
-          {
-            "source": "BEL",
-            "target": "CON",
-            "relationship": "complementarity",
-            "mechanism": "Prosocial behaviour strengthens social bonds; mechanism overlaps but drives are distinct.",
-            "conditional": false
-          },
-          {
-            "source": "STA",
-            "target": "SAF",
-            "relationship": "complementarity",
-            "mechanism": "Higher status generates resources and social protection.",
-            "conditional": false
-          },
-          {
-            "source": "STA",
-            "target": "AUT",
-            "relationship": "conditional",
-            "mechanism": "Complementary at high status (rank confers freedom); conflicting at low status (hierarchy constrains).",
-            "conditional": true,
-            "condition": "Relative status level"
-          },
-          {
-            "source": "STA",
-            "target": "MEA",
-            "relationship": "conflict",
-            "mechanism": "Status is externally conferred and relative; meaning is internally constructed and non-comparative.",
-            "conditional": false,
-            "notes": "mild"
-          },
-          {
-            "source": "STA",
-            "target": "CMP",
-            "relationship": "complementarity",
-            "mechanism": "Competence is the primary legitimate status-acquisition mechanism.",
-            "conditional": false
-          },
-          {
-            "source": "STA",
-            "target": "REC",
-            "relationship": "complementarity",
-            "mechanism": "Both involve being valued; status is rank-based, recognition is witness-based, but they reinforce each other.",
-            "conditional": false
-          },
-          {
-            "source": "STA",
-            "target": "PLA",
-            "relationship": "conflict",
-            "mechanism": "Play is explicitly non-instrumental; status is inherently comparative and instrumental.",
-            "conditional": false
-          },
-          {
-            "source": "STA",
-            "target": "TRN",
-            "relationship": "conflict",
-            "mechanism": "Transcendence involves self-dissolution; status requires self-assertion and differentiation.",
-            "conditional": false,
-            "flags": ["logically supported, empirically under-tested"]
-          },
-          {
-            "source": "STA",
-            "target": "CON",
-            "relationship": "conditional",
-            "mechanism": "Public contribution generates status; private/anonymous contribution conflicts with status-seeking as a motivation.",
-            "conditional": true,
-            "condition": "Public vs anonymous contribution"
-          },
-          {
-            "source": "SAF",
-            "target": "AUT",
-            "relationship": "conflict",
-            "mechanism": "Autonomy involves tolerating risk and uncertainty; safety drives risk avoidance.",
-            "conditional": false
-          },
-          {
-            "source": "SAF",
-            "target": "MEA",
-            "relationship": "complementarity",
-            "mechanism": "Coherent meaning systems provide existential safety; meaninglessness activates threat response.",
-            "conditional": false
-          },
-          {
-            "source": "SAF",
-            "target": "CMP",
-            "relationship": "complementarity",
-            "mechanism": "Competence reduces vulnerability and increases predictability of outcomes.",
-            "conditional": false
-          },
-          {
-            "source": "SAF",
-            "target": "PLA",
-            "relationship": "conditional",
-            "mechanism": "Play requires a safe enough environment to operate (complementary as foundation) but safety drive at high intensity suppresses play.",
-            "conditional": true,
-            "condition": "Intensity of safety drive activation"
-          },
-          {
-            "source": "SAF",
-            "target": "NOV",
-            "relationship": "conflict",
-            "mechanism": "Novelty introduces unpredictability; safety requires predictability and control of environment.",
-            "conditional": false
-          },
-          {
-            "source": "SAF",
-            "target": "TRN",
-            "relationship": "conflict",
-            "mechanism": "Transcendence involves boundary dissolution and surrender of control, which activates safety threat.",
-            "conditional": false
-          },
-          {
-            "source": "SAF",
-            "target": "CON",
-            "relationship": "conflict",
-            "mechanism": "Contribution requires extending resources toward others, creating vulnerability; high safety drive suppresses generosity under scarcity.",
-            "conditional": false,
-            "notes": "mild"
-          },
-          {
-            "source": "AUT",
-            "target": "MEA",
-            "relationship": "complementarity",
-            "mechanism": "Self-authored meaning is a primary and durable meaning source.",
-            "conditional": false
-          },
-          {
-            "source": "AUT",
-            "target": "CMP",
-            "relationship": "complementarity",
-            "mechanism": "Competence enables autonomous action; without capability, autonomy is theoretical.",
-            "conditional": false
-          },
-          {
-            "source": "AUT",
-            "target": "REC",
-            "relationship": "conflict",
-            "mechanism": "Recognition requires others' validation, which introduces external dependency that constrains autonomy.",
-            "conditional": false,
-            "notes": "mild"
-          },
-          {
-            "source": "AUT",
-            "target": "PLA",
-            "relationship": "complementarity",
-            "mechanism": "Play is intrinsically self-directed and non-instrumental; autonomy is its enabling condition.",
-            "conditional": false
-          },
-          {
-            "source": "AUT",
-            "target": "NOV",
-            "relationship": "complementarity",
-            "mechanism": "Novelty-seeking is amplified by autonomy; constraint suppresses exploratory behaviour.",
-            "conditional": false
-          },
-          {
-            "source": "AUT",
-            "target": "TRN",
-            "relationship": "conflict",
-            "mechanism": "Transcendence involves surrendering self-determination; autonomy resists that surrender.",
-            "conditional": false
-          },
-          {
-            "source": "AUT",
-            "target": "CON",
-            "relationship": "complementarity",
-            "mechanism": "Self-directed contribution (chosen, not obligated) is autonomy-satisfying; coerced contribution frustrates both drives simultaneously.",
-            "conditional": false
-          },
-          {
-            "source": "MEA",
-            "target": "CMP",
-            "relationship": "complementarity",
-            "mechanism": "Mastery and efficacy are primary meaning-generating experiences.",
-            "conditional": false
-          },
-          {
-            "source": "MEA",
-            "target": "PLA",
-            "relationship": "conditional",
-            "mechanism": "Play can generate meaning through flow and engagement, but meaning requires coherence and play is explicitly non-goal-directed; conflict at the boundary.",
-            "conditional": true,
-            "condition": "Whether play produces integrable experience or pure process"
-          },
-          {
-            "source": "MEA",
-            "target": "NOV",
-            "relationship": "conflict",
-            "mechanism": "Novelty generates raw experience but meaning requires integration and coherence; too much novelty disrupts meaning-making.",
-            "conditional": false,
-            "notes": "mild"
-          },
-          {
-            "source": "MEA",
-            "target": "TRN",
-            "relationship": "complementarity",
-            "mechanism": "Transcendent experience is a primary meaning-generating event; the two are mutually reinforcing.",
-            "conditional": false
-          },
-          {
-            "source": "MEA",
-            "target": "CON",
-            "relationship": "complementarity",
-            "mechanism": "Contribution generates meaning as a feedback product; mutually reinforcing but contribution precedes meaning, not vice versa.",
-            "conditional": false,
-            "notes": "Directional: CON → MEA in first response mode"
-          },
-          {
-            "source": "CMP",
-            "target": "REC",
-            "relationship": "complementarity",
-            "mechanism": "Demonstrated competence generates recognition; recognition confirms competence.",
-            "conditional": false
-          },
-          {
-            "source": "CMP",
-            "target": "PLA",
-            "relationship": "complementarity",
-            "mechanism": "Play is a primary competence-development mechanism; mastery through exploration.",
-            "conditional": false
-          },
-          {
-            "source": "CMP",
-            "target": "NOV",
-            "relationship": "complementarity",
-            "mechanism": "Novelty challenges existing competence and drives development; the edge of capability is where both drives are most active.",
-            "conditional": false
-          },
-          {
-            "source": "CMP",
-            "target": "CON",
-            "relationship": "complementarity",
-            "mechanism": "Effective contribution requires and develops competence; the two co-activate in caregiving and mentorship contexts.",
-            "conditional": false
-          },
-          {
-            "source": "REC",
-            "target": "TRN",
-            "relationship": "conflict",
-            "mechanism": "Transcendence involves dissolution of individual self-boundary; recognition requires individual distinction to be maintained.",
-            "conditional": false
-          },
-          {
-            "source": "REC",
-            "target": "CON",
-            "relationship": "complementarity",
-            "mechanism": "Contribution is a primary recognition-generating mechanism; being witnessed as a benefactor satisfies both simultaneously.",
-            "conditional": false
-          },
-          {
-            "source": "PLA",
-            "target": "NOV",
-            "relationship": "complementarity",
-            "mechanism": "Play is the primary mode through which novelty is explored safely.",
-            "conditional": false
-          },
-          {
-            "source": "PLA",
-            "target": "TRN",
-            "relationship": "complementarity",
-            "mechanism": "Play at high intensity (flow states, collective play) is a reliable transcendence-generating mechanism.",
-            "conditional": false
-          },
-          {
-            "source": "NOV",
-            "target": "TRN",
-            "relationship": "complementarity",
-            "mechanism": "Intense novel experience is a consistent transcendence trigger.",
-            "conditional": false
-          }
+          {"source": "BEL", "target": "STA", "relationship": "conflict", "mechanism": "Belonging requires acceptance as part of the group; status requires differentiation within or above it.", "conditional": false},
+          {"source": "BEL", "target": "SAF", "relationship": "complementarity", "mechanism": "Social connection is a primary safety mechanism; isolation activates threat response.", "conditional": false},
+          {"source": "BEL", "target": "AUT", "relationship": "conflict", "mechanism": "Belonging pulls toward conformity; autonomy pulls toward self-determination.", "conditional": false},
+          {"source": "BEL", "target": "MEA", "relationship": "complementarity", "mechanism": "Shared meaning systems are a primary source of both simultaneously.", "conditional": false},
+          {"source": "BEL", "target": "REC", "relationship": "conditional", "mechanism": "Complementary within a group; conflicting at the group boundary.", "conditional": true, "condition": "Within-group vs group boundary context"},
+          {"source": "BEL", "target": "PLA", "relationship": "complementarity", "mechanism": "Social play is a primary belonging mechanism.", "conditional": false},
+          {"source": "BEL", "target": "NOV", "relationship": "conflict", "mechanism": "Novelty introduces unpredictability that can threaten group stability.", "conditional": false, "notes": "mild"},
+          {"source": "BEL", "target": "TRN", "relationship": "complementarity", "mechanism": "Collective transcendence satisfies both simultaneously.", "conditional": false},
+          {"source": "BEL", "target": "CON", "relationship": "complementarity", "mechanism": "Prosocial behaviour strengthens social bonds.", "conditional": false},
+          {"source": "STA", "target": "SAF", "relationship": "complementarity", "mechanism": "Higher status generates resources and social protection.", "conditional": false},
+          {"source": "STA", "target": "AUT", "relationship": "conditional", "mechanism": "Complementary at high status; conflicting at low status.", "conditional": true, "condition": "Relative status level"},
+          {"source": "STA", "target": "MEA", "relationship": "conflict", "mechanism": "Status is externally conferred and relative; meaning is internally constructed.", "conditional": false, "notes": "mild"},
+          {"source": "STA", "target": "CMP", "relationship": "complementarity", "mechanism": "Competence is the primary legitimate status-acquisition mechanism.", "conditional": false},
+          {"source": "STA", "target": "REC", "relationship": "complementarity", "mechanism": "Status is rank-based, recognition is witness-based, but they reinforce each other.", "conditional": false},
+          {"source": "STA", "target": "PLA", "relationship": "conflict", "mechanism": "Play is non-instrumental; status is comparative and instrumental.", "conditional": false},
+          {"source": "STA", "target": "TRN", "relationship": "conflict", "mechanism": "Transcendence involves self-dissolution; status requires self-assertion.", "conditional": false, "flags": ["empirically under-tested"]},
+          {"source": "STA", "target": "CON", "relationship": "conditional", "mechanism": "Public contribution generates status; anonymous contribution conflicts with status-seeking.", "conditional": true, "condition": "Public vs anonymous contribution"},
+          {"source": "SAF", "target": "AUT", "relationship": "conflict", "mechanism": "Autonomy involves tolerating risk; safety drives risk avoidance.", "conditional": false},
+          {"source": "SAF", "target": "MEA", "relationship": "complementarity", "mechanism": "Coherent meaning systems provide existential safety.", "conditional": false},
+          {"source": "SAF", "target": "CMP", "relationship": "complementarity", "mechanism": "Competence reduces vulnerability and increases predictability.", "conditional": false},
+          {"source": "SAF", "target": "PLA", "relationship": "conditional", "mechanism": "Play requires sufficient safety; high safety drive suppresses play.", "conditional": true, "condition": "Intensity of safety drive activation"},
+          {"source": "SAF", "target": "NOV", "relationship": "conflict", "mechanism": "Novelty introduces unpredictability; safety requires predictability.", "conditional": false},
+          {"source": "SAF", "target": "TRN", "relationship": "conflict", "mechanism": "Transcendence involves boundary dissolution which activates safety threat.", "conditional": false},
+          {"source": "SAF", "target": "CON", "relationship": "conflict", "mechanism": "Contribution requires extending resources toward others, creating vulnerability.", "conditional": false, "notes": "mild"},
+          {"source": "AUT", "target": "MEA", "relationship": "complementarity", "mechanism": "Self-authored meaning is a primary and durable meaning source.", "conditional": false},
+          {"source": "AUT", "target": "CMP", "relationship": "complementarity", "mechanism": "Competence enables autonomous action.", "conditional": false},
+          {"source": "AUT", "target": "REC", "relationship": "conflict", "mechanism": "Recognition requires others' validation, introducing external dependency.", "conditional": false, "notes": "mild"},
+          {"source": "AUT", "target": "PLA", "relationship": "complementarity", "mechanism": "Play is intrinsically self-directed; autonomy is its enabling condition.", "conditional": false},
+          {"source": "AUT", "target": "NOV", "relationship": "complementarity", "mechanism": "Novelty-seeking is amplified by autonomy; constraint suppresses exploration.", "conditional": false},
+          {"source": "AUT", "target": "TRN", "relationship": "conflict", "mechanism": "Transcendence involves surrendering self-determination.", "conditional": false},
+          {"source": "AUT", "target": "CON", "relationship": "complementarity", "mechanism": "Self-directed contribution is autonomy-satisfying; coerced contribution frustrates both.", "conditional": false},
+          {"source": "MEA", "target": "CMP", "relationship": "complementarity", "mechanism": "Mastery and efficacy are primary meaning-generating experiences.", "conditional": false},
+          {"source": "MEA", "target": "PLA", "relationship": "conditional", "mechanism": "Play can generate meaning but conflicts with meaning's coherence requirement.", "conditional": true, "condition": "Whether play produces integrable experience"},
+          {"source": "MEA", "target": "NOV", "relationship": "conflict", "mechanism": "Too much novelty disrupts meaning-making coherence.", "conditional": false, "notes": "mild"},
+          {"source": "MEA", "target": "TRN", "relationship": "complementarity", "mechanism": "Transcendent experience is a primary meaning-generating event.", "conditional": false},
+          {"source": "MEA", "target": "CON", "relationship": "complementarity", "mechanism": "Contribution generates meaning as a feedback product. Direction: CON generates MEA.", "conditional": false},
+          {"source": "CMP", "target": "REC", "relationship": "complementarity", "mechanism": "Demonstrated competence generates recognition; recognition confirms competence.", "conditional": false},
+          {"source": "CMP", "target": "PLA", "relationship": "complementarity", "mechanism": "Play is a primary competence-development mechanism.", "conditional": false},
+          {"source": "CMP", "target": "NOV", "relationship": "complementarity", "mechanism": "Novelty challenges existing competence and drives development.", "conditional": false},
+          {"source": "CMP", "target": "CON", "relationship": "complementarity", "mechanism": "Effective contribution requires and develops competence.", "conditional": false},
+          {"source": "REC", "target": "TRN", "relationship": "conflict", "mechanism": "Transcendence involves dissolution of individual self-boundary; recognition requires individual distinction.", "conditional": false},
+          {"source": "REC", "target": "CON", "relationship": "complementarity", "mechanism": "Contribution is a primary recognition-generating mechanism.", "conditional": false},
+          {"source": "PLA", "target": "NOV", "relationship": "complementarity", "mechanism": "Play is the primary mode through which novelty is explored safely.", "conditional": false},
+          {"source": "PLA", "target": "TRN", "relationship": "complementarity", "mechanism": "Play at high intensity is a reliable transcendence-generating mechanism.", "conditional": false},
+          {"source": "NOV", "target": "TRN", "relationship": "complementarity", "mechanism": "Intense novel experience is a consistent transcendence trigger.", "conditional": false}
+        ]
+      }
+    },
+    "2": {
+      "name": "States",
+      "description": "Transient internal conditions triggered by situational events interacting with drives. Time-limited, affectively charged, and motivationally directional.",
+      "validity_criteria": ["Transient", "Internally experienced", "Drive-activated", "Motivationally charged", "Pre-behavioural"],
+      "nodes": {
+        "ANX": {"id": "ANX", "name": "Anxiety", "description": "SAF threat activation. Pushes toward safety-restoring behaviour.", "primary_drives": ["SAF", "BEL", "MEA"], "activation": "threat", "status": "confirmed"},
+        "SHA": {"id": "SHA", "name": "Shame", "description": "BEL + REC simultaneous collapse. Self is defective. Pushes toward hiding or defensive anger.", "primary_drives": ["BEL", "REC", "STA"], "activation": "threat", "status": "confirmed"},
+        "GUI": {"id": "GUI", "name": "Guilt", "description": "CON norm violation. Other-focused. Motivates reparative behaviour.", "primary_drives": ["CON", "BEL"], "activation": "violation", "status": "confirmed"},
+        "LON": {"id": "LON", "name": "Loneliness", "description": "BEL deprivation (chronic absence). Pushes toward proximity-seeking.", "primary_drives": ["BEL"], "activation": "deprivation", "status": "confirmed"},
+        "ANG": {"id": "ANG", "name": "Anger", "description": "AUT violation primary trigger. Pushes toward boundary-assertion or retaliation.", "primary_drives": ["AUT", "SAF"], "activation": "threat", "status": "confirmed"},
+        "GRI": {"id": "GRI", "name": "Grief", "description": "BEL loss perceived as permanent. Pushes toward withdrawal then meaning-making.", "primary_drives": ["BEL"], "activation": "loss", "status": "confirmed"},
+        "CUR": {"id": "CUR", "name": "Curiosity", "description": "NOV + CMP co-activation. Pushes toward exploration and engagement.", "primary_drives": ["NOV", "CMP"], "activation": "activation", "status": "confirmed"},
+        "AWE": {"id": "AWE", "name": "Awe", "description": "TRN activation. Pushes toward stillness, narrative, and prosocial behaviour.", "primary_drives": ["TRN", "MEA"], "activation": "activation", "status": "confirmed"},
+        "ENV": {"id": "ENV", "name": "Envy", "description": "STA threat via upward social comparison. Ambivalent: can push toward competing or inspiration.", "primary_drives": ["STA"], "activation": "threat", "status": "confirmed"},
+        "JEA": {"id": "JEA", "name": "Jealousy", "description": "BEL threat via third party (triadic). Pushes toward controlling behaviour or reassurance-seeking.", "primary_drives": ["BEL"], "activation": "threat", "status": "confirmed"},
+        "FLO": {"id": "FLO", "name": "Flow", "description": "CMP + AUT + NOV optimal co-activation. Loss of self-consciousness, intrinsic reward.", "primary_drives": ["CMP", "AUT", "NOV"], "activation": "activation", "status": "confirmed"},
+        "BOR": {"id": "BOR", "name": "Boredom", "description": "NOV + PLA + CMP deprivation. Aversive state pushing toward stimulation-seeking.", "primary_drives": ["NOV", "PLA", "CMP"], "activation": "deprivation", "status": "confirmed"},
+        "EXC": {"id": "EXC", "name": "Excitement", "description": "NOV activation + sufficient SAF. Anticipatory, forward-directed, energising.", "primary_drives": ["NOV", "PLA"], "activation": "activation", "status": "confirmed"},
+        "VUL": {"id": "VUL", "name": "Vulnerability", "description": "SAF exposure without immediate threat. Motivationally ambivalent: disclosure or defensive closure.", "primary_drives": ["SAF"], "activation": "exposure", "status": "confirmed"},
+        "RES": {"id": "RES", "name": "Resentment", "description": "AUT violation chronic and unresolved. Calcified anger. Pushes toward passive resistance or covert opposition.", "primary_drives": ["AUT"], "activation": "chronic_violation", "status": "confirmed"},
+        "INS": {"id": "INS", "name": "Inspiration", "description": "MEA + CON co-activation. Evocation, transcendence of current limits, approach motivation.", "primary_drives": ["MEA", "CON"], "activation": "activation", "status": "confirmed"},
+        "PRI": {"id": "PRI", "name": "Pride", "description": "CMP + STA + REC satisfaction. Self-evaluative, achievement-tied. Sustains status and competence-building behaviour.", "primary_drives": ["CMP", "STA", "REC"], "activation": "satisfaction", "status": "confirmed"},
+        "DEF": {"id": "DEF", "name": "Defensiveness", "description": "SAF + STA simultaneous threat. Attack on self-concept. Pushes toward deflection, counter-attack, or justification.", "primary_drives": ["SAF", "STA"], "activation": "threat", "status": "confirmed"},
+        "DIS": {"id": "DIS", "name": "Disgust", "description": "SAF moral/contamination violation. Rejection/expulsion motivational profile.", "primary_drives": ["SAF", "BEL"], "activation": "violation", "status": "confirmed"},
+        "MOR": {"id": "MOR", "name": "Mortality Salience", "description": "SAF existential threat. Death awareness activation. Pushes toward meaning reinforcement, legacy behaviour, in-group bonding.", "primary_drives": ["SAF", "MEA"], "activation": "existential_threat", "status": "confirmed"}
+      },
+      "edges": {
+        "intra_layer": [
+          {"source": "ANX", "target": "DEF", "relationship": "triggers", "mechanism": "Sustained safety threat activates self-protective posture"},
+          {"source": "SHA", "target": "ANX", "relationship": "triggers", "mechanism": "Self-concept collapse triggers safety threat"},
+          {"source": "SHA", "target": "ANG", "relationship": "triggers", "mechanism": "Shame converts to anger as self-protection"},
+          {"source": "GUI", "target": "ANX", "relationship": "triggers", "mechanism": "Norm violation activates fear of social consequence"},
+          {"source": "GUI", "target": "INS", "relationship": "triggers", "mechanism": "Reparative motivation converts guilt into forward action"},
+          {"source": "ENV", "target": "RES", "relationship": "triggers", "mechanism": "Chronic unresolved envy calcifies into resentment"},
+          {"source": "ENV", "target": "INS", "relationship": "triggers", "mechanism": "Upward comparison can activate approach motivation"},
+          {"source": "ANG", "target": "RES", "relationship": "triggers", "mechanism": "Unresolved anger becomes chronic resentment"},
+          {"source": "LON", "target": "ANX", "relationship": "triggers", "mechanism": "Sustained belonging deprivation activates safety threat"},
+          {"source": "LON", "target": "GRI", "relationship": "triggers", "mechanism": "Prolonged loneliness transitions toward grief"},
+          {"source": "BOR", "target": "CUR", "relationship": "triggers", "mechanism": "Drive deprivation activates exploratory motivation"},
+          {"source": "EXC", "target": "CUR", "relationship": "triggers", "mechanism": "Anticipatory state opens into exploratory engagement"},
+          {"source": "VUL", "target": "ANX", "relationship": "triggers", "mechanism": "Exposure activates safety threat"},
+          {"source": "VUL", "target": "SHA", "relationship": "triggers", "mechanism": "Exposure without acceptance triggers shame"},
+          {"source": "AWE", "target": "INS", "relationship": "triggers", "mechanism": "Transcendent experience activates meaning and contribution motivation"},
+          {"source": "FLO", "target": "PRI", "relationship": "triggers", "mechanism": "Mastery experience generates self-evaluative satisfaction"},
+          {"source": "PRI", "target": "INS", "relationship": "triggers", "mechanism": "Achievement satisfaction motivates continued and expanded action"},
+          {"source": "MOR", "target": "ANX", "relationship": "triggers", "mechanism": "Death awareness is a direct safety threat activation"},
+          {"source": "MOR", "target": "INS", "relationship": "triggers", "mechanism": "Mortality salience activates meaning-seeking and legacy motivation"},
+          {"source": "DEF", "target": "ANG", "relationship": "triggers", "mechanism": "Defensive posture escalates to anger under continued pressure"},
+          {"source": "JEA", "target": "ANX", "relationship": "triggers", "mechanism": "Belonging threat activates safety response"},
+          {"source": "JEA", "target": "ANG", "relationship": "triggers", "mechanism": "Threat to bond activates protective anger"},
+          {"source": "DIS", "target": "ANG", "relationship": "triggers", "mechanism": "Moral violation escalates from rejection to confrontation"},
+          {"source": "GRI", "target": "INS", "relationship": "triggers", "mechanism": "Later-stage grief activates meaning-making and contribution"},
+          {"source": "FLO", "target": "ANX", "relationship": "suppresses", "mechanism": "Optimal engagement suppresses threat monitoring"},
+          {"source": "FLO", "target": "BOR", "relationship": "suppresses", "mechanism": "Mutually exclusive activation states"},
+          {"source": "PRI", "target": "SHA", "relationship": "suppresses", "mechanism": "Recent achievement temporarily buffers shame vulnerability"},
+          {"source": "INS", "target": "RES", "relationship": "suppresses", "mechanism": "Forward-directed motivation displaces chronic negative state"},
+          {"source": "AWE", "target": "DEF", "relationship": "suppresses", "mechanism": "Self-dissolution of awe temporarily disarms defensive posture"},
+          {"source": "EXC", "target": "BOR", "relationship": "suppresses", "mechanism": "Mutually exclusive activation states"},
+          {"source": "ANX", "target": "VUL", "relationship": "co_occurs", "mechanism": "Both activated by SAF exposure; frequently simultaneous"},
+          {"source": "SHA", "target": "VUL", "relationship": "co_occurs", "mechanism": "Self-concept exposure produces both simultaneously"},
+          {"source": "ENV", "target": "LON", "relationship": "co_occurs", "mechanism": "Upward comparison often paired with belonging deprivation"},
+          {"source": "AWE", "target": "INS", "relationship": "co_occurs", "mechanism": "TRN + MEA + CON co-activation produces both"},
+          {"source": "GUI", "target": "GRI", "relationship": "co_occurs", "mechanism": "Loss of relationship through own action activates both"},
+          {"source": "PRI", "target": "EXC", "relationship": "co_occurs", "mechanism": "Achievement and anticipation of further achievement"}
+        ]
+      }
+    },
+    "3": {
+      "name": "Traits",
+      "description": "Stable dispositional tendencies that modulate how states express as behaviours. Individual-variable, durable across time.",
+      "validity_criteria": ["Stable", "Individual-variable", "Dispositional", "Modulating", "Indirectly observable", "Social-emotional scope"],
+      "nodes": {
+        "CHM": {"id": "CHM", "name": "Charm", "description": "Ability to create positive affect and engagement in others through social interaction.", "status": "confirmed"},
+        "SIN": {"id": "SIN", "name": "Sincerity", "description": "Stable tendency toward authentic expression over performed or strategic expression.", "status": "confirmed"},
+        "EMP": {"id": "EMP", "name": "Empathy", "description": "Sensitivity to and resonance with others' emotional states.", "status": "confirmed"},
+        "WRM": {"id": "WRM", "name": "Warmth", "description": "Positive dispositional orientation toward others.", "status": "confirmed"},
+        "DOM": {"id": "DOM", "name": "Dominance", "description": "Tendency to assert influence, control, and direction in social situations.", "status": "confirmed"},
+        "ASS": {"id": "ASS", "name": "Assertiveness", "description": "Tendency to express needs, positions, and boundaries directly.", "status": "confirmed"},
+        "AGR": {"id": "AGR", "name": "Agreeableness", "description": "Tendency toward accommodation, harmony-seeking, and conflict avoidance.", "status": "confirmed"},
+        "EXT": {"id": "EXT", "name": "Extraversion", "description": "Social energy orientation and stimulation preference.", "status": "confirmed"},
+        "OPN": {"id": "OPN", "name": "Openness", "description": "Receptivity to novelty, new experience, and ideas.", "status": "confirmed"},
+        "CSC": {"id": "CSC", "name": "Conscientiousness", "description": "Reliability, follow-through, organisation, and self-regulation.", "status": "confirmed"},
+        "EMS": {"id": "EMS", "name": "Emotional Stability", "description": "Baseline volatility of state activation. Inverse of neuroticism. Governs activation threshold and intensity.", "status": "confirmed"},
+        "RSL": {"id": "RSL", "name": "Resilience", "description": "Capacity to recover from adverse states. Governs recovery rate distinct from activation threshold.", "status": "confirmed"},
+        "RSK": {"id": "RSK", "name": "Risk Tolerance", "description": "Comfort with uncertainty, potential loss, and unknown outcomes.", "status": "confirmed"},
+        "CRT": {"id": "CRT", "name": "Curiosity (trait)", "description": "Stable orientation toward exploration and inquiry. Distinct from curiosity as a transient state.", "status": "confirmed"},
+        "VLT": {"id": "VLT", "name": "Vulnerability Tolerance", "description": "Capacity to remain in and act from states of exposure without collapsing into defensive behaviour.", "status": "confirmed"},
+        "HUM": {"id": "HUM", "name": "Humour", "description": "Tendency to engage with experience through levity, play, and comic reframing.", "status": "provisional"},
+        "FAI": {"id": "FAI", "name": "Fairness-orientation", "description": "Stable sensitivity to violations of reciprocity and proportionality.", "status": "confirmed"},
+        "CTL": {"id": "CTL", "name": "Control-seeking", "description": "Stable tendency to manage and constrain the behaviour of others and environmental outcomes.", "status": "confirmed"}
+      },
+      "edges": {
+        "intra_layer": [
+          {"source": "CHM", "target": "EXT", "relationship": "potentiates", "mechanism": "Social fluency amplifies extravert energy expression"},
+          {"source": "EMP", "target": "WRM", "relationship": "potentiates", "mechanism": "Accurate emotional resonance deepens positive orientation"},
+          {"source": "EMP", "target": "SIN", "relationship": "potentiates", "mechanism": "Awareness of others' states increases authentic responsiveness"},
+          {"source": "DOM", "target": "ASS", "relationship": "potentiates", "mechanism": "Hierarchy orientation amplifies direct self-expression"},
+          {"source": "EMS", "target": "RSL", "relationship": "potentiates", "mechanism": "Lower baseline volatility makes recovery easier"},
+          {"source": "EMS", "target": "RSK", "relationship": "potentiates", "mechanism": "Stable activation baseline enables greater comfort with uncertainty"},
+          {"source": "OPN", "target": "CRT", "relationship": "potentiates", "mechanism": "Broad receptivity amplifies exploratory motivation"},
+          {"source": "OPN", "target": "RSK", "relationship": "potentiates", "mechanism": "Receptivity to novelty correlates with comfort with uncertainty"},
+          {"source": "VLT", "target": "SIN", "relationship": "potentiates", "mechanism": "Capacity to remain in exposed states enables authentic expression"},
+          {"source": "HUM", "target": "CHM", "relationship": "potentiates", "mechanism": "Levity is a primary charm mechanism"},
+          {"source": "CSC", "target": "FAI", "relationship": "potentiates", "mechanism": "Self-regulation amplifies sensitivity to norm violations"},
+          {"source": "AGR", "target": "ASS", "relationship": "inhibits", "mechanism": "Harmony-seeking suppresses direct self-expression"},
+          {"source": "AGR", "target": "DOM", "relationship": "inhibits", "mechanism": "Conflict avoidance suppresses hierarchy assertion"},
+          {"source": "CTL", "target": "VLT", "relationship": "inhibits", "mechanism": "Managing external variables is incompatible with self-exposure"},
+          {"source": "CTL", "target": "OPN", "relationship": "inhibits", "mechanism": "Constraint preference suppresses receptivity to novelty"},
+          {"source": "DOM", "target": "EMP", "relationship": "inhibits", "mechanism": "Hierarchy focus reduces sensitivity to others' states", "notes": "mild"},
+          {"source": "CHM", "target": "SIN", "relationship": "inhibits", "mechanism": "High charm can substitute performed affect for authentic affect", "notes": "mild; context-dependent"},
+          {"source": "EXT", "target": "CHM", "relationship": "correlates", "basis": "Big Five research consistent co-occurrence"},
+          {"source": "AGR", "target": "WRM", "relationship": "correlates", "basis": "Empirically adjacent constructs"},
+          {"source": "CSC", "target": "FAI", "relationship": "correlates", "basis": "Self-regulation and norm-sensitivity co-occur"},
+          {"source": "OPN", "target": "HUM", "relationship": "correlates", "basis": "Receptivity to novelty correlates with comic reframing"},
+          {"source": "DOM", "target": "CTL", "relationship": "correlates", "basis": "Both reflect influence-orientation"},
+          {"source": "EMS", "target": "RSL", "relationship": "correlates", "basis": "Strongly empirically correlated; kept separate due to distinct mechanisms"}
+        ]
+      }
+    },
+    "4": {
+      "name": "Behaviours",
+      "description": "Observable interpersonal expressions. The only layer directly visible to others. The diagnostic entry point for analysis.",
+      "validity_criteria": ["Observable", "Interpersonal", "Discrete", "Drive-neutral", "Trait-mediated", "Not a state", "Not a trait"],
+      "nodes": {
+        "WIT": {"id": "WIT", "name": "Withdrawing", "description": "Reducing engagement, presence, or responsiveness in social interaction.", "status": "confirmed"},
+        "MIR": {"id": "MIR", "name": "Mirroring", "description": "Reflecting another person's language, affect, posture, or behaviour back to them.", "status": "confirmed"},
+        "DMN": {"id": "DMN", "name": "Dominating", "description": "Asserting control over the direction, pace, or outcome of an interaction.", "status": "confirmed"},
+        "PER": {"id": "PER", "name": "Performing", "description": "Presenting a curated, managed self rather than responding spontaneously.", "status": "confirmed"},
+        "HLP": {"id": "HLP", "name": "Helping/Caregiving", "description": "Actively providing situational assistance, resources, or support to others.", "status": "confirmed"},
+        "CMP": {"id": "CMP", "name": "Competing", "description": "Seeking advantage, primacy, or superiority relative to others in a shared context.", "status": "confirmed"},
+        "COL": {"id": "COL", "name": "Collaborating", "description": "Pursuing shared goals through joint effort and mutual contribution.", "status": "confirmed"},
+        "REA": {"id": "REA", "name": "Seeking Reassurance", "description": "Soliciting validation, confirmation, or comfort from others.", "status": "confirmed"},
+        "CFM": {"id": "CFM", "name": "Conforming", "description": "Aligning behaviour, expressed views, or presentation with group norms.", "status": "confirmed"},
+        "REB": {"id": "REB", "name": "Rebelling", "description": "Opposing, violating, or actively subverting group norms or expectations.", "status": "confirmed"},
+        "VDS": {"id": "VDS", "name": "Vulnerability Disclosure", "description": "Revealing internal states, uncertainties, or perceived weaknesses to others.", "status": "confirmed"},
+        "BND": {"id": "BND", "name": "Boundary-setting", "description": "Asserting limits on others' behaviour toward the self.", "status": "confirmed"},
+        "CHL": {"id": "CHL", "name": "Challenging", "description": "Questioning, opposing, or directly contesting another's position, claim, or behaviour.", "status": "confirmed"},
+        "SIG": {"id": "SIG", "name": "Signalling Status", "description": "Communicating relative rank, capability, or social value through behaviour.", "status": "confirmed"},
+        "NUR": {"id": "NUR", "name": "Nurturing", "description": "Supporting the development, growth, or wellbeing of another over time.", "status": "confirmed"},
+        "DFL": {"id": "DFL", "name": "Deflecting", "description": "Redirecting attention away from the self, a topic, or a feeling.", "status": "confirmed"},
+        "PLC": {"id": "PLC", "name": "Placating", "description": "Appeasing others to reduce conflict or tension, often at own expense.", "status": "confirmed"},
+        "STR": {"id": "STR", "name": "Storytelling", "description": "Using narrative self-presentation to construct meaning, connection, or identity.", "status": "provisional"},
+        "INT": {"id": "INT", "name": "Intimacy-building", "description": "Progressive mutual disclosure and deepening of connection over time.", "status": "confirmed"},
+        "CTB": {"id": "CTB", "name": "Controlling Behaviour", "description": "Restricting, managing, or constraining others' options and behaviour.", "status": "confirmed"},
+        "ATT": {"id": "ATT", "name": "Attention-seeking", "description": "Drawing social focus toward the self.", "status": "confirmed"}
+      },
+      "edges": {
+        "intra_layer": [
+          {"source": "DFL", "target": "WIT", "relationship": "escalates", "mechanism": "Failed deflection under pressure leads to full withdrawal"},
+          {"source": "REA", "target": "ATT", "relationship": "escalates", "mechanism": "Reassurance-seeking escalates if unmet"},
+          {"source": "CHL", "target": "DMN", "relationship": "escalates", "mechanism": "Targeted challenge escalates to broad control assertion"},
+          {"source": "PLC", "target": "CFM", "relationship": "escalates", "mechanism": "Appeasement behaviour generalises to norm-alignment"},
+          {"source": "CMP", "target": "DMN", "relationship": "escalates", "mechanism": "Competitive behaviour escalates to subordination behaviour"},
+          {"source": "VDS", "target": "INT", "relationship": "escalates", "mechanism": "Successful disclosure initiates the intimacy sequence"},
+          {"source": "MIR", "target": "INT", "relationship": "escalates", "mechanism": "Sustained mirroring creates the safety for disclosure"},
+          {"source": "ATT", "target": "PER", "relationship": "escalates", "mechanism": "Attention drive activates self-curation"},
+          {"source": "WIT", "target": "DFL", "relationship": "substitutes", "function": "Safety/avoidance"},
+          {"source": "DMN", "target": "CTB", "relationship": "substitutes", "function": "Influence assertion"},
+          {"source": "PLC", "target": "CFM", "relationship": "substitutes", "function": "Conflict avoidance"},
+          {"source": "CMP", "target": "SIG", "relationship": "substitutes", "function": "Status assertion"},
+          {"source": "HLP", "target": "NUR", "relationship": "substitutes", "function": "Prosocial support"},
+          {"source": "CHL", "target": "REB", "relationship": "substitutes", "function": "Opposition"},
+          {"source": "STR", "target": "PER", "relationship": "substitutes", "function": "Self-presentation"},
+          {"source": "VDS", "target": "PER", "relationship": "inhibits", "mechanism": "Authentic exposure incompatible with managed self-presentation"},
+          {"source": "COL", "target": "DMN", "relationship": "inhibits", "mechanism": "Joint effort orientation suppresses subordination behaviour"},
+          {"source": "BND", "target": "PLC", "relationship": "inhibits", "mechanism": "Asserting limits incompatible with appeasement"},
+          {"source": "WIT", "target": "INT", "relationship": "inhibits", "mechanism": "Reduced engagement prevents disclosure sequence"},
+          {"source": "CFM", "target": "CHL", "relationship": "inhibits", "mechanism": "Norm-alignment suppresses targeted opposition"}
         ]
       }
     }
   },
+  "inter_layer_edges": {
+    "drive_to_state": [
+      {"drive": "BEL", "state": "ANX", "sub_type": "threat"},
+      {"drive": "BEL", "state": "SHA", "sub_type": "threat"},
+      {"drive": "BEL", "state": "JEA", "sub_type": "threat"},
+      {"drive": "BEL", "state": "LON", "sub_type": "deprivation"},
+      {"drive": "BEL", "state": "GRI", "sub_type": "loss"},
+      {"drive": "BEL", "state": "PRI", "sub_type": "satisfaction", "notes": "partial"},
+      {"drive": "STA", "state": "SHA", "sub_type": "threat"},
+      {"drive": "STA", "state": "ENV", "sub_type": "threat"},
+      {"drive": "STA", "state": "DEF", "sub_type": "threat"},
+      {"drive": "STA", "state": "ANX", "sub_type": "threat"},
+      {"drive": "STA", "state": "PRI", "sub_type": "satisfaction"},
+      {"drive": "SAF", "state": "ANX", "sub_type": "threat"},
+      {"drive": "SAF", "state": "VUL", "sub_type": "exposure"},
+      {"drive": "SAF", "state": "DEF", "sub_type": "threat"},
+      {"drive": "SAF", "state": "MOR", "sub_type": "existential_threat"},
+      {"drive": "SAF", "state": "DIS", "sub_type": "violation"},
+      {"drive": "AUT", "state": "ANG", "sub_type": "violation"},
+      {"drive": "AUT", "state": "RES", "sub_type": "chronic_violation"},
+      {"drive": "AUT", "state": "FLO", "sub_type": "satisfaction", "notes": "partial"},
+      {"drive": "MEA", "state": "ANX", "sub_type": "threat", "notes": "existential anxiety from meaning collapse"},
+      {"drive": "MEA", "state": "INS", "sub_type": "activation"},
+      {"drive": "MEA", "state": "AWE", "sub_type": "activation", "notes": "partial"},
+      {"drive": "MEA", "state": "FLO", "sub_type": "satisfaction", "notes": "partial"},
+      {"drive": "CMP", "state": "ANX", "sub_type": "threat"},
+      {"drive": "CMP", "state": "SHA", "sub_type": "threat"},
+      {"drive": "CMP", "state": "CUR", "sub_type": "activation"},
+      {"drive": "CMP", "state": "PRI", "sub_type": "satisfaction"},
+      {"drive": "CMP", "state": "FLO", "sub_type": "satisfaction", "notes": "partial"},
+      {"drive": "REC", "state": "SHA", "sub_type": "threat"},
+      {"drive": "REC", "state": "LON", "sub_type": "deprivation"},
+      {"drive": "REC", "state": "PRI", "sub_type": "satisfaction"},
+      {"drive": "PLA", "state": "BOR", "sub_type": "deprivation"},
+      {"drive": "PLA", "state": "EXC", "sub_type": "activation"},
+      {"drive": "PLA", "state": "FLO", "sub_type": "activation", "notes": "partial"},
+      {"drive": "NOV", "state": "BOR", "sub_type": "deprivation"},
+      {"drive": "NOV", "state": "CUR", "sub_type": "activation"},
+      {"drive": "NOV", "state": "EXC", "sub_type": "activation"},
+      {"drive": "TRN", "state": "AWE", "sub_type": "activation"},
+      {"drive": "TRN", "state": "FLO", "sub_type": "activation", "notes": "partial"},
+      {"drive": "CON", "state": "GUI", "sub_type": "violation"},
+      {"drive": "CON", "state": "INS", "sub_type": "activation"},
+      {"drive": "CON", "state": "PRI", "sub_type": "satisfaction", "notes": "partial"}
+    ],
+    "trait_to_state": [
+      {"trait": "EMS", "state": "ANX", "sub_type": "lowers_threshold", "direction": "low trait value"},
+      {"trait": "EMS", "state": "SHA", "sub_type": "lowers_threshold", "direction": "low trait value"},
+      {"trait": "EMS", "state": "ANG", "sub_type": "amplifies", "direction": "low trait value"},
+      {"trait": "RSL", "state": "SHA", "sub_type": "raises_threshold", "direction": "high trait value"},
+      {"trait": "RSL", "state": "GRI", "sub_type": "raises_threshold", "direction": "high trait value"},
+      {"trait": "RSL", "state": "RES", "sub_type": "raises_threshold", "direction": "high trait value"},
+      {"trait": "EMP", "state": "GUI", "sub_type": "lowers_threshold", "direction": "high trait value"},
+      {"trait": "EMP", "state": "SHA", "sub_type": "lowers_threshold", "direction": "high trait value"},
+      {"trait": "RSK", "state": "ANX", "sub_type": "raises_threshold", "direction": "high trait value"},
+      {"trait": "RSK", "state": "EXC", "sub_type": "lowers_threshold", "direction": "high trait value"},
+      {"trait": "VLT", "state": "VUL", "sub_type": "dampens", "direction": "high trait value"},
+      {"trait": "FAI", "state": "ANG", "sub_type": "lowers_threshold", "direction": "high trait value"},
+      {"trait": "FAI", "state": "RES", "sub_type": "lowers_threshold", "direction": "high trait value"},
+      {"trait": "CTL", "state": "ANX", "sub_type": "raises_threshold", "direction": "high trait value"},
+      {"trait": "CTL", "state": "JEA", "sub_type": "amplifies", "direction": "high trait value"},
+      {"trait": "OPN", "state": "CUR", "sub_type": "lowers_threshold", "direction": "high trait value"},
+      {"trait": "OPN", "state": "BOR", "sub_type": "raises_threshold", "direction": "high trait value"},
+      {"trait": "CSC", "state": "GUI", "sub_type": "amplifies", "direction": "high trait value"},
+      {"trait": "CRT", "state": "CUR", "sub_type": "lowers_threshold", "direction": "high trait value"}
+    ],
+    "state_to_behaviour": [
+      {"state": "ANX", "behaviour": "PLC", "trait_condition": "high AGR"},
+      {"state": "ANX", "behaviour": "REA", "trait_condition": "trait_invariant"},
+      {"state": "ANX", "behaviour": "CTB", "trait_condition": "high CTL or high DOM"},
+      {"state": "ANX", "behaviour": "DFL", "trait_condition": "low SIN"},
+      {"state": "ANX", "behaviour": "WIT", "trait_condition": "low EMS"},
+      {"state": "SHA", "behaviour": "VDS", "trait_condition": "high SIN + high VLT"},
+      {"state": "SHA", "behaviour": "PER", "trait_condition": "low SIN"},
+      {"state": "SHA", "behaviour": "DFL", "trait_condition": "low VLT"},
+      {"state": "SHA", "behaviour": "WIT", "trait_condition": "low VLT + low DOM"},
+      {"state": "SHA", "behaviour": "CHL", "trait_condition": "high DOM (shame converted to anger)"},
+      {"state": "SHA", "behaviour": "PLC", "trait_condition": "high AGR"},
+      {"state": "GUI", "behaviour": "HLP", "trait_condition": "high EMP + high CSC"},
+      {"state": "GUI", "behaviour": "VDS", "trait_condition": "high SIN"},
+      {"state": "GUI", "behaviour": "PLC", "trait_condition": "low EMP"},
+      {"state": "GUI", "behaviour": "WIT", "trait_condition": "low CSC"},
+      {"state": "ANG", "behaviour": "CHL", "trait_condition": "high ASS + high SIN"},
+      {"state": "ANG", "behaviour": "DMN", "trait_condition": "high DOM + low EMP"},
+      {"state": "ANG", "behaviour": "DFL", "trait_condition": "high AGR"},
+      {"state": "ANG", "behaviour": "BND", "trait_condition": "high RSL + high ASS"},
+      {"state": "ANG", "behaviour": "WIT", "trait_condition": "low DOM + low ASS"},
+      {"state": "LON", "behaviour": "ATT", "trait_condition": "high EXT"},
+      {"state": "LON", "behaviour": "VDS", "trait_condition": "high VLT"},
+      {"state": "LON", "behaviour": "MIR", "trait_condition": "low VLT"},
+      {"state": "LON", "behaviour": "CFM", "trait_condition": "high AGR"},
+      {"state": "VUL", "behaviour": "VDS", "trait_condition": "high VLT + high SIN"},
+      {"state": "VUL", "behaviour": "DFL", "trait_condition": "low VLT"},
+      {"state": "VUL", "behaviour": "WIT", "trait_condition": "low VLT + low EXT"},
+      {"state": "VUL", "behaviour": "PER", "trait_condition": "high CHM + low SIN"},
+      {"state": "VUL", "behaviour": "CTB", "trait_condition": "high CTL"},
+      {"state": "RES", "behaviour": "CHL", "trait_condition": "high ASS + high FAI"},
+      {"state": "RES", "behaviour": "WIT", "trait_condition": "high AGR"},
+      {"state": "RES", "behaviour": "REB", "trait_condition": "low AGR"},
+      {"state": "RES", "behaviour": "CTB", "trait_condition": "high CTL + low EMS"},
+      {"state": "INS", "behaviour": "STR", "trait_condition": "high EXT"},
+      {"state": "INS", "behaviour": "COL", "trait_condition": "high CSC"},
+      {"state": "INS", "behaviour": "HLP", "trait_condition": "high EMP"},
+      {"state": "INS", "behaviour": "NUR", "trait_condition": "high EMP + high CSC"},
+      {"state": "INS", "behaviour": "VDS", "trait_condition": "high SIN"},
+      {"state": "ENV", "behaviour": "CMP", "trait_condition": "high DOM"},
+      {"state": "ENV", "behaviour": "SIG", "trait_condition": "high EXT + high DOM"},
+      {"state": "ENV", "behaviour": "COL", "trait_condition": "high OPN (inspiration path)"},
+      {"state": "ENV", "behaviour": "CHL", "trait_condition": "high FAI (reframed as unfairness)"},
+      {"state": "PRI", "behaviour": "STR", "trait_condition": "high EXT + high SIN"},
+      {"state": "PRI", "behaviour": "SIG", "trait_condition": "low SIN + high EXT"},
+      {"state": "PRI", "behaviour": "PER", "trait_condition": "low SIN"},
+      {"state": "PRI", "behaviour": "NUR", "trait_condition": "high EMP"},
+      {"state": "DEF", "behaviour": "DFL", "trait_condition": "high AGR"},
+      {"state": "DEF", "behaviour": "DMN", "trait_condition": "high DOM"},
+      {"state": "DEF", "behaviour": "CHL", "trait_condition": "high ASS"},
+      {"state": "FLO", "behaviour": "COL", "trait_condition": "trait_invariant"},
+      {"state": "MOR", "behaviour": "STR", "trait_condition": "high EXT"},
+      {"state": "MOR", "behaviour": "NUR", "trait_condition": "high EMP"},
+      {"state": "MOR", "behaviour": "PER", "trait_condition": "low SIN"},
+      {"state": "AWE", "behaviour": "VDS", "trait_condition": "high SIN + high VLT"},
+      {"state": "AWE", "behaviour": "STR", "trait_condition": "high EXT"},
+      {"state": "JEA", "behaviour": "CTB", "trait_condition": "high CTL"},
+      {"state": "JEA", "behaviour": "REA", "trait_condition": "high AGR"},
+      {"state": "JEA", "behaviour": "WIT", "trait_condition": "low ASS"},
+      {"state": "BOR", "behaviour": "REB", "trait_condition": "low AGR"},
+      {"state": "BOR", "behaviour": "ATT", "trait_condition": "high EXT"},
+      {"state": "BOR", "behaviour": "CMP", "trait_condition": "high DOM"},
+      {"state": "EXC", "behaviour": "COL", "trait_condition": "high AGR"},
+      {"state": "EXC", "behaviour": "SIG", "trait_condition": "high EXT"},
+      {"state": "EXC", "behaviour": "PER", "trait_condition": "high CHM"},
+      {"state": "DIS", "behaviour": "WIT", "trait_condition": "high AGR"},
+      {"state": "DIS", "behaviour": "CHL", "trait_condition": "high ASS + high FAI"},
+      {"state": "DIS", "behaviour": "REB", "trait_condition": "low AGR + low CTL"},
+      {"state": "GRI", "behaviour": "WIT", "trait_condition": "trait_invariant (acute)"},
+      {"state": "GRI", "behaviour": "REA", "trait_condition": "high AGR"},
+      {"state": "GRI", "behaviour": "STR", "trait_condition": "high EXT (meaning-making)"},
+      {"state": "CUR", "behaviour": "CHL", "trait_condition": "high ASS"},
+      {"state": "CUR", "behaviour": "COL", "trait_condition": "high AGR + high OPN"},
+      {"state": "EXC", "behaviour": "ATT", "trait_condition": "high EXT + low SIN"},
+      {"state": "INS", "behaviour": "CMP", "trait_condition": "high DOM (channelled ambition)"}
+    ],
+    "trait_to_behaviour_modulation": [
+      {"trait": "CHM", "behaviour": "MIR", "effect": "amplifies"},
+      {"trait": "CHM", "behaviour": "PER", "effect": "amplifies"},
+      {"trait": "SIN", "behaviour": "VDS", "effect": "amplifies"},
+      {"trait": "SIN", "behaviour": "PER", "effect": "suppresses"},
+      {"trait": "EMP", "behaviour": "MIR", "effect": "amplifies"},
+      {"trait": "EMP", "behaviour": "NUR", "effect": "amplifies"},
+      {"trait": "EMP", "behaviour": "DMN", "effect": "suppresses"},
+      {"trait": "DOM", "behaviour": "CHL", "effect": "amplifies"},
+      {"trait": "DOM", "behaviour": "COL", "effect": "suppresses", "notes": "mild"},
+      {"trait": "AGR", "behaviour": "PLC", "effect": "amplifies"},
+      {"trait": "AGR", "behaviour": "CHL", "effect": "suppresses"},
+      {"trait": "ASS", "behaviour": "BND", "effect": "amplifies"},
+      {"trait": "EXT", "behaviour": "ATT", "effect": "amplifies"},
+      {"trait": "EXT", "behaviour": "STR", "effect": "amplifies"},
+      {"trait": "EXT", "behaviour": "WIT", "effect": "suppresses"},
+      {"trait": "RSL", "behaviour": "WIT", "effect": "suppresses"},
+      {"trait": "RSK", "behaviour": "VDS", "effect": "amplifies"},
+      {"trait": "RSK", "behaviour": "CFM", "effect": "suppresses"},
+      {"trait": "CTL", "behaviour": "CTB", "effect": "amplifies"},
+      {"trait": "CTL", "behaviour": "COL", "effect": "suppresses"},
+      {"trait": "FAI", "behaviour": "CHL", "effect": "amplifies"},
+      {"trait": "HUM", "behaviour": "DFL", "effect": "amplifies"},
+      {"trait": "HUM", "behaviour": "MIR", "effect": "amplifies"},
+      {"trait": "VLT", "behaviour": "INT", "effect": "amplifies"},
+      {"trait": "OPN", "behaviour": "COL", "effect": "amplifies"},
+      {"trait": "CSC", "behaviour": "HLP", "effect": "amplifies"}
+    ],
+    "feedback_behaviour_to_state": [
+      {"behaviour": "WIT", "state": "LON", "effect": "generates", "mode": "longitudinal", "mechanism": "Repeated withdrawal deepens belonging deprivation"},
+      {"behaviour": "VDS", "state": "ANX", "effect": "suppresses", "mode": "longitudinal", "condition": "met with acceptance"},
+      {"behaviour": "VDS", "state": "SHA", "effect": "generates", "mode": "longitudinal", "condition": "met with rejection"},
+      {"behaviour": "PER", "state": "SHA", "effect": "generates", "mode": "longitudinal", "mechanism": "Gap between performed and authentic self widens over time"},
+      {"behaviour": "CMP", "state": "PRI", "effect": "generates", "mode": "longitudinal", "condition": "winning"},
+      {"behaviour": "CMP", "state": "SHA", "effect": "generates", "mode": "longitudinal", "condition": "losing"},
+      {"behaviour": "HLP", "state": "INS", "effect": "reinforces", "mode": "longitudinal"},
+      {"behaviour": "CTB", "state": "RES", "effect": "generates_in_target", "mode": "longitudinal", "notes": "Generates resentment in the person being controlled"},
+      {"behaviour": "INT", "state": "LON", "effect": "suppresses", "mode": "longitudinal"},
+      {"behaviour": "CHL", "state": "PRI", "effect": "generates", "mode": "longitudinal", "condition": "successful"},
+      {"behaviour": "CFM", "state": "RES", "effect": "generates", "mode": "longitudinal", "mechanism": "Habitual self-suppression activates autonomy violation"}
+    ],
+    "feedback_state_to_trait": [
+      {"state": "ANX", "trait": "EMS", "effect": "lowers", "mode": "longitudinal", "condition": "chronic"},
+      {"state": "ANX", "trait": "RSK", "effect": "lowers", "mode": "longitudinal", "condition": "chronic"},
+      {"state": "ANX", "trait": "CTL", "effect": "raises", "mode": "longitudinal", "condition": "chronic"},
+      {"state": "SHA", "trait": "VLT", "effect": "lowers", "mode": "longitudinal", "condition": "repeated"},
+      {"state": "SHA", "trait": "SIN", "effect": "lowers", "mode": "longitudinal", "condition": "repeated"},
+      {"state": "FLO", "trait": "CRT", "effect": "raises", "mode": "longitudinal", "condition": "repeated"},
+      {"state": "FLO", "trait": "OPN", "effect": "raises", "mode": "longitudinal", "condition": "repeated"},
+      {"state": "PRI", "trait": "EMS", "effect": "raises", "mode": "longitudinal", "condition": "repeated"},
+      {"state": "INS", "trait": "CSC", "effect": "raises", "mode": "longitudinal", "condition": "repeated"},
+      {"state": "RES", "trait": "AGR", "effect": "lowers", "mode": "longitudinal", "condition": "chronic"},
+      {"state": "GUI", "trait": "EMP", "effect": "raises", "mode": "longitudinal", "condition": "repeated + resolved"},
+      {"state": "LON", "trait": "WRM", "effect": "lowers", "mode": "longitudinal", "condition": "chronic"},
+      {"state": "VUL", "trait": "VLT", "effect": "raises", "mode": "longitudinal", "condition": "repeatedly accepted"}
+    ]
+  },
   "discard_register": [
-    {
-      "candidate": "Fairness/Reciprocity",
-      "discarded_from": "Layer 1",
-      "reason": "Fails irreducibility - decomposes into Safety + Belonging",
-      "destination": "Layer 3: Traits",
-      "notes": "Fairness-orientation is a stable dispositional tendency varying between individuals"
-    },
-    {
-      "candidate": "Continuity/Legacy",
-      "discarded_from": "Layer 1",
-      "reason": "Fails irreducibility - decomposes into Meaning + time extension",
-      "destination": "Layer 2: States",
-      "notes": "Mortality salience as an acute state is the relevant Layer 2 construct"
-    },
-    {
-      "candidate": "Intimacy",
-      "discarded_from": "Layer 1",
-      "reason": "Fails irreducibility - decomposes into Belonging + Recognition at high intensity",
-      "destination": "Layer 4: Behaviours",
-      "notes": "Intimacy-seeking and intimacy-building are observable interpersonal behaviours"
-    },
-    {
-      "candidate": "Control",
-      "discarded_from": "Layer 1",
-      "reason": "Fails irreducibility - decomposes into Autonomy + Safety",
-      "destination": "Layer 3: Traits",
-      "notes": "Control-seeking as a stable dispositional tendency is a trait modulator"
-    },
-    {
-      "candidate": "Justice",
-      "discarded_from": "Layer 1",
-      "reason": "Fails irreducibility and scope - value not drive; collapses into fairness/reciprocity at interpersonal level",
-      "destination": "Layer 3: Traits",
-      "notes": "Justice-orientation as dispositional tendency belongs with fairness in traits"
-    }
+    {"candidate": "Fairness/Reciprocity", "discarded_from": "Layer 1", "reason": "Fails irreducibility", "destination": "Layer 3: Traits", "placed_as": "FAI"},
+    {"candidate": "Continuity/Legacy", "discarded_from": "Layer 1", "reason": "Fails irreducibility", "destination": "Layer 2: States", "placed_as": "MOR"},
+    {"candidate": "Intimacy", "discarded_from": "Layer 1", "reason": "Fails irreducibility", "destination": "Layer 4: Behaviours", "placed_as": "INT"},
+    {"candidate": "Control", "discarded_from": "Layer 1", "reason": "Fails irreducibility", "destination": "Layer 3: Traits", "placed_as": "CTL"},
+    {"candidate": "Justice", "discarded_from": "Layer 1", "reason": "Fails irreducibility and scope", "destination": "Layer 3: Traits", "placed_as": "FAI (merged)"},
+    {"candidate": "Humiliation", "discarded_from": "Layer 2", "reason": "Derivable from Shame + public context", "destination": "Context note only"},
+    {"candidate": "Contempt", "discarded_from": "Layer 2", "reason": "Primarily a behavioural expression", "destination": "Layer 4 expression pathway of DIS"},
+    {"candidate": "Elation", "discarded_from": "Layer 2", "reason": "Composite of Pride + Excitement", "destination": "None - emergent"},
+    {"candidate": "Satisfaction", "discarded_from": "Layer 2", "reason": "Baseline condition not a distinct state", "destination": "None"},
+    {"candidate": "Justice-orientation", "discarded_from": "Layer 3", "reason": "Redundant with fairness-orientation", "destination": "Merged into FAI"},
+    {"candidate": "Narcissistic tendency", "discarded_from": "Layer 3", "reason": "Drive configuration not a trait", "destination": "Integration testing flag"},
+    {"candidate": "Perfectionism", "discarded_from": "Layer 3", "reason": "Derivable from CSC + CMP drive sensitivity", "destination": "Integration testing flag"},
+    {"candidate": "Flirting", "discarded_from": "Layer 4", "reason": "Too contextually specific", "destination": "Emergent from MIR + SIG + VDS in romantic context"},
+    {"candidate": "Active listening", "discarded_from": "Layer 4", "reason": "Insufficient distinctiveness", "destination": "None"}
+  ],
+  "integration_testing_flags": [
+    "REC (Recognition) - mechanistically distinct but least empirically robust drive node",
+    "NOV (Novelty) - weakest irreducibility case in Layer 1",
+    "TRN (Transcendence) - universality claim weakest in Layer 1",
+    "CON (Contribution) - closest irreducibility call; test whether it decomposes into BEL + MEA in scenarios",
+    "STA-TRN conflict edge - logically sound but empirically under-tested",
+    "BEL-STA conditional edge - validate within-group vs boundary context distinction",
+    "HUM (Humour trait) - provisional; borderline between trait and behaviour pattern",
+    "STR (Storytelling behaviour) - provisional; sits close to Performing",
+    "Narcissistic tendency - test as drive configuration: high STA + high REC + low EMP",
+    "Perfectionism - test as trait combination: high CSC + CMP threat sensitivity",
+    "Power/Influence - monitor whether STA node is sufficient or requires separate treatment"
   ]
 }
